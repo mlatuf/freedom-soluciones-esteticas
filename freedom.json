@@ -1,0 +1,877 @@
+{
+  "appointment": [
+    {
+      "id": "26",
+      "IdCenter": null,
+      "idPatient": "3",
+      "idDay": "1",
+      "status": "0",
+      "startTime": "07:30:00",
+      "endTime": "08:10:00",
+      "price": "1600",
+      "comments": ""
+    }
+  ],
+  "appointment_area": [
+    {
+      "id": "31",
+      "idAppointment": "26",
+      "idArea": "3"
+    },
+    {
+      "id": "32",
+      "idAppointment": "26",
+      "idArea": "5"
+    },
+    {
+      "id": "33",
+      "idAppointment": "26",
+      "idArea": "7"
+    },
+    {
+      "id": "34",
+      "idAppointment": "26",
+      "idArea": "9"
+    }
+  ],
+  "area": [
+    {
+      "id": "3",
+      "IdCenter": null,
+      "description": "Menton",
+      "price": "200",
+      "duration": "1"
+    },
+    {
+      "id": "4",
+      "IdCenter": null,
+      "description": "Bozo",
+      "price": "200",
+      "duration": "1"
+    },
+    {
+      "id": "5",
+      "IdCenter": null,
+      "description": "Cejas",
+      "price": "200",
+      "duration": "1"
+    },
+    {
+      "id": "6",
+      "IdCenter": null,
+      "description": "Rostro",
+      "price": "400",
+      "duration": "1"
+    },
+    {
+      "id": "7",
+      "IdCenter": null,
+      "description": "Axilas",
+      "price": "500",
+      "duration": "1"
+    },
+    {
+      "id": "8",
+      "IdCenter": null,
+      "description": "Cavado bikini",
+      "price": "550",
+      "duration": "1"
+    },
+    {
+      "id": "9",
+      "IdCenter": null,
+      "description": "Cavado completo",
+      "price": "700",
+      "duration": "1"
+    },
+    {
+      "id": "10",
+      "IdCenter": null,
+      "description": "Media pierna alta",
+      "price": "900",
+      "duration": "1"
+    },
+    {
+      "id": "11",
+      "IdCenter": null,
+      "description": "Media pierna baja",
+      "price": "800",
+      "duration": "1"
+    },
+    {
+      "id": "12",
+      "IdCenter": null,
+      "description": "Pierna entera",
+      "price": "600",
+      "duration": "1"
+    },
+    {
+      "id": "13",
+      "IdCenter": null,
+      "description": "Brazos",
+      "price": "500",
+      "duration": "1"
+    },
+    {
+      "id": "14",
+      "IdCenter": null,
+      "description": "Cavado bikini + axilas",
+      "price": "700",
+      "duration": "1"
+    },
+    {
+      "id": "15",
+      "IdCenter": null,
+      "description": "Cavado completo + axilas",
+      "price": "900",
+      "duration": "1"
+    },
+    {
+      "id": "16",
+      "IdCenter": null,
+      "description": "Media pierna + cavado bikini + axilas",
+      "price": "1000",
+      "duration": "1"
+    },
+    {
+      "id": "17",
+      "IdCenter": null,
+      "description": "Media pierna + cavado completo + axilas",
+      "price": "1000",
+      "duration": "1"
+    },
+    {
+      "id": "18",
+      "IdCenter": null,
+      "description": "Pierna entera + cavado completo + axilas",
+      "price": "1000",
+      "duration": "1"
+    },
+    {
+      "id": "19",
+      "IdCenter": null,
+      "description": "Media pierna + cavado bikini + axilas",
+      "price": "1000",
+      "duration": "1"
+    }
+  ],
+  "center": [],
+  "day": [
+    {
+      "id": "1",
+      "date": "2016-07-30",
+      "startTime": null,
+      "endTime": null,
+      "step": null
+    }
+  ],
+  "migration": [
+    {
+      "version": "m000000_000000_base",
+      "apply_time": "1521902481"
+    },
+    {
+      "version": "m130524_201442_init",
+      "apply_time": "1521902484"
+    }
+  ],
+  "patient": [
+    {
+      "id": "1",
+      "name": "Paciente 1",
+      "lastName": "Paciente 1",
+      "phone": null,
+      "facebookContact": "paciente.1",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "2",
+      "name": "Paciente 2",
+      "lastName": "Paciente 2",
+      "phone": null,
+      "facebookContact": "paciente.2",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "3",
+      "name": "Virginia",
+      "lastName": "Dalzovo",
+      "phone": "1111111",
+      "facebookContact": "Virginia.Dalzovo",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "4",
+      "name": "Anabela",
+      "lastName": "Becchi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "5",
+      "name": "Maria",
+      "lastName": "Jose Pastor",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "6",
+      "name": "Pamela",
+      "lastName": "Beloqui",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "7",
+      "name": "Soledad",
+      "lastName": "Lopez",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "8",
+      "name": "Maru",
+      "lastName": "Gonzalez Guerra",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "9",
+      "name": "Delfina",
+      "lastName": "Marcovecchio",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "10",
+      "name": "Maru",
+      "lastName": "Gonzalez Guerra",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "11",
+      "name": "Delfina",
+      "lastName": "Marcovecchio",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "12",
+      "name": "Maru",
+      "lastName": "Gonzalez Guerra",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "13",
+      "name": "Delfina",
+      "lastName": "Marcovecchio",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "14",
+      "name": "Maria Jose",
+      "lastName": "Thomas",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "15",
+      "name": "Sofia",
+      "lastName": "Barsotini",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "16",
+      "name": "Lujan",
+      "lastName": "Garcia Etulain",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "17",
+      "name": "Belen",
+      "lastName": "Santurio",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "18",
+      "name": "Liliana",
+      "lastName": "Vera",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "19",
+      "name": "Florencia",
+      "lastName": "Mortati",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "20",
+      "name": "Daniela",
+      "lastName": "Sanabria",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "21",
+      "name": "Agustina",
+      "lastName": "Mena",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "22",
+      "name": "Bernardita",
+      "lastName": "Fernandez",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "23",
+      "name": "Mailen",
+      "lastName": "Rampoldi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "24",
+      "name": "Laura",
+      "lastName": "Barrena",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "25",
+      "name": "Claudia",
+      "lastName": "Zanazzi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "26",
+      "name": "Graciela",
+      "lastName": "Valcarce",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "27",
+      "name": "Romina",
+      "lastName": "del Buono",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "28",
+      "name": "Andrea",
+      "lastName": "Bertora",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "29",
+      "name": "Nerina",
+      "lastName": "Guisolis",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "30",
+      "name": "Mariana",
+      "lastName": "Saraca",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "31",
+      "name": "Sandra",
+      "lastName": "Elizain",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "32",
+      "name": "Malena",
+      "lastName": "Malena",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "33",
+      "name": "Paola",
+      "lastName": "Jaramillo",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "34",
+      "name": "Belen",
+      "lastName": "Alvarez",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "35",
+      "name": "Victoria",
+      "lastName": "Dallavia",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "36",
+      "name": "Victoria",
+      "lastName": "Alberdi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "37",
+      "name": "Camila",
+      "lastName": "Fuentes",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "38",
+      "name": "Nadia",
+      "lastName": "Pais",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "39",
+      "name": "Paz",
+      "lastName": "Zabaleta",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "40",
+      "name": "Pia",
+      "lastName": "Zabaleta",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "41",
+      "name": "Marcela",
+      "lastName": "Nibaldi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "42",
+      "name": "Natalia",
+      "lastName": "Belen",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "43",
+      "name": "Marina",
+      "lastName": "Saavedra",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "44",
+      "name": "Vanesa",
+      "lastName": "Celentano",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "45",
+      "name": "Maricel",
+      "lastName": "Collela",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "46",
+      "name": "Monica",
+      "lastName": "Villavona",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "47",
+      "name": "Nancy",
+      "lastName": "Machi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "48",
+      "name": "Lucrecia",
+      "lastName": "Ruiz",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "49",
+      "name": "Eugenia",
+      "lastName": "Vargas",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "50",
+      "name": "Ana",
+      "lastName": "Albanese",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "51",
+      "name": "Eugenia",
+      "lastName": "Trueba",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "52",
+      "name": "Laura",
+      "lastName": "Fernandez",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "53",
+      "name": "Julieta",
+      "lastName": "de fabio",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "54",
+      "name": "Evangelina",
+      "lastName": "Moller",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "55",
+      "name": "Florencia",
+      "lastName": "Ramil",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "56",
+      "name": "Mariana",
+      "lastName": "Camaño",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "57",
+      "name": "Mercedes",
+      "lastName": "Jarque",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "58",
+      "name": "Bernardita",
+      "lastName": "Henderson",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "59",
+      "name": "Jaquelina",
+      "lastName": "Orsi",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "60",
+      "name": "Cecilia",
+      "lastName": "Acosta",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "61",
+      "name": "Mercedes",
+      "lastName": "Correa",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "62",
+      "name": "Ileana",
+      "lastName": "Mastropierro",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "63",
+      "name": "Vanesa",
+      "lastName": "Staldeker",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "64",
+      "name": "Manuela",
+      "lastName": "Piñeyro",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "65",
+      "name": "Laura",
+      "lastName": "Gonzalez Guerra",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "66",
+      "name": "Daiana",
+      "lastName": "Sanchez",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "67",
+      "name": "Celeste",
+      "lastName": "Morrone",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "68",
+      "name": "Valentina",
+      "lastName": "Masson",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "69",
+      "name": "Ana",
+      "lastName": "Span",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "70",
+      "name": "Valeria",
+      "lastName": "Lazarte",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "71",
+      "name": "Soledad",
+      "lastName": "Gomar",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "72",
+      "name": "Marcela",
+      "lastName": "Varela",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "73",
+      "name": "Carina",
+      "lastName": "Sousa",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "74",
+      "name": "Alejandra",
+      "lastName": "Savini",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "75",
+      "name": "Milagros",
+      "lastName": "Alonso",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    },
+    {
+      "id": "76",
+      "name": "Marina",
+      "lastName": "Grondona",
+      "phone": "2222222",
+      "facebookContact": "facebook",
+      "IdCenter": null,
+      "idPartner": "0"
+    }
+  ],
+  "user": [
+    {
+      "id": "1",
+      "username": "admin",
+      "auth_key": "admin",
+      "password_hash": "",
+      "password_reset_token": null,
+      "email": "",
+      "status": "10",
+      "created_at": "0",
+      "updated_at": "0"
+    }
+  ]
+}
