@@ -1,0 +1,55 @@
+<clr-header class="header-4">
+  <div class="branding">
+    <clr-icon shape="vm-bug"></clr-icon>
+  </div>
+  <div class="header-nav" [clr-nav-level]="1">
+    <clr-dropdown>
+      <a class="nav-link nav-icon" clrDropdownTrigger>
+        <span class="nav-text">Calendario</span>
+      </a>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="#" clrDropdownItem>Agregar Fecha</a>
+        <a href="#" clrDropdownItem>Fechas disponibles</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+    <clr-dropdown>
+      <a class="nav-link nav-icon" clrDropdownTrigger>
+        <span class="nav-text">Pacientes</span>
+      </a>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="#" clrDropdownItem>Agregar Paciente</a>
+        <a routerLink="/appointments" clrDropdownItem>Listado</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+    <clr-dropdown>
+      <a class="nav-link nav-icon" clrDropdownTrigger>
+        <span class="nav-text">Zonas</span>
+      </a>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="#" clrDropdownItem>Agregar Zona</a>
+        <a href="#" clrDropdownItem>Listado</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+    <clr-dropdown>
+      <a class="nav-link nav-icon" clrDropdownTrigger>
+        <span class="nav-text">Caja</span>
+      </a>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="#" clrDropdownItem>Agregar Gastos</a>
+        <a href="#" clrDropdownItem>Informes</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>   
+  </div>
+  <div class="header-actions">
+    <clr-dropdown>
+      <a class="nav-icon" clrDropdownTrigger>
+        <clr-icon shape="user"></clr-icon>
+        <clr-icon shape="caret down"></clr-icon>
+      </a>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="..." clrDropdownItem>Ajustes</a>
+        <a href="..." clrDropdownItem>Salir</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</clr-header>
