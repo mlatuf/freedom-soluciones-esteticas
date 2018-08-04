@@ -1,0 +1,34 @@
+.page-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #CCCCCC;
+}
+form {
+  .clr-row {
+    .clr-form-control {
+      margin: 0.5rem 0;
+      .clr-control-label {
+        font-weight: normal;
+      }
+      .clr-input {
+        min-width: 12rem;
+      }
+      textarea {
+        min-width: 12rem;
+        height: 4vw;
+      }
+      &:first-child {
+        margin-top: 0px;
+      }
+    }
+    .checkboxes-container {
+      display: flex;
+      height: 24vw;
+      @media (max-width: 768px) {
+        display: block;
+        height: auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<clr-datagrid>
+  <clr-dg-column [clrDgField]="'date'">
+    Fecha
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'areas'">
+    Zonas
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'status'">
+    Estado del turno
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'observations'">
+    Observaciones
+  </clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let appointment of appointmentHistory">
+    <clr-dg-cell>{{ appointment.date | date:'fullDate'}}</clr-dg-cell>
+    <clr-dg-cell>{{ appointment.areas }}</clr-dg-cell>
+    <clr-dg-cell>{{ appointment.status }}</clr-dg-cell>
+    <clr-dg-cell>{{ appointment.observations }}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>{{ appointmentHistory.length }} Sesiones</clr-dg-footer>
+</clr-datagrid>
