@@ -1,9 +1,9 @@
 export class Patient {
-  id: number;
+  _id: number;
   name: string;
   lastName: string;
-  age: string;
-  phone: string;
+  age: number;
+  phone: number;
   hasMedicines: Boolean;
   medicines: string;
   hasAllergies: Boolean;

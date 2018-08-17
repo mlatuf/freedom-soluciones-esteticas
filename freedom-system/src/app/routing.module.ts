@@ -12,8 +12,8 @@ const routes: Routes = [
   { path: 'appointments', component: AppointmentsComponent },
   
   { path: 'patients', component: PatientsComponent, data: { title: 'Pacientes' }},
-  { path: 'patient-details', component: PatientDetailsComponent, data: { title: 'Nuevo paciente' } },
-  { path: 'patient-details/:id', component: PatientDetailsComponent, data: { title: 'Detalles del paciente' } },
+  { path: 'patient/details', component: PatientDetailsComponent, data: { title: 'Nuevo paciente' } },
+  { path: 'patient/details/:id', component: PatientDetailsComponent, data: { title: 'Detalles del paciente' } },
 
 ];
 

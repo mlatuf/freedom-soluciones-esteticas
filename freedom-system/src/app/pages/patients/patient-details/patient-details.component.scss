@@ -1,8 +1,12 @@
 .page-title {
-  margin-top: 0;
   margin-bottom: 1rem;
   padding: 0.5rem 0;
   border-bottom: 1px solid #CCCCCC;
+  display: flex;
+  h3 {
+    margin-top: 0;
+    flex: 0 1 90%;
+  }
 }
 form {
   .clr-row {
@@ -15,8 +19,13 @@ form {
         min-width: 12rem;
       }
       textarea {
+        font-size: 0.7em;
         min-width: 12rem;
+        min-height: 2rem;
+        line-height: 1.5em;
         height: 4vw;
+        padding-top: 0px;
+        padding-bottom: 0px;
       }
       &:first-child {
         margin-top: 0px;

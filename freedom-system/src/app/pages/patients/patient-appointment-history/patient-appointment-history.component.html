@@ -1,4 +1,4 @@
-<clr-datagrid>
+<clr-datagrid [hidden]="(appointmentHistory.length == 0)">
   <clr-dg-column [clrDgField]="'date'">
     Fecha
   </clr-dg-column>
@@ -13,11 +13,14 @@
   </clr-dg-column>
 
   <clr-dg-row *clrDgItems="let appointment of appointmentHistory">
-    <clr-dg-cell>{{ appointment.date | date:'fullDate'}}</clr-dg-cell>
+    <clr-dg-cell>{{ appointment.date | date:'shortDate'}}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.areas }}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.status }}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.observations }}</clr-dg-cell>
   </clr-dg-row>
 
-  <clr-dg-footer>{{ appointmentHistory.length }} Sesiones</clr-dg-footer>
+  <!-- <clr-dg-footer>
+    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+    </clr-dg-pagination>
+  </clr-dg-footer> -->
 </clr-datagrid>

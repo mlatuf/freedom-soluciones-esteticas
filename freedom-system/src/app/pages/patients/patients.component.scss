@@ -1,0 +1,21 @@
+.page-title {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #CCCCCC;
+  display: flex;
+  h3 {
+    margin-top: 0;
+    flex: 0 1 86%;
+  }
+}
+.patients-grid {
+  .actions-cell {
+    text-align: center;
+    padding: 0.1rem 0.5rem 0;
+    &.mobile-view {
+      text-align: start;
+      clr-button-group {
+        margin-top: 0.5rem 0;
+      }
+    }
+  }
+}

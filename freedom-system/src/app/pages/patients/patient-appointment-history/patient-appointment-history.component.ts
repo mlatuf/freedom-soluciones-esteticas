@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { AppointmentPatient } from '../../../classes/appointment-patient';
+import { PatientService } from '../../../shared/patient.service';
 
 @Component({
   selector: 'patient-appointment-history',
@@ -11,29 +13,19 @@ export class PatientAppointmentHistoryComponent implements OnInit {
   @Input() patientId: number;
   appointmentHistory: AppointmentPatient[];
 
-  constructor() { 
+  constructor(private patientService: PatientService) { 
     this.appointmentHistory = [];
   }
 
   ngOnInit() {
-
-    for (let index = 0; index < 5; index++) {
-      let appointmentPatient = new AppointmentPatient;
-      appointmentPatient.date = new Date();
-      appointmentPatient.areas = "todo";
-      appointmentPatient.status = "confirmado";
-      this.appointmentHistory.push(appointmentPatient);
-    }
-    for (let index = 0; index < 5; index++) {
-      let appointmentPatient = new AppointmentPatient;
-      appointmentPatient.date = new Date();
-      appointmentPatient.areas = "algo";
-      appointmentPatient.status = "cancelado";
-      appointmentPatient.observations = "cancelo la rata";
-      this.appointmentHistory.push(appointmentPatient);
-    }
-
-
+    this.patientService.getAppoinmentsPatientData$(this.patientId).subscribe(
+      response => {
+        this.appointmentHistory = response;
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }

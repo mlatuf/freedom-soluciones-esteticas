@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { RoutingModule } from './routing.module';
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
@@ -27,6 +28,7 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     BrowserAnimationsModule,
     FormsModule,
     RoutingModule,
