@@ -1,0 +1,98 @@
+<div class="page-title">
+  <h3>{{ pageTitle }}</h3>
+  <button class="btn btn-sm btn" title="Nuevo paciente" [routerLink]="['/patient/details']">
+    <clr-icon shape="add"></clr-icon>
+    <span [hidden]="mobileView">Nuevo Paciente</span>
+  </button>
+</div>
+<clr-datagrid [hidden]="(patients.length == 0)" 
+  class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 patients-grid">
+  <clr-dg-column [clrDgField]="'fullName'">
+    Nombre y apellido
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'phone'">
+    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
+      Telefono
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
+    </ng-container>
+  </clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let patient of patients">
+    <clr-dg-cell>{{ patient.fullName }}</clr-dg-cell>
+    <clr-dg-cell>{{ patient.phone }}</clr-dg-cell>
+    <clr-dg-cell class="actions-cell">
+      <!-- <clr-button-group class="btn-icon btn-primary-outline btn-sm">
+        <clr-button title="Historial de sesiones" (click)="showHistoryModal(patient._id)">
+          <clr-icon shape="calendar"></clr-icon>
+        </clr-button>
+        <clr-button title="Ver" class="btn-success-outline" [routerLink]="['/patient/details', patient._id]">
+          <clr-icon shape="eye"></clr-icon>
+        </clr-button>
+        <clr-button title="Eliminar" class="btn-danger-outline" (click)="deletePatient(patient._id, patient.fullName)">
+          <clr-icon shape="trash"></clr-icon>
+        </clr-button>
+      </clr-button-group> -->
+      <button type="button" title="Historial de sesiones" class="btn btn-icon btn-sm" (click)="showHistoryModal(patient._id)">
+        <clr-icon shape="calendar"></clr-icon>
+      </button>
+      <button type="button" title="Ver" class="btn btn-icon btn-sm btn-success-outline" [routerLink]="['/patient/details', patient._id]">
+        <clr-icon shape="eye"></clr-icon>
+      </button>
+      <button type="button" title="Eliminar" class="btn btn-icon btn-sm btn-danger-outline" (click)="deletePatient(patient._id, patient.fullName)">
+        <clr-icon shape="trash"></clr-icon>
+      </button>
+    </clr-dg-cell>
+    <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="mobileView">
+      <clr-dg-row-detail *clrIfExpanded>
+        <clr-dg-cell class="actions-cell mobile-view">
+          <div>{{ patient.phone }}</div>
+          <clr-button-group class="btn-icon btn-primary-outline btn-sm">
+            <clr-button title="Historial de sesiones" (click)="showHistoryModal(patient._id)">
+              <clr-icon shape="calendar"></clr-icon>
+            </clr-button>
+            <clr-button title="Ver" class="btn-success-outline" [routerLink]="['/patient/details', patient._id]">
+              <clr-icon shape="eye"></clr-icon>
+            </clr-button>
+            <clr-button title="Eliminar" class="btn-danger-outline" (click)="deletePatient(patient._id, patient.fullName)">
+              <clr-icon shape="trash"></clr-icon>
+            </clr-button>
+          </clr-button-group>
+        </clr-dg-cell>
+      </clr-dg-row-detail>
+    </ng-container>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    <clr-dg-column-toggle hidden></clr-dg-column-toggle>
+    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+        de {{pagination.totalItems}} pacientes
+    </clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openHistory" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Historial de sesiones</h3>
+  <div class="modal-body">
+    <patient-appointment-history
+      [patientId]="patientSelected"
+      class="clr-col-md-12 clr-col-12">
+    </patient-appointment-history>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
+  <h3 class="modal-title">Eliminar paciente</h3>
+  <div class="modal-body">
+    <p>
+      Esta seguro que desea eliminar al paciente <b>{{ patientNameSelected }}</b> ?
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
+    <button type="button" class="btn btn-outline" (click)="(openConfirmation = !openConfirmation)">Si</button>
+  </div>
+</clr-modal>
