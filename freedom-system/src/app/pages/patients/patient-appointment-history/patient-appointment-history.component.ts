@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { AppointmentPatient } from '../../../classes/appointment-patient';
 import { PatientService } from '../../../shared/patient.service';
+import { AlertService } from '../../../shared/alert.service'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'patient-appointment-history',
@@ -13,17 +15,20 @@ export class PatientAppointmentHistoryComponent implements OnInit {
   @Input() patientId: number;
   appointmentHistory: AppointmentPatient[];
 
-  constructor(private patientService: PatientService) { 
+  constructor(private patientService: PatientService, private spinner: NgxSpinnerService, private alertService: AlertService ) { 
     this.appointmentHistory = [];
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.patientService.getAppoinmentsPatientData$(this.patientId).subscribe(
       response => {
         this.appointmentHistory = response;
+        this.spinner.hide();
       },
       error => {
-        console.log(error);
+        this.spinner.hide();
+        this.alertService.error(error);
       }
     );
   }

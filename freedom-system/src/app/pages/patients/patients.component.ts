@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Patient } from '../../classes/patient';
 import { PatientService } from '../../shared/patient.service';
+import { AlertService } from '../../shared/alert.service'
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'patients',
@@ -19,7 +22,8 @@ export class PatientsComponent implements OnInit {
   patientNameSelected: string;
   mobileView: boolean;
 
-  constructor(route: ActivatedRoute, private patientService: PatientService) {
+  constructor(route: ActivatedRoute, private patientService: PatientService, 
+      private spinner:   NgxSpinnerService, private alertService: AlertService) {
     this.pageTitle = route.snapshot.data['title'];
     this.openHistory = this.openConfirmation = false;
     this.mobileView = (window.screen.width < 576);
@@ -27,13 +31,20 @@ export class PatientsComponent implements OnInit {
 
   ngOnInit() {
     this.patients = [];
-
+    this.getPatientList();
+  }
+  
+  
+  private getPatientList() {    
+    this.spinner.show();
     this.patientService.getPatients$().subscribe(
       response => {
         this.patients = response;
+        this.spinner.hide();
       },
       error => {
-        console.log(error);
+        this.spinner.hide();
+        this.alertService.error(error);
       }
     );
   }
@@ -47,5 +58,21 @@ export class PatientsComponent implements OnInit {
     this.patientSelected = patientId;
     this.patientNameSelected = patientName;
     this.openConfirmation = true;
+  }
+
+  confirmDeletePatient() {
+    this.openConfirmation = false;
+    this.spinner.show();    
+    this.patientService.deletePatient$(this.patientSelected).subscribe(
+      response => {
+        this.spinner.hide();
+        this.alertService.success(response);
+        this.getPatientList();
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
   }
 } 

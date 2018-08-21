@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Patient } from '../../../classes/patient';
 import { PatientService } from '../../../shared/patient.service';
+import { AlertService } from '../../../shared/alert.service'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'patient-details',
@@ -16,7 +18,9 @@ export class PatientDetailsComponent implements OnInit {
   patientId: number;
   @Input() editionMode: Boolean;
 
-  constructor(private route: ActivatedRoute, private patientService: PatientService) {
+  constructor(private route: ActivatedRoute, private router: Router, 
+    private patientService: PatientService, private spinner: NgxSpinnerService, 
+    private alertService: AlertService) {
     this.pageTitle = this.route.snapshot.data['title'];
     this.patientId = +this.route.snapshot.paramMap.get('id');
   }
@@ -25,16 +29,34 @@ export class PatientDetailsComponent implements OnInit {
     this.patient = new Patient;
     this.editionMode = (this.patientId === 0);
     if (this.patientId) {
-      // this.patientService.getPatientData$(this.patientId).subscribe(
-      this.patientService.getPatientData$(1).subscribe(
+      this.spinner.show();
+      this.patientService.getPatientData$(this.patientId).subscribe(
         response => {
           this.patient = response;
+          this.spinner.hide();
         },
         error => {
-          console.log(error);
+          this.spinner.hide();
+          this.alertService.error(error);
         }
       );
     } 
+  }
+
+  onSubmit() {
+    this.spinner.show();
+    this.patientService.savePatient$(this.patient).subscribe(
+      response => {
+        this.patient = response;
+        this.spinner.hide();
+        this.router.navigate(['/patients']);
+        this.alertService.success("Paciente creado con exito");
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
   }
 
 }
