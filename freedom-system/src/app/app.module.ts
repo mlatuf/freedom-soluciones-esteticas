@@ -6,9 +6,11 @@ import { HttpModule } from '@angular/http';
 
 import { RoutingModule } from './routing.module';
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './common/menu/menu.component';
+import { AlertsComponent } from './common/alerts/alerts.component';
 
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
 
@@ -21,6 +23,7 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
   declarations: [
     AppComponent,
     MenuComponent,
+    AlertsComponent,
     AppointmentsComponent,
     PatientsComponent,
     PatientDetailsComponent,
@@ -33,7 +36,8 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
     FormsModule,
     RoutingModule,
     ClarityModule,
-    ClrFormsNextModule
+    ClrFormsNextModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

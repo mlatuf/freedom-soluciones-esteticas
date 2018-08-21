@@ -24,17 +24,6 @@
     <clr-dg-cell>{{ patient.fullName }}</clr-dg-cell>
     <clr-dg-cell>{{ patient.phone }}</clr-dg-cell>
     <clr-dg-cell class="actions-cell">
-      <!-- <clr-button-group class="btn-icon btn-primary-outline btn-sm">
-        <clr-button title="Historial de sesiones" (click)="showHistoryModal(patient._id)">
-          <clr-icon shape="calendar"></clr-icon>
-        </clr-button>
-        <clr-button title="Ver" class="btn-success-outline" [routerLink]="['/patient/details', patient._id]">
-          <clr-icon shape="eye"></clr-icon>
-        </clr-button>
-        <clr-button title="Eliminar" class="btn-danger-outline" (click)="deletePatient(patient._id, patient.fullName)">
-          <clr-icon shape="trash"></clr-icon>
-        </clr-button>
-      </clr-button-group> -->
       <button type="button" title="Historial de sesiones" class="btn btn-icon btn-sm" (click)="showHistoryModal(patient._id)">
         <clr-icon shape="calendar"></clr-icon>
       </button>
@@ -93,6 +82,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
-    <button type="button" class="btn btn-outline" (click)="(openConfirmation = !openConfirmation)">Si</button>
+    <button type="button" class="btn btn-outline" (click)="confirmDeletePatient()">Si</button>
   </div>
 </clr-modal>

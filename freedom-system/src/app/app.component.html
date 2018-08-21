@@ -1,9 +1,12 @@
 <clr-main-container>
-  <div class="alert alert-app-level">
-  </div>
   <app-menu></app-menu>
+  <app-alerts></app-alerts>
   <div class="content-container">
     <div class="content-area">
+      <ngx-spinner 
+        size="medium" 
+        type="timer">
+      </ngx-spinner>
       <router-outlet></router-outlet>
     </div>
   </div>

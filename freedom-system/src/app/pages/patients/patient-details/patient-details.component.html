@@ -5,7 +5,7 @@
     <label for="editionMode">editar</label>
   </div>
 </div>
-<form clrForm #patientForm="ngForm">
+<form clrForm #patientForm="ngForm" (ngSubmit)="onSubmit()">
   <div class="clr-row">
     <section class="clr-col-md-4 clr-col-12">
       <clr-input-container>
@@ -72,7 +72,7 @@
   </div>
   <div class="clr-row">
     <section class="clr-col-md-12 clr-col-12">
-      <button class="btn btn-success-outline" [disabled]="(!editionMode ||!patientForm.form.valid)">Guardar</button>
+      <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !patientForm.form.dirty || !patientForm.form.valid)">Guardar</button>
       <button class="btn btn-danger-outline">Cancelar</button>
     </section>
   </div>
