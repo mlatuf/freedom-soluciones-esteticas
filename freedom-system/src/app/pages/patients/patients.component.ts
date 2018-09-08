@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Patient } from '../../classes/patient';
-import { PatientService } from '../../shared/patient.service';
-import { AlertService } from '../../shared/alert.service'
+import { Patient } from '../../classes/patient/patient';
+import { PatientService } from '../../shared/patient/patient.service';
+import { AlertService } from '../../shared/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http }       from '@angular/http';
 import { HttpHeaders, HttpErrorResponse }       from '@angular/common/http';
-import { Observable } from '../../../node_modules/rxjs';
-import { AppointmentPatient }       from '../../app/classes/appointment-patient';
-import { Patient }       from '../../app/classes/patient';
+import { Observable } from 'rxjs';
+import { AppointmentPatient }       from '../../classes/patient/appointment-patient';
+import { Patient }       from '../../classes/patient/patient';
 import { map, retry, catchError }        from "rxjs/operators";
 
 const httpOptions = {
@@ -80,7 +80,6 @@ export class PatientService {
       patientsArray.forEach((patient) => {
         let newPatient = {
           //TODO change to _id when BE is ready
-          // '_id': patient._id,
           '_id': patient.id,
           'fullName': patient.name +' '+ patient.lastName,
           'phone': patient.phone

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { AppointmentPatient } from '../../../classes/appointment-patient';
-import { PatientService } from '../../../shared/patient.service';
-import { AlertService } from '../../../shared/alert.service'
+import { AppointmentPatient } from '../../../classes/patient/appointment-patient';
+import { PatientService } from '../../../shared/patient/patient.service';
+import { AlertService } from '../../../shared/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({

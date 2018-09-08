@@ -1,0 +1,51 @@
+.page-title {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #CCCCCC;
+  display: flex;
+  h3 {
+    margin-top: 0;
+    flex: 0 1 86%;
+  }
+  .btn-sm {
+    clr-icon {
+      margin-right: 0.5rem;
+    }
+    @media (max-width: 576px) {
+      clr-icon {
+        margin-right: 0px;
+      }
+    }
+  }
+}
+form {
+  .form-block {
+    margin: 0.5rem;
+    .form-group {
+      margin: 0.5rem 0;
+      padding-left: 6.5rem;
+    }
+  }
+  @media (max-width: 576px) {
+    .form-block {
+      .form-group {
+        padding-left: 0px;
+      }
+    }
+  }
+}
+.calendar-grid {
+  .datagrid-cell.action-cell {
+    padding: 0.2rem 0.5rem;
+    .btn-sm {
+      min-width: 2rem;
+    }
+    @media (max-width: 576px) {
+      text-align: center;
+      .btn-sm {
+        &:first-child {
+          margin-top: 0px;
+        }
+      }
+    }
+  }
+}

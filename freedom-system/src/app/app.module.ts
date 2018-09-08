@@ -11,6 +11,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './common/menu/menu.component';
 import { AlertsComponent } from './common/alerts/alerts.component';
+import { MonthNamePipe } from './common/pipes/month-name.pipe';
+
+import { CalendarComponent } from './pages/calendar/calendar.component';
 
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
 
@@ -24,6 +27,8 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
     AppComponent,
     MenuComponent,
     AlertsComponent,
+    MonthNamePipe,
+    CalendarComponent,
     AppointmentsComponent,
     PatientsComponent,
     PatientDetailsComponent,

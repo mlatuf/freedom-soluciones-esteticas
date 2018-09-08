@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
  
-import { Alert, AlertType } from '../classes/alert';
+import { Alert, AlertType } from '../../classes/common/alert';
 
 @Injectable({
   providedIn: 'root'
