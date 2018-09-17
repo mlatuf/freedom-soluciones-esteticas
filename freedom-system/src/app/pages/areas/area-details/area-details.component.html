@@ -1,0 +1,47 @@
+<form clrForm #areaForm="ngForm" (ngSubmit)="onSubmit()">
+  <section>
+    <clr-input-container>
+      <label for="area_description" class="clr-control-label">Descripción</label>
+      <input clrInput type="text" name="area_description" [(ngModel)]="areaModel.description" required/>
+      <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+    </clr-input-container>
+    <clr-input-container>
+      <label for="area_price" class="clr-control-label">Precio</label>
+      <input clrInput type="number" name="area_price" [(ngModel)]="areaModel.price" required/>
+      <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+    </clr-input-container>
+    <div class="clr-form-control">
+      <label for="area_duration" class="clr-control-label">Duración</label>
+      <div class="select">
+        <select [(ngModel)]="areaModel.duration" (ngModelChange)="onChange($event)" [ngModelOptions]="{standalone: true}">
+          <option *ngFor="let time of durationsArray" [ngValue]="time.id"> {{ time.description }} </option>
+        </select>
+      </div>
+    </div>
+  </section>
+  <section class="modal-footer">
+    <button type="submit" title="Guardar" class="btn btn-icon btn-outline-success"
+      [disabled]="(!areaForm.form.dirty || !areaForm.form.valid)">
+      <clr-icon shape="floppy"></clr-icon>
+    </button>
+    <button type="button" title="Cancelar" class="btn btn-icon btn-outline-danger" 
+      (click)="cancelEditionModal(areaForm.form.dirty)">
+      <clr-icon shape="cancel"></clr-icon>
+    </button>
+  </section>
+</form>
+<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
+  <h3 class="modal-title">Cancelar edición</h3>
+  <div class="modal-body">
+    <p>
+      Está seguro que desea cancelar la edición ?
+      <small>Se perderán todos los datos no guardados.</small>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
+    <button type="button" class="btn btn-outline" (click)="this.closeModal.emit()">Si</button>
+  </div>
+</clr-modal>
+    
+  
