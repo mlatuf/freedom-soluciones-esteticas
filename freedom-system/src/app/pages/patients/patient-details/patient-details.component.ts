@@ -17,12 +17,14 @@ export class PatientDetailsComponent implements OnInit {
   pageTitle: string;
   patientId: number;
   @Input() editionMode: Boolean;
+  openConfirmation: Boolean;
 
   constructor(private route: ActivatedRoute, private router: Router, 
     private patientService: PatientService, private spinner: NgxSpinnerService, 
     private alertService: AlertService) {
     this.pageTitle = this.route.snapshot.data['title'];
     this.patientId = +this.route.snapshot.paramMap.get('id');
+    this.openConfirmation = false;
   }
   
   ngOnInit() {
@@ -57,6 +59,17 @@ export class PatientDetailsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+  }
+
+  cancelEdition(formDirty) {
+    this.openConfirmation = formDirty;
+    if (!formDirty) {
+      this.router.navigate(['/patients']);
+    }
+  }
+  
+  confirmCancelation() {
+    this.router.navigate(['/patients']);
   }
 
 }

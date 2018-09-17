@@ -38,6 +38,8 @@ form {
     padding: 0.2rem 0.5rem;
     .btn-sm {
       min-width: 2rem;
+      margin-top: 0px;
+      margin-bottom: 0.2px;
     }
     @media (max-width: 576px) {
       text-align: center;

@@ -1,0 +1,47 @@
+.page-title {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #CCCCCC;
+  display: flex;
+  h3 {
+    margin-top: 0;
+    flex: 0 1 86%;
+  }
+  .btn-sm {
+    clr-icon {
+      margin-right: 0.5rem;
+    }
+    @media (max-width: 576px) {
+      clr-icon {
+        margin-right: 0px;
+      }
+    }
+  }
+}
+.areas-grid {
+  .datagrid-cell {
+    text-align: center;
+    &:first-child {
+      text-align: left;
+    }
+    @media (max-width: 576px) {
+      text-align: left;
+    }
+  }
+  .actions-cell {
+    padding: 0.2rem 0.5rem 0;
+    .btn {
+      margin-top: 0px;
+      margin-bottom: 0.2px;
+    }
+    &.mobile-view {
+      text-align: start;
+      div {
+        margin-bottom: 0.5rem;
+      }
+      clr-button-group {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
+

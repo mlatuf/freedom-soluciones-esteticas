@@ -64,7 +64,7 @@
       </div>
     </section>
   </div>
-  <div class="clr-row">
+  <div class="clr-row" [hidden]="!patientId">
     <patient-appointment-history
       [patientId]="patient._id"
       class="clr-col-md-12 clr-col-12">
@@ -73,8 +73,22 @@
   <div class="clr-row">
     <section class="clr-col-md-12 clr-col-12">
       <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !patientForm.form.dirty || !patientForm.form.valid)">Guardar</button>
-      <button class="btn btn-danger-outline">Cancelar</button>
+      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(patientForm.form.dirty)">Cancelar</button>
     </section>
   </div>
 </form>
+
+<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
+  <h3 class="modal-title">Cancelar edición</h3>
+  <div class="modal-body">
+    <p>
+      Está seguro que desea cancelar la edición ?
+      <small>Se perderán todos los datos no guardados.</small>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
+    <button type="button" class="btn btn-outline" (click)="confirmCancelation()">Si</button>
+  </div>
+</clr-modal>
 

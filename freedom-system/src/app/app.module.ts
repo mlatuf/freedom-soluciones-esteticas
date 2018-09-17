@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './common/menu/menu.component';
 import { AlertsComponent } from './common/alerts/alerts.component';
 import { MonthNamePipe } from './common/pipes/month-name.pipe';
+import { DurationMinutesPipe } from './common/pipes/duration-minutes.pipe';
 
 import { CalendarComponent } from './pages/calendar/calendar.component';
 
@@ -21,6 +22,9 @@ import { PatientsComponent } from './pages/patients/patients.component';
 import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
 import { PatientAppointmentHistoryComponent } from './pages/patients/patient-appointment-history/patient-appointment-history.component';
 
+import { AreasComponent } from './pages/areas/areas.component';
+import { AreaDetailsComponent } from './pages/areas/area-details/area-details.component';
+
 
 @NgModule({
   declarations: [
@@ -28,11 +32,14 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
     MenuComponent,
     AlertsComponent,
     MonthNamePipe,
+    DurationMinutesPipe,
     CalendarComponent,
     AppointmentsComponent,
     PatientsComponent,
     PatientDetailsComponent,
-    PatientAppointmentHistoryComponent
+    PatientAppointmentHistoryComponent,
+    AreasComponent,
+    AreaDetailsComponent
   ],
   imports: [
     BrowserModule,
