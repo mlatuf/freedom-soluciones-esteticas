@@ -14,9 +14,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo:'calendar', pathMatch: 'full' },
-  { path: 'appointments', component: AppointmentsComponent },
   
   { path: 'calendar', component: CalendarComponent, data: { title: 'Calendario' } },
+  
+  { path: 'appointments/:day', component: AppointmentsComponent, data: { title: 'Turnos' } },
   
   { path: 'patients', component: PatientsComponent, data: { title: 'Pacientes' }},
   { path: 'patient/details', component: PatientDetailsComponent, data: { title: 'Nuevo paciente' } },

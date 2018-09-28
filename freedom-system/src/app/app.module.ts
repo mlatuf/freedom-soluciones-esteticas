@@ -13,10 +13,15 @@ import { MenuComponent } from './common/menu/menu.component';
 import { AlertsComponent } from './common/alerts/alerts.component';
 import { MonthNamePipe } from './common/pipes/month-name.pipe';
 import { DurationMinutesPipe } from './common/pipes/duration-minutes.pipe';
+import { TimeMinutesPipe } from './common/pipes/time-minutes.pipe';
+import { StatusDescriptionPipe } from './common/pipes/status-description.pipe';
+import { AreasDescriptionPipe } from './common/pipes/areas-description.pipe';
 
 import { CalendarComponent } from './pages/calendar/calendar.component';
 
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
+import { AppointmentActionsComponent } from './pages/appointments/appointment-actions/appointment-actions.component';
+import { AppointmentEndDayComponent } from './pages/appointments/appointment-end-day/appointment-end-day.component';
 
 import { PatientsComponent } from './pages/patients/patients.component';
 import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
@@ -33,8 +38,13 @@ import { AreaDetailsComponent } from './pages/areas/area-details/area-details.co
     AlertsComponent,
     MonthNamePipe,
     DurationMinutesPipe,
+    TimeMinutesPipe,
+    StatusDescriptionPipe,
+    AreasDescriptionPipe,
     CalendarComponent,
     AppointmentsComponent,
+    AppointmentActionsComponent,
+    AppointmentEndDayComponent,
     PatientsComponent,
     PatientDetailsComponent,
     PatientAppointmentHistoryComponent,

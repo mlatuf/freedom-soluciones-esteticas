@@ -40,7 +40,8 @@ class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
     <clr-dg-cell>{{ calendarItem.year }}</clr-dg-cell>
     <clr-dg-cell>{{ calendarItem.month | monthName }}</clr-dg-cell>
     <clr-dg-cell class="action-cell">
-      <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days">
+      <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days"
+        (click)="goToAppointment(day)">
         {{ day.getDate() }}
       </button> 
     </clr-dg-cell>

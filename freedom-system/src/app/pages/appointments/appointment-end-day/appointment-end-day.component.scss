@@ -1,0 +1,12 @@
+.takings-list {
+  li {
+    list-style: none;
+    label {
+      font-weight: bold;
+    }
+    &.total-row {
+      border-top: 1px solid #ddd;
+      padding-top: 5px;
+    }
+  }
+}
