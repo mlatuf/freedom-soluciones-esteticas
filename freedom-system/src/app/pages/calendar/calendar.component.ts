@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AlertService } from '../../shared/alert/alert.service'
 import { CalendarService } from '../../shared/calendar/calendar.service'
@@ -23,7 +23,8 @@ export class CalendarComponent implements OnInit {
   calendar: Calendar;
   calendarHistory: Calendar;
 
-  constructor(private route: ActivatedRoute, private calendarService: CalendarService, 
+  constructor(private route: ActivatedRoute, private router: Router, 
+    private calendarService: CalendarService, 
     private spinner: NgxSpinnerService, 
     private alertService: AlertService) { 
     this.pageTitle = this.route.snapshot.data['title'];
@@ -76,5 +77,10 @@ export class CalendarComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+  }
+
+  goToAppointment(day: Date): void {
+    let dayToString = [day.getFullYear(), day.getMonth(), day.getDate()].join('-');
+    this.router.navigate(['/appointments', dayToString]);
   }
 }

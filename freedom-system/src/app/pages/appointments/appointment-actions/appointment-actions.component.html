@@ -1,0 +1,33 @@
+<!-- <button type="button" title="Nuevo" class="btn btn-icon btn-sm btn-outline-primary">
+  <clr-icon shape="new"></clr-icon>
+</button> -->
+<button type="button" title="Solicitar confirmación" class="btn btn-icon btn-sm btn-outline-primary"
+  [hidden]='!actionsList.includes(2)'
+  (click)="changeStatus(2)">
+  <clr-icon shape="bubble-exclamation"></clr-icon>
+</button>
+<button type="button" title="Confirmar" class="btn btn-icon btn-sm btn-outline-primary"
+  [hidden]='!actionsList.includes(3)'
+  (click)="changeStatus(3)">
+  <clr-icon shape="event"></clr-icon>
+</button>
+<button type="button" title="Ausente" class="btn btn-icon btn-sm btn-outline-primary"
+  [hidden]='!actionsList.includes(4)'
+  (click)="changeStatus(4)">
+  <clr-icon shape="sad-face"></clr-icon>
+</button>
+<button type="button" title="Presente" class="btn btn-icon btn-sm btn-outline-primary"
+  [hidden]='!actionsList.includes(5)'
+  (click)="changeStatus(5)">
+  <clr-icon shape="happy-face"></clr-icon>
+</button>
+<button type="button" title="Finalizar" class="btn btn-icon btn-sm btn-outline-primary"
+  [hidden]='!actionsList.includes(6)'
+  (click)="changeStatus(6)">
+  <clr-icon shape="dollar"></clr-icon>
+</button>
+<button type="button" title="Cancelar" class="btn btn-icon btn-sm btn-outline-danger"
+  [hidden]='!actionsList.includes(7)'
+  (click)="changeStatus(7)">
+  <clr-icon shape="ban"></clr-icon>
+</button>
