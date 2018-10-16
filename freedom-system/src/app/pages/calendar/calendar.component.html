@@ -1,5 +1,4 @@
-<div class="page-title">
-  <h3>{{ pageTitle }}</h3>
+<page-title>
   <clr-button-group class="btn-sm">
     <clr-button title="Nueva Fecha" (click)="(showNewDateForm = !showNewDateForm)">
       <clr-icon shape="add" class="clr-icon" [hidden]="showNewDateForm"></clr-icon>
@@ -10,8 +9,8 @@
       <clr-icon shape="history"class="clr-icon"></clr-icon>
       <span [hidden]="mobileView">Historial</span>
     </clr-button>
-  </clr-button-group>
-</div>
+  </clr-button-group> 
+</page-title>
 <form clrForm #dateForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="!showNewDateForm"
 class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
   <section class="form-block">

@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AppointmentService } from '../../shared/appointment/appointment.service'
 import { AreaService } from '../../shared/area/area.service';
 import { Area } from '../../classes/area/area';
+import { ApplicationStateService } from 'src/app/shared/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'appointments',
@@ -16,7 +17,6 @@ import { Area } from '../../classes/area/area';
 })
 export class AppointmentsComponent implements OnInit {
 
-  pageTitle: string;
   mobileView: Boolean;
   appointmentsDate: Date;
   day: string;
@@ -30,13 +30,12 @@ export class AppointmentsComponent implements OnInit {
   selectedAppointment: number;
   isFinished: Boolean;
 
-  constructor(private route: ActivatedRoute, private router: Router,
+  constructor(private route: ActivatedRoute,
+    private aplicationState: ApplicationStateService,
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
     private appointmentService: AppointmentService,
     private areaService: AreaService) { 
-      this.pageTitle = this.route.snapshot.data['title'];
-      this.day = this.route.snapshot.paramMap.get('day');
       this.paymentsArray = [
         {id: 1, description: 'Efectivo'},
         {id: 2, description: 'Débito'},
@@ -44,12 +43,13 @@ export class AppointmentsComponent implements OnInit {
       ];
       this.openPaymentModal = this.openConfirmationModal = false;
       this.paymentMethodSelected = 1;
-      this.mobileView = (window.screen.width < 576);
       //TODO este campo viene en el modelo Day
       this.isFinished = false;
     }
-
+    
   ngOnInit() {
+    this.day = this.route.snapshot.paramMap.get('day');
+    this.mobileView = this.aplicationState.getIsMobileResolution();
     this.appointmentsDate = new Date(this.day);
     this.appointments = this.areasData = this.endedAppointments = [];
     this.getAppointmentsList();

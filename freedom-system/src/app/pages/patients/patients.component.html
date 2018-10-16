@@ -1,10 +1,10 @@
-<div class="page-title">
-  <h3>{{ pageTitle }}</h3>
+<page-title>
   <button class="btn btn-sm btn" title="Nuevo paciente" [routerLink]="['/patient/details']">
     <clr-icon shape="add"></clr-icon>
     <span [hidden]="mobileView">Nuevo Paciente</span>
   </button>
-</div>
+</page-title>
+
 <clr-datagrid [hidden]="(patients.length == 0)" 
   class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 patients-grid">
   <clr-dg-column [clrDgField]="'fullName'">

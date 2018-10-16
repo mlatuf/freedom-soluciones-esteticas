@@ -1,10 +1,10 @@
-<div class="page-title">
-  <h3>{{ pageTitle }}</h3>
+<page-title>
   <div class="toggle-switch" [hidden]="(patientId === 0)">
     <input type="checkbox" id="editionMode" [(ngModel)]="editionMode">
     <label for="editionMode">editar</label>
   </div>
-</div>
+</page-title>
+
 <form clrForm #patientForm="ngForm" (ngSubmit)="onSubmit()">
   <div class="clr-row">
     <section class="clr-col-md-4 clr-col-12">

@@ -11,6 +11,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './common/menu/menu.component';
 import { AlertsComponent } from './common/alerts/alerts.component';
+import { PageTitleComponent } from './common/page-title/page-title.component';
+
 import { MonthNamePipe } from './common/pipes/month-name.pipe';
 import { DurationMinutesPipe } from './common/pipes/duration-minutes.pipe';
 import { TimeMinutesPipe } from './common/pipes/time-minutes.pipe';
@@ -30,12 +32,15 @@ import { PatientAppointmentHistoryComponent } from './pages/patients/patient-app
 import { AreasComponent } from './pages/areas/areas.component';
 import { AreaDetailsComponent } from './pages/areas/area-details/area-details.component';
 
+import { ApplicationStateService } from './shared/aplication-state/aplication-state.service';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     AlertsComponent,
+    PageTitleComponent,
     MonthNamePipe,
     DurationMinutesPipe,
     TimeMinutesPipe,
@@ -61,7 +66,7 @@ import { AreaDetailsComponent } from './pages/areas/area-details/area-details.co
     ClrFormsNextModule,
     NgxSpinnerModule
   ],
-  providers: [],
+  providers: [ApplicationStateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
