@@ -1,10 +1,10 @@
-<div class="page-title">
-  <h3>{{ pageTitle }}</h3>
+<page-title>
   <button class="btn btn-sm btn" title="Nueva zona" (click)="showAreaModal()">
     <clr-icon shape="add"></clr-icon>
     <span [hidden]="mobileView">Nueva Zona</span>
   </button>
-</div>
+</page-title>
+
 <clr-datagrid [hidden]="(areas.length == 0)" 
   class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 areas-grid">
   <clr-dg-column [clrDgField]="'description'">

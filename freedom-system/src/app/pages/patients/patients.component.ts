@@ -5,6 +5,7 @@ import { Patient } from '../../classes/patient/patient';
 import { PatientService } from '../../shared/patient/patient.service';
 import { AlertService } from '../../shared/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ApplicationStateService } from 'src/app/shared/aplication-state/aplication-state.service';
 
 
 @Component({
@@ -14,26 +15,24 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class PatientsComponent implements OnInit {
 
-  pageTitle: string;
+  mobileView: Boolean;
   patients: Patient[];
   openHistory: Boolean;
   openConfirmation: Boolean;
   patientSelected: number;
   patientNameSelected: string;
-  mobileView: boolean;
 
-  constructor(route: ActivatedRoute, private patientService: PatientService, 
-      private spinner:   NgxSpinnerService, private alertService: AlertService) {
-    this.pageTitle = route.snapshot.data['title'];
+  constructor(private aplicationStateService: ApplicationStateService, 
+    private patientService: PatientService, 
+    private spinner:   NgxSpinnerService, private alertService: AlertService) {
     this.openHistory = this.openConfirmation = false;
-    this.mobileView = (window.screen.width < 576);
   }
-
+  
   ngOnInit() {
+    this.mobileView = this.aplicationStateService.getIsMobileResolution();
     this.patients = [];
     this.getPatientList();
   }
-  
   
   private getPatientList() {    
     this.spinner.show();
