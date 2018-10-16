@@ -5,6 +5,7 @@ import { Patient } from '../../../classes/patient/patient';
 import { PatientService } from '../../../shared/patient/patient.service';
 import { AlertService } from '../../../shared/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ApplicationStateService } from 'src/app/shared/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'patient-details',
@@ -13,21 +14,23 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class PatientDetailsComponent implements OnInit {
 
+  mobileView: Boolean;
   patient: Patient;
-  pageTitle: string;
   patientId: number;
   @Input() editionMode: Boolean;
   openConfirmation: Boolean;
 
-  constructor(private route: ActivatedRoute, private router: Router, 
+  constructor(private route: ActivatedRoute,
+    private aplicationStateService: ApplicationStateService,
+    private router: Router, 
     private patientService: PatientService, private spinner: NgxSpinnerService, 
     private alertService: AlertService) {
-    this.pageTitle = this.route.snapshot.data['title'];
-    this.patientId = +this.route.snapshot.paramMap.get('id');
-    this.openConfirmation = false;
+      this.openConfirmation = false;
   }
-  
+    
   ngOnInit() {
+    this.mobileView = this.aplicationStateService.getIsMobileResolution();
+    this.patientId = +this.route.snapshot.paramMap.get('id');
     this.patient = new Patient;
     this.editionMode = (this.patientId === 0);
     if (this.patientId) {

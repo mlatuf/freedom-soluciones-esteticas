@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 import { Day } from '../../classes/calendar/day';
 import { Calendar } from '../../classes/calendar/calendar';
+import { ApplicationStateService } from 'src/app/shared/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'calendar',
@@ -15,7 +16,6 @@ import { Calendar } from '../../classes/calendar/calendar';
 })
 export class CalendarComponent implements OnInit {
   
-  pageTitle: string;
   mobileView: Boolean;
   showNewDateForm: Boolean;
   openHistory: Boolean;
@@ -23,18 +23,17 @@ export class CalendarComponent implements OnInit {
   calendar: Calendar;
   calendarHistory: Calendar;
 
-  constructor(private route: ActivatedRoute, private router: Router, 
+  constructor(private router: Router, private aplicationState: ApplicationStateService,
     private calendarService: CalendarService, 
     private spinner: NgxSpinnerService, 
     private alertService: AlertService) { 
-    this.pageTitle = this.route.snapshot.data['title'];
     this.showNewDateForm = this.openHistory = false;
-    this.mobileView = (window.screen.width < 576);
     this.calendar = new Calendar;
     this.calendarHistory = new Calendar;
   }
 
   ngOnInit() {
+    this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
     this.spinner.show();
     this.calendarService.getCalendar$().subscribe(

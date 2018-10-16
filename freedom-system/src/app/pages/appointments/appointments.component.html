@@ -1,5 +1,4 @@
-<div class="page-title">
-  <h3>{{ pageTitle }}</h3>
+<page-title>
   <clr-button-group class="btn-sm">
     <clr-button title="Agregar turno" [disabled]="isFinished"> 
       <clr-icon shape="add" class="clr-icon"></clr-icon>
@@ -11,7 +10,7 @@
       <span [hidden]="mobileView">Finalizar dia</span>
     </clr-button>
   </clr-button-group>
-</div>
+</page-title>
 <clr-datagrid [hidden]="(appointments.length == 0)" 
   class="clr-col-12 appointments-grid">
   <clr-dg-column [clrDgField]="'time'">

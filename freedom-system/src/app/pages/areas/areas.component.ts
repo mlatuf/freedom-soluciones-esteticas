@@ -5,6 +5,7 @@ import { Area } from '../../classes/area/area';
 import { AreaService } from '../../shared/area/area.service';
 import { AlertService } from '../../shared/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ApplicationStateService } from 'src/app/shared/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'areas',
@@ -21,14 +22,15 @@ export class AreasComponent implements OnInit {
   areaNameSelected: string;
   mobileView: boolean;
 
-  constructor(route: ActivatedRoute, private areaService: AreaService, 
-    private spinner:   NgxSpinnerService, private alertService: AlertService) {
-    this.pageTitle = route.snapshot.data['title'];
-    this.mobileView = (window.screen.width < 576);
+  constructor(private aplicationStateService: ApplicationStateService, 
+    private areaService: AreaService, 
+    private spinner: NgxSpinnerService, 
+    private alertService: AlertService) {
     this.openConfirmation = this.openEditionModal = false;
   }
-
+  
   ngOnInit() {
+    this.mobileView = this.aplicationStateService.getIsMobileResolution();
     this.areas = [];
     this.getAreaList();
   }
