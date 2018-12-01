@@ -4,74 +4,39 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { RoutingModule } from './routing.module';
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgSelectModule } from '@ng-select/ng-select';
 
+import { CoreModule } from './core/core.module';
+import { AreasModule } from './areas/areas.module';
+import { CalendarModule } from './calendar/calendar.module';
+import { PatientsModule } from './patients/patients.module';
+import { AppointmentsModule } from './appointments/appointments.module';
+
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './common/menu/menu.component';
-import { AlertsComponent } from './common/alerts/alerts.component';
-import { PageTitleComponent } from './common/page-title/page-title.component';
-
-import { MonthNamePipe } from './common/pipes/month-name.pipe';
-import { DurationMinutesPipe } from './common/pipes/duration-minutes.pipe';
-import { TimeMinutesPipe } from './common/pipes/time-minutes.pipe';
-import { StatusDescriptionPipe } from './common/pipes/status-description.pipe';
-import { AreasDescriptionPipe } from './common/pipes/areas-description.pipe';
-
-import { CalendarComponent } from './pages/calendar/calendar.component';
-
-import { AppointmentsComponent } from './pages/appointments/appointments.component';
-import { AppointmentActionsComponent } from './pages/appointments/appointment-actions/appointment-actions.component';
-import { AppointmentEndDayComponent } from './pages/appointments/appointment-end-day/appointment-end-day.component';
-import { AppointmentDetailsComponent } from './pages/appointments/appointment-details/appointment-details.component';
-
-import { PatientsComponent } from './pages/patients/patients.component';
-import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
-import { PatientAppointmentHistoryComponent } from './pages/patients/patient-appointment-history/patient-appointment-history.component';
-
-import { AreasComponent } from './pages/areas/areas.component';
-import { AreaDetailsComponent } from './pages/areas/area-details/area-details.component';
-
-import { ApplicationStateService } from './shared/aplication-state/aplication-state.service';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    MenuComponent,
-    AlertsComponent,
-    PageTitleComponent,
-    MonthNamePipe,
-    DurationMinutesPipe,
-    TimeMinutesPipe,
-    StatusDescriptionPipe,
-    AreasDescriptionPipe,
-    CalendarComponent,
-    AppointmentsComponent,
-    AppointmentActionsComponent,
-    AppointmentEndDayComponent,
-    AppointmentDetailsComponent,
-    PatientsComponent,
-    PatientDetailsComponent,
-    PatientAppointmentHistoryComponent,
-    AreasComponent,
-    AreaDetailsComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    RouterModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    RoutingModule,
     ClarityModule,
     ClrFormsNextModule,
     NgxSpinnerModule,
-    NgSelectModule
+    CoreModule,
+    AreasModule,
+    CalendarModule,
+    PatientsModule,
+    AppointmentsModule
   ],
-  providers: [ApplicationStateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

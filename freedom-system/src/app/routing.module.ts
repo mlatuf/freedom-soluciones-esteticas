@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CalendarComponent } from './pages/calendar/calendar.component';
+import { CalendarComponent } from './calendar/components/calendar.component';
 
-import { AppointmentsComponent } from './pages/appointments/appointments.component';
-import { AppointmentDetailsComponent } from './pages/appointments/appointment-details/appointment-details.component';
+import { AppointmentsComponent } from './appointments/components/appointments.component';
+import { AppointmentDetailsComponent } from './appointments/components/appointment-details/appointment-details.component';
 
-import { PatientsComponent } from './pages/patients/patients.component';
-import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
+import { PatientsComponent } from './patients/components/patients.component';
+import { PatientDetailsComponent } from './patients/components/patient-details/patient-details.component';
 
-import { AreasComponent } from './pages/areas/areas.component';
+import { AreasComponent } from './areas/components/areas.component';
 
 import { RouterModule, Routes } from '@angular/router';
 
