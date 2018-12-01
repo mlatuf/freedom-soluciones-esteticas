@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
+import { AppointmentDetailsComponent } from './pages/appointments/appointment-details/appointment-details.component';
 
 import { PatientsComponent } from './pages/patients/patients.component';
 import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'calendar', component: CalendarComponent, data: { title: 'Calendario' } },
   
   { path: 'appointments/:day', component: AppointmentsComponent, data: { title: 'Turnos' } },
+  { path: 'appointment/details/:day', component: AppointmentDetailsComponent, data: { title: 'Nuevo turno' } },
+  { path: 'appointment/details/:day/:id', component: AppointmentDetailsComponent, data: { title: 'Detalles del turno' } },
   
   { path: 'patients', component: PatientsComponent, data: { title: 'Pacientes' }},
   { path: 'patient/details', component: PatientDetailsComponent, data: { title: 'Nuevo paciente' } },

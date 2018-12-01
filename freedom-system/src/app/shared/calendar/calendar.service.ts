@@ -32,6 +32,16 @@ export class CalendarService {
       );
   }
 
+  getDaysList$(): Observable<any> {
+    return this._http
+      .get(`https://api.myjson.com/bins/10tcg4`)
+      .pipe(
+        retry(3), 
+        map(this.extractDaysList),
+        catchError(this.handleError)
+      );
+  }
+
   getCalendarHistory$(): Observable<Calendar> {
     return this._http
       .get(`https://api.myjson.com/bins/jhmqs`)
@@ -86,6 +96,29 @@ export class CalendarService {
       });
     }
     return {'_id': daysArray[0], 'days': newDaysArray};
+  }
+
+  private extractDaysList(res: Response) {
+    let body = res.json();
+
+    let daysArray = Object.keys(body).map(function(k) { return body[k] });
+    let newDaysArray = [];
+    if (daysArray[1].length > 0) {
+      //Sort the response by date
+      //TODO do this sort on Backend
+      daysArray[1].sort(function(a,b){
+        return +new Date(a.date) - +new Date(b.date);
+      });
+
+      daysArray[1].forEach((day) => {
+        let newDay = {
+          '_id': day.date,    
+          'date': new Date(day.date)
+        }
+        newDaysArray.push(newDay);
+      });
+    }
+    return newDaysArray;
   }
 
   private handleError(error: HttpErrorResponse) {

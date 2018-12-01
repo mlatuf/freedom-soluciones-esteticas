@@ -1,6 +1,6 @@
 <page-title>
   <clr-button-group class="btn-sm">
-    <clr-button title="Agregar turno" [disabled]="isFinished"> 
+    <clr-button title="Agregar turno" [disabled]="isFinished" (click)="goToAppointmentDetails()"> 
       <clr-icon shape="add" class="clr-icon"></clr-icon>
       <span [hidden]="mobileView">Agregar turno</span>
     </clr-button>
@@ -57,7 +57,7 @@
     <clr-dg-cell>{{ appointment.status | statusDescription }}</clr-dg-cell>
     <clr-dg-cell><small>{{ appointment.observations }}</small></clr-dg-cell>
     <clr-dg-cell class="actions-cell">
-      <button type="button" title="Editar" class="btn btn-icon btn-sm btn-outline">
+      <button type="button" title="Editar" class="btn btn-icon btn-sm btn-outline" (click)="goToAppointmentDetails(appointment._id)">
         <clr-icon shape="pencil"></clr-icon>
       </button>
       <appointment-actions

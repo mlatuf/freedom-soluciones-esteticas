@@ -1,0 +1,40 @@
+.clr-form {
+  .clr-row {
+    .clr-form-control {
+      .clr-input {
+        width: 10rem;
+        padding-bottom: 0px;
+      } 
+      .ng-select.form-autocomplete-select::ng-deep {
+        width: 10rem;
+        padding-bottom: 0px;
+        max-height: none;
+        display: inline-block;
+        vertical-align: middle;
+        border-bottom-color: transparent;
+        .ng-select-container {
+          min-height: 0px;
+          .ng-value-container {
+            border-top: none;
+            padding: 0px;
+          }
+        }
+      }
+      .ng-select.form-autocomplete-select.ng-invalid.ng-touched::ng-deep {
+        border-bottom-color: #c92100;
+      }
+      .ng-select.form-autocomplete-select.ng-select-multiple::ng-deep {
+        .ng-select-container {
+          .ng-value {
+            background-color: transparent;
+            border: 1px solid #217b9c;
+            color: #217b9c;
+            .ng-value-icon {
+              color: #217b9c;
+            }
+          }
+        }
+      }  
+    }
+  }
+}

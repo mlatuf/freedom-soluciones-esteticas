@@ -1,0 +1,106 @@
+<page-title>
+  <div class="toggle-switch" [hidden]="(appointmentId === 0)">
+    <input type="checkbox" id="editionMode" [(ngModel)]="editionMode">
+    <label for="editionMode">editar</label>
+  </div>
+</page-title>
+<form clrForm [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+  <div class="clr-row">
+    <section class="form-block clr-col-md-4 clr-col-12">
+      <clr-input-container>
+        <label for="appointment_date" class="clr-control-label">Fecha</label>
+        <ng-select
+          #appointmentDay
+          [(ngModel)]="selectedDay"
+          [searchable]="false"
+          class="form-autocomplete-select"
+          formControlName="appointmentDay"
+          clrInput
+          required>
+          <ng-option *ngFor="let day of availableDays" [value]="selectedDay"> {{ day.date | date:'mediumDate' }} </ng-option>
+        </ng-select>
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <clr-input-container>
+        <label for="appointment_patient" class="clr-control-label">Paciente</label>
+        <ng-select 
+          [(ngModel)]="appointment.patient"
+          class="form-autocomplete-select"
+          formControlName="appointmentPatient"
+          clrInput
+          required>
+          <ng-option *ngFor="let patient of patients" [value]="patient"> {{ patient.fullName }} </ng-option>
+        </ng-select>
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+    </section>
+    <section class="form-block clr-col-md-4 clr-col-12">
+      <clr-input-container>
+        <label for="appointment_areas" class="clr-control-label">Zonas</label>
+        <ng-select 
+          [(ngModel)]="appointment.areas"
+          (ngModelChange)="onChangeAreas($event)"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          class="form-autocomplete-select"
+          formControlName="appointmentAreas"
+          clrInput
+          required>
+          <ng-option *ngFor="let area of areas" [value]="area"> {{ area.description }} </ng-option>
+          <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+        </ng-select>
+        <span class="clr-subtext" *ngIf="appointment.areas?.length">
+          Duracion aproximada: {{ appointmentDuration }} minutos
+        </span>
+      </clr-input-container>
+    </section>
+    <section class="form-block clr-col-md-4 clr-col-12">
+      <clr-input-container>
+        <label for="appointment_time" class="clr-control-label">Hora</label>
+        <ng-select
+          [(ngModel)]="appointment.time"
+          class="form-autocomplete-select"
+          formControlName="appointmentTime"
+          clrInput
+          required>
+          <ng-option *ngFor="let time of availableTimes" [value]="time"> {{ time | timeMinutes }} </ng-option>
+        </ng-select>
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <div class="clr-form-control">
+        <label for="appointment_duration" class="clr-control-label"> 
+          Duracion aproximada en minutos: {{ appointmentDuration }}
+        </label>
+      </div>
+      <clr-input-container>
+        <label for="appointment_price" class="clr-control-label">Precio</label>
+        <input clrInput type="number" name="appointment_price" [(ngModel)]="appointment.price" [ngModelOptions]="{standalone: true}"/>
+      </clr-input-container>
+      <clr-textarea-container>
+        <label for="appointment_observations" class="clr-control-label">Observaciones</label>
+        <textarea clrTextarea name="appointment_observations" [(ngModel)]="appointment.observations" [ngModelOptions]="{standalone: true}">
+        </textarea>
+      </clr-textarea-container>
+    </section>
+  </div>
+  <div class="clr-row">
+    <section class="clr-col-md-12 clr-col-12">
+      <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !appointmentForm.dirty || !appointmentForm.valid)">Guardar</button>
+      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(appointmentForm.form.dirty)">Cancelar</button>
+    </section>
+  </div>
+</form>
+
+<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
+  <h3 class="modal-title">Cancelar edición</h3>
+  <div class="modal-body">
+    <p>
+      Está seguro que desea cancelar la edición ?
+      <small>Se perderán todos los datos no guardados.</small>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
+    <button type="button" class="btn btn-outline" (click)="confirmCancelation()">Si</button>
+  </div>
+</clr-modal>
