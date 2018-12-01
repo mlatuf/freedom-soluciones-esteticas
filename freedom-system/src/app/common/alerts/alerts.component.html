@@ -1,0 +1,9 @@
+<clr-alerts>
+  <clr-alert *ngFor="let alert of alerts" [clrAlertType]="cssClass(alert)">
+    <clr-alert-item>
+      <span class="alert-text">
+        {{ alert.message }}
+      </span>
+    </clr-alert-item>
+  </clr-alert>
+</clr-alerts>

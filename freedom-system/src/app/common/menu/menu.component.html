@@ -3,42 +3,18 @@
     <clr-icon shape="vm-bug"></clr-icon>
   </div>
   <div class="header-nav" [clr-nav-level]="1">
-    <clr-dropdown>
-      <a class="nav-link nav-icon" clrDropdownTrigger>
-        <span class="nav-text">Calendario</span>
-      </a>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="#" clrDropdownItem>Agregar Fecha</a>
-        <a href="#" clrDropdownItem>Fechas disponibles</a>
-      </clr-dropdown-menu>
-    </clr-dropdown>
-    <clr-dropdown>
-      <a class="nav-link nav-icon" clrDropdownTrigger>
-        <span class="nav-text">Pacientes</span>
-      </a>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="#" clrDropdownItem>Agregar Paciente</a>
-        <a routerLink="/appointments" clrDropdownItem>Listado</a>
-      </clr-dropdown-menu>
-    </clr-dropdown>
-    <clr-dropdown>
-      <a class="nav-link nav-icon" clrDropdownTrigger>
-        <span class="nav-text">Zonas</span>
-      </a>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="#" clrDropdownItem>Agregar Zona</a>
-        <a href="#" clrDropdownItem>Listado</a>
-      </clr-dropdown-menu>
-    </clr-dropdown>
-    <clr-dropdown>
-      <a class="nav-link nav-icon" clrDropdownTrigger>
-        <span class="nav-text">Caja</span>
-      </a>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="#" clrDropdownItem>Agregar Gastos</a>
-        <a href="#" clrDropdownItem>Informes</a>
-      </clr-dropdown-menu>
-    </clr-dropdown>   
+    <a class="nav-link" routerLink="/calendar" routerLinkActive="active">
+      <span class="nav-text">Calendario</span>
+    </a>
+    <a class="nav-link" routerLink="/patients" routerLinkActive="active">
+      <span class="nav-text">Pacientes</span>
+    </a>
+    <a class="nav-link" routerLink="/areas" routerLinkActive="active">
+      <span class="nav-text">Zonas</span>
+    </a>
+    <a class="nav-link" routerLinkActive="active">
+      <span class="nav-text">Caja</span>
+    </a>
   </div>
   <div class="header-actions">
     <clr-dropdown>

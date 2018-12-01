@@ -1,0 +1,57 @@
+.appointments-grid {
+  .datagrid-row {
+    &.waiting-confirmation {
+      background-color: #FEF3B5;
+      &:hover {
+        background-color: #FFE860;
+      }
+    }
+    &.confirmed {
+      background-color: #D1D6F3;
+      &:hover {
+        background-color: #B7BDE7;
+      }
+    }
+    &.missing {
+      background-color: #FFCCB5;
+      &:hover {
+        background-color: #FFB38F;
+      }
+    }
+    &.present {
+      background-color: #D9E4EA;
+      &:hover {
+        background-color: #C1CDD4;
+      }
+    }
+    &.terminated {
+      background-color: #C7E59C;
+      &:hover {
+        background-color: #AADB1E;
+      }
+    }
+    .datagrid-cell.actions-cell {
+      &.mobile-view {
+        text-align: start;
+        div {
+          margin-bottom: 0.5rem;
+          label {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+.payment-modal {
+  .clr-form-control {
+    margin-top: 0px;
+    .clr-control-label {
+      flex: 0 0 33.333333%;
+      max-width: 33.333333%;
+    }
+  }
+  small {
+    padding-top: 0.6rem;
+  }
+}

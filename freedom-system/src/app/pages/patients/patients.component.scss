@@ -1,0 +1,15 @@
+.patients-grid {
+  .actions-cell {
+    text-align: center;
+    padding: 0.2rem 0.5rem 0;
+    .btn {
+      margin-top: 0;
+    }
+    &.mobile-view {
+      text-align: start;
+      clr-button-group {
+        margin: 0.5rem 0;
+      }
+    }
+  }
+}

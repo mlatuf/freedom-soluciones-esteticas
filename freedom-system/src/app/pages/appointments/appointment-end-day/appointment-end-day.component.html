@@ -1,0 +1,18 @@
+<ul class="takings-list clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
+  <li>
+    <label>Efectivo: </label>
+    <span>{{ takings.cash | currency }}</span>
+  </li>
+  <li>
+    <label>Debito: </label>
+    <span>{{ takings.debit | currency }}</span>
+  </li>
+  <li>
+    <label>Credito: </label>
+    <span>{{ takings.credit | currency }}</span>
+  </li>
+  <li class="total-row">
+    <label>Total: </label>
+    <span>{{ takings.total | currency }}</span>
+  </li>
+</ul>

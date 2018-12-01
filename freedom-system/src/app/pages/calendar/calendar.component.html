@@ -1,0 +1,92 @@
+<page-title>
+  <clr-button-group class="btn-sm">
+    <clr-button title="Nueva Fecha" (click)="(showNewDateForm = !showNewDateForm)">
+      <clr-icon shape="add" class="clr-icon" [hidden]="showNewDateForm"></clr-icon>
+      <clr-icon shape="minus" class="clr-icon" [hidden]="!showNewDateForm"></clr-icon>
+      <span [hidden]="mobileView">Nueva Fecha</span>
+    </clr-button>
+    <clr-button title="Historial" (click)="showCalendarHistory()">
+      <clr-icon shape="history"class="clr-icon"></clr-icon>
+      <span [hidden]="mobileView">Historial</span>
+    </clr-button>
+  </clr-button-group> 
+</page-title>
+<form clrForm #dateForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="!showNewDateForm"
+class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
+  <section class="form-block">
+    <div class="form-group">
+      <label for="new-date">Seleccionar fecha</label>
+      <input type="date" clrDate name="new-date" [(ngModel)]="newDate.date"/>
+      <button type="submit" class="btn btn-success-outline btn-icon btn-sm" [disabled]="(!dateForm.form.dirty || !dateForm.form.valid)" title="Guardar">
+        <clr-icon shape="check"></clr-icon>
+      </button>
+    </div>
+  </section>
+</form>
+<clr-datagrid [hidden]="(calendar.length == 0)" 
+  class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 calendar-grid">
+  <clr-dg-column [clrDgField]="'year'">
+    Año
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'month'">
+    Mes
+  </clr-dg-column>
+  <clr-dg-column>
+    Dias
+  </clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let calendarItem of calendar.days">
+    <clr-dg-cell>{{ calendarItem.year }}</clr-dg-cell>
+    <clr-dg-cell>{{ calendarItem.month | monthName }}</clr-dg-cell>
+    <clr-dg-cell class="action-cell">
+      <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days"
+        (click)="goToAppointment(day)">
+        {{ day.getDate() }}
+      </button> 
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    <clr-dg-column-toggle hidden></clr-dg-column-toggle>
+    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+        de {{pagination.totalItems}} dias
+    </clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openHistory" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Historial de fechas</h3>
+  <div class="modal-body">
+    <clr-datagrid [hidden]="(calendarHistory.length == 0)" 
+    class="calendar-grid">
+      <clr-dg-column [clrDgField]="'year'">
+        Anio
+      </clr-dg-column>
+      <clr-dg-column [clrDgField]="'month'">
+        Mes
+      </clr-dg-column>
+      <clr-dg-column>
+        Dias
+      </clr-dg-column>
+      
+      <clr-dg-row *clrDgItems="let calendarItem of calendarHistory.days">
+        <clr-dg-cell>{{ calendarItem.year }}</clr-dg-cell>
+        <clr-dg-cell>{{ calendarItem.month | monthName }}</clr-dg-cell>
+        <clr-dg-cell class="action-cell">
+          <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days">
+            {{ day.getDate() }}
+          </button> 
+        </clr-dg-cell>
+      </clr-dg-row>
+    
+      <clr-dg-footer>
+        <clr-dg-column-toggle hidden></clr-dg-column-toggle>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            de {{pagination.totalItems}} dias
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+</clr-modal>
