@@ -10,7 +10,7 @@ export class MonthNamePipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
     if (value === null) return 'Not assigned';
-    return monthNames[value - 1];
+    return monthNames[value-1];
   }
 
 }

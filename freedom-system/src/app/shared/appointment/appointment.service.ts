@@ -32,10 +32,31 @@ export class AppointmentService {
 
   getAppointmentData$(appointmentId: number): Observable<Appointment> {
     return this._http
-      .get('https://api.myjson.com/bins/1cytr4')
+      .get('https://api.myjson.com/bins/keb7u')
       .pipe(
         retry(3), 
         map((res: any) => res.json()),
+        catchError(this.handleError)
+      );
+  }
+
+  saveAppointment$(appointment: Appointment): Observable<any> {
+    return this._http
+    //TODO is a post method
+    .get('https://api.myjson.com/bins/keb7u')
+    .pipe(
+      retry(3), 
+      map((res: any) => res.json()),
+      catchError(this.handleError)
+    );
+  }
+
+  getAppointmentTimes$(day: Date): Observable<any> {
+    return this._http
+      .get(`https://api.myjson.com/bins/1133ok`)
+      .pipe(
+        retry(3), 
+        map(this.extractDataTimes),
         catchError(this.handleError)
       );
   }
@@ -66,6 +87,32 @@ export class AppointmentService {
       });
     }
     return newAppointmentsList;
+  }
+
+  public extractDataTimes(res: Response) {
+    let body = res.json();
+    const timeMinutes = Array.from(Array(52).keys());
+    let occupiedTimes = []; 
+    let freeTimes = [];
+    let appointmentsTimes = Object.keys(body).map(function(k) { return body[k] });
+    if (appointmentsTimes.length > 0) {
+      //sort by time
+      appointmentsTimes.sort(function(a,b){
+        return a.time - b.time;
+      });
+      //remove duplicated
+      let appointmentsTimesUnique = appointmentsTimes.reduce((x, y) => x.findIndex(e=>e.time==y.time)<0 ? [...x, y]: x, []);
+
+
+      appointmentsTimesUnique.forEach((appointment) => {
+        let newTime = {
+          'time': appointment.time
+        }
+        occupiedTimes.push(newTime);
+      });
+    }
+    freeTimes = timeMinutes.filter(e => !occupiedTimes.find(a => e == a.time));
+    return freeTimes;
   }
 
   private handleError(error: HttpErrorResponse) {

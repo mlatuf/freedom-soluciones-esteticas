@@ -31,6 +31,7 @@ export class AppointmentsComponent implements OnInit {
   isFinished: Boolean;
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private aplicationState: ApplicationStateService,
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
@@ -161,5 +162,11 @@ export class AppointmentsComponent implements OnInit {
       return (obj.status != 6 && obj.status != 4);
     });
     return (filteredList.length > 0);
+  }
+
+  goToAppointmentDetails(appointmentId: number = null) {
+    let detailsUrl = (appointmentId) ? ['/appointment/details/', this.day, appointmentId] 
+    : ['/appointment/details/',this.day ];
+    this.router.navigate(detailsUrl);
   }
 }

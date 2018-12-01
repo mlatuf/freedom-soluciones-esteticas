@@ -1,12 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { RoutingModule } from './routing.module';
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './common/menu/menu.component';
@@ -24,6 +25,7 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { AppointmentsComponent } from './pages/appointments/appointments.component';
 import { AppointmentActionsComponent } from './pages/appointments/appointment-actions/appointment-actions.component';
 import { AppointmentEndDayComponent } from './pages/appointments/appointment-end-day/appointment-end-day.component';
+import { AppointmentDetailsComponent } from './pages/appointments/appointment-details/appointment-details.component';
 
 import { PatientsComponent } from './pages/patients/patients.component';
 import { PatientDetailsComponent } from './pages/patients/patient-details/patient-details.component';
@@ -50,6 +52,7 @@ import { ApplicationStateService } from './shared/aplication-state/aplication-st
     AppointmentsComponent,
     AppointmentActionsComponent,
     AppointmentEndDayComponent,
+    AppointmentDetailsComponent,
     PatientsComponent,
     PatientDetailsComponent,
     PatientAppointmentHistoryComponent,
@@ -61,10 +64,12 @@ import { ApplicationStateService } from './shared/aplication-state/aplication-st
     HttpModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     RoutingModule,
     ClarityModule,
     ClrFormsNextModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgSelectModule
   ],
   providers: [ApplicationStateService],
   bootstrap: [AppComponent]

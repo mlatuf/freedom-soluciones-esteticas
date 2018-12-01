@@ -9,7 +9,7 @@ export class TimeMinutesPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
     if (value === null) return 'Not assigned';
-    return timeMinutes [value - 1];
+    return timeMinutes [value];
   }
 
 }
