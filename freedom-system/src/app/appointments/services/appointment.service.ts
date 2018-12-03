@@ -25,14 +25,14 @@ export class AppointmentService {
       .get(`https://api.myjson.com/bins/1133ok`)
       .pipe(
         retry(3), 
-        map(this.extractData),
+        map((res:any) => this.extractData(res)),
         catchError(this.handleError)
       );
   }
 
   getAppointmentData$(appointmentId: number): Observable<Appointment> {
     return this._http
-      .get('https://api.myjson.com/bins/keb7u')
+      .get('https://api.myjson.com/bins/wux5c')
       .pipe(
         retry(3), 
         map((res: any) => res.json()),
@@ -56,7 +56,7 @@ export class AppointmentService {
       .get(`https://api.myjson.com/bins/1133ok`)
       .pipe(
         retry(3), 
-        map(this.extractDataTimes),
+        map((res: any) =>this.extractDataTimes(res)),
         catchError(this.handleError)
       );
   }
