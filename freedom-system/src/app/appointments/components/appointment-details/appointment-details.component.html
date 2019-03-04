@@ -11,12 +11,12 @@
         <label for="appointment_date" class="clr-control-label">Fecha</label>
         <ng-select
           #appointmentDay
-          [(ngModel)]="selectedDay"
           [searchable]="false"
           class="form-autocomplete-select"
           formControlName="appointmentDay"
           clrInput
-          required>
+          required
+          [disabled]="!editionMode">
           <ng-option *ngFor="let day of availableDays" [value]="selectedDay"> {{ day.date | date:'mediumDate' }} </ng-option>
         </ng-select>
         <clr-control-error>Este campo no puede estar vacio</clr-control-error>
@@ -24,11 +24,12 @@
       <clr-input-container>
         <label for="appointment_patient" class="clr-control-label">Paciente</label>
         <ng-select 
-          [(ngModel)]="appointment.patient"
+          #appointmentPatient
           class="form-autocomplete-select"
           formControlName="appointmentPatient"
           clrInput
-          required>
+          required
+          [disabled]="!editionMode">
           <ng-option *ngFor="let patient of patients" [value]="patient"> {{ patient.fullName }} </ng-option>
         </ng-select>
         <clr-control-error>Este campo no puede estar vacio</clr-control-error>
@@ -38,31 +39,30 @@
       <clr-input-container>
         <label for="appointment_areas" class="clr-control-label">Zonas</label>
         <ng-select 
-          [(ngModel)]="appointment.areas"
+          #appointmentAreas
           (ngModelChange)="onChangeAreas($event)"
           [multiple]="true"
           [closeOnSelect]="false"
           class="form-autocomplete-select"
           formControlName="appointmentAreas"
           clrInput
-          required>
+          required
+          [disabled]="!editionMode">
           <ng-option *ngFor="let area of areas" [value]="area"> {{ area.description }} </ng-option>
           <clr-control-error>Este campo no puede estar vacio</clr-control-error>
         </ng-select>
-        <span class="clr-subtext" *ngIf="appointment.areas?.length">
-          Duracion aproximada: {{ appointmentDuration }} minutos
-        </span>
       </clr-input-container>
     </section>
     <section class="form-block clr-col-md-4 clr-col-12">
       <clr-input-container>
         <label for="appointment_time" class="clr-control-label">Hora</label>
         <ng-select
-          [(ngModel)]="appointment.time"
+          #appointmentTime
           class="form-autocomplete-select"
           formControlName="appointmentTime"
           clrInput
-          required>
+          required
+          [disabled]="!editionMode">
           <ng-option *ngFor="let time of availableTimes" [value]="time"> {{ time | timeMinutes }} </ng-option>
         </ng-select>
         <clr-control-error>Este campo no puede estar vacio</clr-control-error>
@@ -74,11 +74,13 @@
       </div>
       <clr-input-container>
         <label for="appointment_price" class="clr-control-label">Precio</label>
-        <input clrInput type="number" name="appointment_price" [(ngModel)]="appointment.price" [ngModelOptions]="{standalone: true}"/>
+        <input clrInput type="number" name="appointment_price" [(ngModel)]="appointment.price" [ngModelOptions]="{standalone: true}"
+        [disabled]="!editionMode"/>
       </clr-input-container>
       <clr-textarea-container>
         <label for="appointment_observations" class="clr-control-label">Observaciones</label>
-        <textarea clrTextarea name="appointment_observations" [(ngModel)]="appointment.observations" [ngModelOptions]="{standalone: true}">
+        <textarea clrTextarea name="appointment_observations" [(ngModel)]="appointment.observations" [ngModelOptions]="{standalone: true}"
+        [disabled]="!editionMode">
         </textarea>
       </clr-textarea-container>
     </section>

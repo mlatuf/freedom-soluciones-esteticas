@@ -21,10 +21,11 @@ import { CalendarService } from 'src/app/calendar/services/calendar.service';
 export class AppointmentDetailsComponent implements OnInit {
 
   mobileView: Boolean;
-  areas: Area[];
-  patients: Patient[];
+  areas: Area[] = [];
+  patients: Patient[] = [];
   appointmentId: number;
   selectedDay: any;
+  selectedAreas: any[];
   appointmentDuration: number;
   appointment: Appointment;
   availableDays: any[];
@@ -49,18 +50,13 @@ export class AppointmentDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.appointmentForm = this.fb.group({
-      appointmentDay: new FormControl(null, Validators.required),
-      appointmentPatient: new FormControl(null, Validators.required),
-      appointmentAreas: new FormControl(null, Validators.required),
-      appointmentTime: new FormControl(null, Validators.required)
-    });
-
+    this.selectedDay = this.route.snapshot.paramMap.get('day');
+    this.selectedAreas = [];
+    
     this.openConfirmation = false;
     this.appointment = new Appointment();
+    
     this.appointmentId = +this.route.snapshot.paramMap.get('id');
-    let paramDay = this.route.snapshot.paramMap.get('day');
-    this.selectedDay = paramDay;
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.editionMode = (this.appointmentId === 0);
     this.getSelectorsData();
@@ -69,6 +65,10 @@ export class AppointmentDetailsComponent implements OnInit {
       this.appointmentService.getAppointmentData$(this.appointmentId).subscribe(
         response => {
           this.appointment = response;
+          this.appointmentForm.get('appointmentPatient').setValue(this.appointment.patient.fullName);
+          this.setSelectedAreas(this.appointment.areas, this.areas);
+          this.appointmentForm.get('appointmentAreas').setValue(this.selectedAreas);
+          this.appointmentForm.get('appointmentTime').setValue(this.appointment.time);
           this.spinner.hide();
         },
         error => {
@@ -77,6 +77,24 @@ export class AppointmentDetailsComponent implements OnInit {
         }
       );
     }
+      
+    this.appointmentForm = this.fb.group({
+      appointmentDay: new FormControl({value: this.selectedDay, disabled: !this.editionMode}, Validators.required),
+      appointmentPatient: new FormControl({value: this.appointment.patient,  disabled: !this.editionMode}, Validators.required),
+      appointmentAreas: new FormControl({value: this.selectedAreas, disabled: !this.editionMode}, Validators.required),
+      appointmentTime: new FormControl({value: this.appointment.time, disabled: !this.editionMode}, Validators.required)
+    });
+  }
+
+  private setSelectedAreas(selectedIds: any[], areas: Area[]): void {
+    let settedArea = null;
+    selectedIds.forEach((areaId) => {
+      settedArea = areas.find( (obj) => obj._id === areaId );
+      if (settedArea) {
+        this.selectedAreas.push(settedArea);
+      }
+    });
+    // this.onChangeAreas(this.selectedAreas);
   }
   
   private getSelectorsData(): void {
@@ -129,8 +147,6 @@ export class AppointmentDetailsComponent implements OnInit {
 
   onSubmit() {
     this.appointment.day = new Date(this.selectedDay);
-    console.log(this.availableDays);
-    console.log(this.selectedDay);
     // this.spinner.show();
     // this.appointmentService.saveAppointment$(this.appointment).subscribe(
     //   response => {
@@ -165,11 +181,12 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointment.price = 0;
     this.appointmentDuration = 0;
     if (event) {
-      event.forEach((area) => {
+      this.selectedAreas = event;
+      this.selectedAreas.forEach((area) => {
         this.appointment.price += area.price;
         this.appointmentDuration += area.duration
       });
-      this.availableTimes = (this.appointment.areas.length > 0) ? this.updateAvailableTimes(this.appointmentDuration) : this.times;
+      this.availableTimes = (this.selectedAreas.length > 0) ? this.updateAvailableTimes(this.appointmentDuration) : this.times;
       this.appointmentDuration = this.appointmentDuration *15;
     }
   }
@@ -186,5 +203,5 @@ export class AppointmentDetailsComponent implements OnInit {
       }
     }
     return availableTimesUpdated;
-  }
+  }      
 }

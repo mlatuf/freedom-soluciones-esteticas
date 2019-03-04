@@ -1,6 +1,3 @@
-import { Patient } from "../../patients/classes/patient";
-import { Area } from "../../areas/classes/area";
-
 export class Appointment {
   _id: number;
   //TODO on BE
