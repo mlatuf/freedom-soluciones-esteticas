@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http }       from '@angular/http';
 import { HttpHeaders, HttpErrorResponse }       from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, throwError } from 'rxjs';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Area }       from '../classes/area';
 import { map, retry, catchError }        from "rxjs/operators";
 
@@ -17,64 +18,47 @@ const httpOptions = {
 })
 export class AreaService {
 
-  constructor(private _http: Http) { }
+  private areasCollection: AngularFirestoreCollection<Area>;
+  private areaDoc: AngularFirestoreDocument<Area>;
+
+  constructor(private _http: Http, private afs: AngularFirestore) { 
+    this.areasCollection = this.afs.collection<Area>('areas');
+  }
 
   getAreas$(): Observable<Area[]> {
-    return this._http
-      .get(`https://api.myjson.com/bins/1e9yig`)
-      .pipe(
-        retry(3), 
-        map((res: any) => res.json()),
-        catchError(this.handleError)
-      );
+    return this.areasCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Area;
+        const _id = a.payload.doc.id;
+        return { _id, ...data };
+      }))
+    );
   }
 
   getAreaData$(areaId: number): Observable<Area> {
-    return this._http
-      .get('https://api.myjson.com/bins/1cytr4')
-      .pipe(
-        retry(3), 
-        map((res: any) => res.json()),
-        catchError(this.handleError)
-      );
+    this.areaDoc = this.afs.doc<Area>('areas/' + areaId);
+    return this.areaDoc.snapshotChanges().pipe(
+      map(a => {
+        const data = a.payload.data() as Area;
+        const _id = a.payload.id;
+        return { _id, ...data };
+      })
+    );
   }
 
   deleteArea$(areaId: number): Observable<any> {
-    return this._http
-      .delete(`https://jsonplaceholder.typicode.com/patient/create`)
-      .pipe(
-        retry(3), 
-        map((res: any) => res.json()),
-        catchError(this.handleError)
-      );
+    this.areaDoc = this.afs.doc<Area>('areas/' + areaId);
+    return from(this.areaDoc.delete());
   }
 
 
   saveArea$(area: Area): Observable<any> {
-    return this._http
-      // .post(`https://jsonplaceholder.typicode.com/patient/create`, area)
-      .get(`https://api.myjson.com/bins/1cytr4`)
-      .pipe(
-        retry(3), 
-        map((res: any) => res.json()),
-        catchError(this.handleError)
-      );
+    if (area._id) {
+      this.areaDoc = this.afs.doc<Area>('areas/' + area._id);
+      delete area._id;
+      return from(this.areaDoc.update(area))
+    }
+    return from(this.areasCollection.add({...area}));
   }
 
-  private handleError(error: HttpErrorResponse) {
-
-    let errorMsg: string;
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMsg = 'An error occurred:', error.error.message;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMsg =
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`;
-    }
-    // return an observable with a user-facing error message
-    return Observable.throw(errorMsg);
-  };
 }

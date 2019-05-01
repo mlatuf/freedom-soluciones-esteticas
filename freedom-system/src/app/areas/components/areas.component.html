@@ -80,9 +80,9 @@
 <clr-modal [(clrModalOpen)]="openEditionModal" [clrModalSize]="'sm'">
   <h3 class="modal-title">Editar zona</h3>
   <div class="modal-body">
-    <area-details [areaId]="areaSelected"
+    <area-details [areaId]="areaSelectedToEdit"
       class="area-details"
-      (closeModal)="(openEditionModal = !openEditionModal)">
+      (closeModal)="onCloseModal()">
     </area-details>
   </div>
 </clr-modal>

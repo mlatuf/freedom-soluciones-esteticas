@@ -5,6 +5,7 @@ import { AreaService } from '../services/area.service';
 import { AlertService } from '../../core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
+ 
 
 @Component({
   selector: 'areas',
@@ -17,7 +18,8 @@ export class AreasComponent implements OnInit {
   areas: Area[];
   openConfirmation: Boolean;
   openEditionModal: Boolean;
-  areaSelected: number;
+  areaSelectedToDelete: number;
+  areaSelectedToEdit: number;
   areaNameSelected: string;
   mobileView: boolean;
 
@@ -26,6 +28,7 @@ export class AreasComponent implements OnInit {
     private spinner: NgxSpinnerService, 
     private alertService: AlertService) {
     this.openConfirmation = this.openEditionModal = false;
+    
   }
   
   ngOnInit() {
@@ -49,7 +52,7 @@ export class AreasComponent implements OnInit {
   }
 
   deleteArea(areaId: number, areaName: string) {
-    this.areaSelected = areaId;
+    this.areaSelectedToDelete = areaId;
     this.areaNameSelected = areaName;
     this.openConfirmation = true;
   }
@@ -57,10 +60,10 @@ export class AreasComponent implements OnInit {
   confirmDeleteArea() {
     this.openConfirmation = false;
     this.spinner.show();    
-    this.areaService.deleteArea$(this.areaSelected).subscribe(
+    this.areaService.deleteArea$(this.areaSelectedToDelete).subscribe(
       response => {
         this.spinner.hide();
-        this.alertService.success(response);
+        this.alertService.success("Zona eliminada con exito");
         this.getAreaList();
       },
       error => {
@@ -71,8 +74,15 @@ export class AreasComponent implements OnInit {
   }
 
   showAreaModal(areaId: number) {
-    this.areaSelected = areaId;
+    this.areaSelectedToEdit = areaId;
     this.openEditionModal = true;
+  }
+
+  onCloseModal() {
+    this.openEditionModal = !this.openEditionModal;
+    this.areaSelectedToEdit = this.areaSelectedToDelete = null;
+    this.areaNameSelected = '';
+    this.getAreaList();
   }
 
 }
