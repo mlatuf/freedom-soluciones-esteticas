@@ -1,5 +1,5 @@
 export class AppointmentPatient {
-  _id: number;
+  _id: string;
   date: Date;
   areas: string;
   status: string;

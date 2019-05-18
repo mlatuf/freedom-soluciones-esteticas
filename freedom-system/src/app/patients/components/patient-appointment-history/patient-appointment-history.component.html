@@ -13,7 +13,7 @@
   </clr-dg-column>
 
   <clr-dg-row *clrDgItems="let appointment of appointmentHistory">
-    <clr-dg-cell>{{ appointment.date | date:'shortDate'}}</clr-dg-cell>
+    <clr-dg-cell>{{ appointment.date.toDate() | date:'shortDate'}}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.areas }}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.status }}</clr-dg-cell>
     <clr-dg-cell>{{ appointment.observations }}</clr-dg-cell>
