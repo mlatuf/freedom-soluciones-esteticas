@@ -16,7 +16,7 @@ export class PatientDetailsComponent implements OnInit {
 
   mobileView: Boolean;
   patient: Patient;
-  patientId: number;
+  patientId: string;
   @Input() editionMode: Boolean;
   openConfirmation: Boolean;
 
@@ -30,9 +30,9 @@ export class PatientDetailsComponent implements OnInit {
     
   ngOnInit() {
     this.mobileView = this.aplicationStateService.getIsMobileResolution();
-    this.patientId = +this.route.snapshot.paramMap.get('id');
+    this.patientId = this.route.snapshot.paramMap.get('id');
     this.patient = new Patient;
-    this.editionMode = (this.patientId === 0);
+    this.editionMode = (!this.patientId);
     if (this.patientId) {
       this.spinner.show();
       this.patientService.getPatientData$(this.patientId).subscribe(

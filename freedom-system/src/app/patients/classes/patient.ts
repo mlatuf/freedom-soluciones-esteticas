@@ -1,5 +1,7 @@
+import { AppointmentPatient } from "./appointment-patient";
+
 export class Patient {
-  _id: number;
+  _id: string;
   name: string;
   lastName: string;
   age: number;
@@ -19,4 +21,5 @@ export class Patient {
   hasEpilepsy: Boolean;
   hasPreviousTreatment: Boolean;
   previousTreatment: string;
+  appointments: AppointmentPatient[];
 }
