@@ -26,6 +26,7 @@ currentDate.setDate(currentDate.getDate() - 1);
 export class CalendarService {
   private daysCollection: AngularFirestoreCollection<Day>;
   private daysHistoryCollection: AngularFirestoreCollection<Day>;
+  private dayDoc: AngularFirestoreDocument<Day>;
 
   constructor(private _http: Http, private afs: AngularFirestore) {
     this.daysCollection = this.afs.collection<Day>("days", ref =>
@@ -51,6 +52,16 @@ export class CalendarService {
     return calendar;
   }
 
+  getDayToAppointment$(dayId: string): Observable<Day> {
+    this.dayDoc = this.afs.doc<Day>('days/' + dayId);
+    return this.dayDoc.snapshotChanges().pipe(
+      map(a => {
+        const data = a.payload.data() as Day;
+        const _id = a.payload.id;
+        return { _id, ...data };
+      })
+    );
+  }
   getDaysList$(): Observable<any> {
     return this._http.get(`https://api.myjson.com/bins/10tcg4`).pipe(
       retry(3),
@@ -100,7 +111,7 @@ export class CalendarService {
         let newDay = {
           year: day.date.toDate().getFullYear(),
           month: day.date.toDate().getMonth(),
-          days: [day.date.toDate()]
+          days: [{_id: day._id, date:day.date.toDate()}]
         };
         newDaysArray.push(newDay);
       }
