@@ -38,7 +38,7 @@ import { AppComponent } from './app.component';
     ClrFormsNextModule,
     NgxSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
     CoreModule,

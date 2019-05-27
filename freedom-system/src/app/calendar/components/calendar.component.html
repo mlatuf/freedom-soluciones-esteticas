@@ -35,9 +35,9 @@ class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
     Dias
   </clr-dg-column>
 
-  <clr-dg-row *clrDgItems="let calendarItem of calendar.days">
+  <clr-dg-row *clrDgItems="let calendarItem of calendar">
     <clr-dg-cell>{{ calendarItem.year }}</clr-dg-cell>
-    <clr-dg-cell>{{ calendarItem.month | monthName }}</clr-dg-cell>
+    <clr-dg-cell>{{ calendarItem.month + 1 | monthName }}</clr-dg-cell>
     <clr-dg-cell class="action-cell">
       <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days"
         (click)="goToAppointment(day)">
@@ -61,7 +61,7 @@ class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
     <clr-datagrid [hidden]="(calendarHistory.length == 0)" 
     class="calendar-grid">
       <clr-dg-column [clrDgField]="'year'">
-        Anio
+        Año
       </clr-dg-column>
       <clr-dg-column [clrDgField]="'month'">
         Mes
@@ -70,9 +70,9 @@ class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
         Dias
       </clr-dg-column>
       
-      <clr-dg-row *clrDgItems="let calendarItem of calendarHistory.days">
+      <clr-dg-row *clrDgItems="let calendarItem of calendarHistory">
         <clr-dg-cell>{{ calendarItem.year }}</clr-dg-cell>
-        <clr-dg-cell>{{ calendarItem.month | monthName }}</clr-dg-cell>
+        <clr-dg-cell>{{ calendarItem.month + 1 | monthName }}</clr-dg-cell>
         <clr-dg-cell class="action-cell">
           <button class="btn btn-sm btn-primary-outline" *ngFor="let day of calendarItem.days">
             {{ day.getDate() }}

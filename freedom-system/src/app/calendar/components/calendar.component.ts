@@ -20,32 +20,21 @@ export class CalendarComponent implements OnInit {
   showNewDateForm: Boolean;
   openHistory: Boolean;
   newDate: Day;
-  calendar: Calendar;
-  calendarHistory: Calendar;
+  calendar: Day[];
+  calendarHistory: Day[];
 
   constructor(private router: Router, private aplicationState: ApplicationStateService,
     private calendarService: CalendarService, 
     private spinner: NgxSpinnerService, 
     private alertService: AlertService) { 
     this.showNewDateForm = this.openHistory = false;
-    this.calendar = new Calendar;
-    this.calendarHistory = new Calendar;
   }
-
+  
   ngOnInit() {
+    this.calendar = this.calendarHistory = [];
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
-    this.spinner.show();
-    this.calendarService.getCalendar$().subscribe(
-      response => {
-        this.calendar = response;
-        this.spinner.hide();
-      },
-      error => {
-        this.spinner.hide();
-        this.alertService.error(error);
-      }
-    );
+    this.getCalendar(); 
   }
 
   showCalendarHistory(): void {
@@ -63,12 +52,29 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  private getCalendar() {
     this.spinner.show();
-    this.calendarService.addDate$(this.newDate).subscribe(
+    this.calendarService.getCalendar$().subscribe(
       response => {
         this.calendar = response;
         this.spinner.hide();
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
+  }
+
+  onSubmit() {
+    this.spinner.show();
+    let dateToAdd = this.newDate.date;
+    this.calendarService.saveDate$(dateToAdd).subscribe(
+      response => {
+        this.getCalendar();
+        this.spinner.hide();
+        this.newDate = new Day;
+        this.showNewDateForm = false;
         this.alertService.success("La fecha fue agregada correctamente");
       },
       error => {

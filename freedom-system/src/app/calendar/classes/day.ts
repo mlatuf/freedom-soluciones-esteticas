@@ -1,4 +1,4 @@
 export class Day {
-  _id: number;
-  date: Date;
+  _id: string;
+  date: any;
 }
