@@ -12,6 +12,7 @@ import { PatientService } from 'src/app/patients/services/patient.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/appointments/classes/appointment';
 import { CalendarService } from 'src/app/calendar/services/calendar.service';
+import { Day } from 'src/app/calendar/classes/day';
 
 @Component({
   selector: 'appointment-details',
@@ -23,8 +24,8 @@ export class AppointmentDetailsComponent implements OnInit {
   mobileView: Boolean;
   areas: Area[] = [];
   patients: Patient[] = [];
-  appointmentId: number;
-  selectedDay: any;
+  appointmentId: string;
+  selectedDay: Day;
   selectedAreas: any[];
   appointmentDuration: number;
   appointment: Appointment;
@@ -46,44 +47,60 @@ export class AppointmentDetailsComponent implements OnInit {
     private calendarService: CalendarService,
     private appointmentService: AppointmentService,
     private areaService: AreaService,
-    private patientService: PatientService) { }
+    private patientService: PatientService) { 
+      this.selectedDay = new Day();
+    }
 
   ngOnInit() {
 
-    this.selectedDay = this.route.snapshot.paramMap.get('day');
     this.selectedAreas = [];
-    
     this.openConfirmation = false;
     this.appointment = new Appointment();
     
-    this.appointmentId = +this.route.snapshot.paramMap.get('id');
+    this.appointmentId = this.route.snapshot.paramMap.get('id');
     this.mobileView = this.aplicationState.getIsMobileResolution();
-    this.editionMode = (this.appointmentId === 0);
+    this.setSelectedDay(this.route.snapshot.paramMap.get('day'));
+    this.editionMode = (!this.appointmentId);
     this.getSelectorsData();
-    if (this.appointmentId) {
-      this.spinner.show();
-      this.appointmentService.getAppointmentData$(this.appointmentId).subscribe(
-        response => {
-          this.appointment = response;
-          this.appointmentForm.get('appointmentPatient').setValue(this.appointment.patient.fullName);
-          this.setSelectedAreas(this.appointment.areas, this.areas);
-          this.appointmentForm.get('appointmentAreas').setValue(this.selectedAreas);
-          this.appointmentForm.get('appointmentTime').setValue(this.appointment.time);
-          this.spinner.hide();
-        },
-        error => {
-          this.spinner.hide();
-          this.alertService.error(error);
-        }
-      );
-    }
+    // if (this.appointmentId) {
+    //   this.spinner.show();
+    //   this.appointmentService.getAppointmentData$(this.appointmentId).subscribe(
+    //     response => {
+    //       this.appointment = response;
+    //       this.appointmentForm.get('appointmentPatient').setValue(this.appointment.patient);
+    //       this.setSelectedAreas(this.appointment.areas, this.areas);
+    //       this.appointmentForm.get('appointmentAreas').setValue(this.selectedAreas);
+    //       this.appointmentForm.get('appointmentTime').setValue(this.appointment.time);
+    //       this.spinner.hide();
+    //     },
+    //     error => {
+    //       this.spinner.hide();
+    //       this.alertService.error(error);
+    //     }
+    //   );
+    // }
       
     this.appointmentForm = this.fb.group({
-      appointmentDay: new FormControl({value: this.selectedDay, disabled: !this.editionMode}, Validators.required),
+      appointmentDay: new FormControl({value: this.selectedDay._id, disabled: !this.editionMode}, Validators.required),
       appointmentPatient: new FormControl({value: this.appointment.patient,  disabled: !this.editionMode}, Validators.required),
       appointmentAreas: new FormControl({value: this.selectedAreas, disabled: !this.editionMode}, Validators.required),
       appointmentTime: new FormControl({value: this.appointment.time, disabled: !this.editionMode}, Validators.required)
     });
+  }
+
+  private setSelectedDay(dayId: string): void {
+    this.spinner.show();
+    this.calendarService.getDayToAppointment$(dayId).subscribe(
+      response => {
+        this.selectedDay = response;
+        this.times = response.availableTimes
+        this.spinner.hide();
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
   }
 
   private setSelectedAreas(selectedIds: any[], areas: Area[]): void {
@@ -98,8 +115,9 @@ export class AppointmentDetailsComponent implements OnInit {
   }
   
   private getSelectorsData(): void {
+
     this.spinner.show();
-    this.calendarService.getDaysList$().subscribe(
+    this.calendarService.getCalendar$().subscribe(
       response => {
         this.availableDays = response;
         this.spinner.hide();
@@ -131,22 +149,10 @@ export class AppointmentDetailsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
-    
-    this.spinner.show();
-    //TODO params day id
-    this.appointmentService.getAppointmentTimes$(new Date(this.selectedDay)).subscribe(
-      response => {
-        this.times = this.availableTimes = response;
-        this.spinner.hide();
-      },
-      error => {
-        this.alertService.error(error);
-      }
-    )
   }
 
   onSubmit() {
-    this.appointment.day = new Date(this.selectedDay);
+    this.appointment.day = this.selectedDay.date;
     // this.spinner.show();
     // this.appointmentService.saveAppointment$(this.appointment).subscribe(
     //   response => {
@@ -170,7 +176,7 @@ export class AppointmentDetailsComponent implements OnInit {
   
   confirmCancelation() {
     if (this.appointment.day) {
-      let dayToString = [this.appointment.day.getFullYear(), this.appointment.day.getMonth(), this.appointment.day.getDate()].join('-');
+      let dayToString = [this.appointment.day.date.getFullYear(), this.appointment.day.date.getMonth(), this.appointment.day.date.getDate()].join('-');
       this.router.navigate(['/appointments', dayToString]);
     } else {
       this.router.navigate(['/calendar']);

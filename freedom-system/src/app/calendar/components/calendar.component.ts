@@ -84,8 +84,7 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  goToAppointment(day: Date): void {
-    let dayToString = [day.getFullYear(), day.getMonth() + 1, day.getDate()].join('-');
-    this.router.navigate(['/appointments', dayToString]);
+  goToAppointment(day: string): void {
+    this.router.navigate(['/appointments', day]);
   }
 }

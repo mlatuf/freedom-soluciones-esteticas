@@ -4,7 +4,10 @@ import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, retry, catchError }        from "rxjs/operators";
 
-import { Appointment }       from '../classes/appointment';
+import { Appointment }       from 'src/app/appointments/classes/appointment';
+import { Day } from 'src/app/calendar/classes/day';
+
+import { AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,10 +20,13 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AppointmentService {
+  private appointmentsCollection: AngularFirestoreCollection<Appointment>;
   
-  constructor(private _http: Http) { }
+  constructor(private _http: Http, private afs: AngularFirestore) { 
+    this.appointmentsCollection = this.afs.collection<Appointment>('appointments');
+  }
 
-  getAppointments$(day: Date): Observable<Appointment[]> {  
+  getAppointments$(day: Day): Observable<Appointment[]> {
     return this._http
       .get(`https://api.myjson.com/bins/1133ok`)
       .pipe(

@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Appointment } from '../classes/appointment';
+import { Appointment } from 'src/app/appointments/classes/appointment';
+import { Area } from 'src/app/areas/classes/area';
+import { Day } from 'src/app/calendar/classes/day';
 
-import { AlertService } from '../../core/services/alert/alert.service'
+import { AppointmentService } from 'src/app/appointments/services/appointment.service'
+import { AreaService } from 'src/app/areas/services/area.service';
+import { CalendarService } from 'src/app/calendar/services/calendar.service';
+import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AppointmentService } from '../services/appointment.service'
-import { AreaService } from '../../areas/services/area.service';
-import { Area } from '../../areas/classes/area';
-import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
+import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'appointments',
@@ -18,7 +20,7 @@ import { ApplicationStateService } from '../../core/services/aplication-state/ap
 export class AppointmentsComponent implements OnInit {
 
   mobileView: Boolean;
-  appointmentsDate: Date;
+  appointmentsDate: Day;
   day: string;
   appointments: Appointment[];
   endedAppointments: Appointment[];
@@ -27,8 +29,7 @@ export class AppointmentsComponent implements OnInit {
   openPaymentModal: Boolean;
   openConfirmationModal: Boolean;
   paymentMethodSelected: number;
-  selectedAppointment: number;
-  isFinished: Boolean;
+  selectedAppointment: string;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -36,7 +37,8 @@ export class AppointmentsComponent implements OnInit {
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
     private appointmentService: AppointmentService,
-    private areaService: AreaService) { 
+    private areaService: AreaService,
+    private calendarService: CalendarService) { 
       this.paymentsArray = [
         {id: 1, description: 'Efectivo'},
         {id: 2, description: 'Débito'},
@@ -44,14 +46,13 @@ export class AppointmentsComponent implements OnInit {
       ];
       this.openPaymentModal = this.openConfirmationModal = false;
       this.paymentMethodSelected = 1;
-      //TODO este campo viene en el modelo Day
-      this.isFinished = false;
     }
     
   ngOnInit() {
     this.day = this.route.snapshot.paramMap.get('day');
     this.mobileView = this.aplicationState.getIsMobileResolution();
-    this.appointmentsDate = new Date(this.day);
+    this.appointmentsDate = new Day();
+    this.setAppointmentsDay();
     this.appointments = this.areasData = this.endedAppointments = [];
     this.getAppointmentsList();
   }
@@ -63,6 +64,20 @@ export class AppointmentsComponent implements OnInit {
         this.getAreasInformation();
       },
       error => {
+        this.alertService.error(error);
+      }
+      );
+    }
+    
+    private setAppointmentsDay(): void {
+      this.spinner.show();
+      this.calendarService.getDayToAppointment$(this.day).subscribe(
+        response => {
+          this.appointmentsDate = response;
+          this.spinner.hide();
+        },
+        error => {
+        this.spinner.hide();
         this.alertService.error(error);
       }
     );
@@ -86,10 +101,10 @@ export class AppointmentsComponent implements OnInit {
   private getAreasInformation(): void {
     this.appointments.forEach((appointment) => {
       let areasNames = [];
-      appointment.areas.forEach((areaId) => {
-        areasNames.push(this.areasData[areaId-1].description);
-        appointment.price += this.areasData[areaId-1].price;
-      });
+      // appointment.areas.forEach((areaId) => {
+      //   areasNames.push(this.areasData[areaId-1].description);
+      //   appointment.price += this.areasData[areaId-1].price;
+      // });
       appointment.areas = areasNames;
     });
   }
@@ -153,7 +168,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   onEndDay(): void {
-    this.isFinished = true;
+    this.appointmentsDate.isFinished = true;
     this.openConfirmationModal = false;
   }
 

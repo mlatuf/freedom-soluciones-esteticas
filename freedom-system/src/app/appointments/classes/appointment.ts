@@ -1,14 +1,13 @@
+import { Area } from "src/app/areas/classes/area";
+import { Patient } from "src/app/patients/classes/patient";
+import { Day } from "src/app/calendar/classes/day";
+
 export class Appointment {
-  _id: number;
-  //TODO on BE
-  // patient: Patient;
-  day: Date;
+  _id: string;
+  patient: Patient;
+  day: Day;
   time: number;
-  patient: { 
-    _id: number;
-    fullName: string;
-  };
-  areas: number[];
+  areas: Area[];
   price: number;
   paymentMethod: number;
   status: number;

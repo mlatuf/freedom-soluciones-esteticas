@@ -1,6 +1,6 @@
 <page-title>
   <clr-button-group class="btn-sm">
-    <clr-button title="Agregar turno" [disabled]="isFinished" (click)="goToAppointmentDetails()"> 
+    <clr-button title="Agregar turno" [disabled]="appointmentsDate.isFinished" (click)="goToAppointmentDetails()"> 
       <clr-icon shape="add" class="clr-icon"></clr-icon>
       <span [hidden]="mobileView">Agregar turno</span>
     </clr-button>
