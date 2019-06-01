@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AlertService } from '../../core/services/alert/alert.service'
 import { CalendarService } from '../services/calendar.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { Day } from '../classes/day';
-import { Calendar } from '../classes/calendar';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
 
 @Component({
@@ -34,6 +33,8 @@ export class CalendarComponent implements OnInit {
     this.calendar = this.calendarHistory = [];
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
+    this.newDate.isFinished = false;
+    this.newDate.availableTimes = Array.from(Array(52).keys(), n => n + 1);
     this.getCalendar(); 
   }
 
@@ -68,13 +69,12 @@ export class CalendarComponent implements OnInit {
 
   onSubmit() {
     this.spinner.show();
-    let dateToAdd = this.newDate.date;
-    this.calendarService.saveDate$(dateToAdd).subscribe(
+    this.calendarService.saveDate$(this.newDate).subscribe(
       response => {
         this.getCalendar();
         this.spinner.hide();
-        this.newDate = new Day;
         this.showNewDateForm = false;
+        this.newDate.date = null;
         this.alertService.success("La fecha fue agregada correctamente");
       },
       error => {
