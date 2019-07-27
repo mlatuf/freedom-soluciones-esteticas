@@ -34,7 +34,6 @@ export class CalendarComponent implements OnInit {
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
     this.newDate.isFinished = false;
-    this.newDate.availableTimes = Array.from(Array(52).keys(), n => n + 1);
     this.getCalendar(); 
   }
 

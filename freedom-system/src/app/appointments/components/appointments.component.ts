@@ -6,7 +6,6 @@ import { Area } from 'src/app/areas/classes/area';
 import { Day } from 'src/app/calendar/classes/day';
 
 import { AppointmentService } from 'src/app/appointments/services/appointment.service'
-import { AreaService } from 'src/app/areas/services/area.service';
 import { CalendarService } from 'src/app/calendar/services/calendar.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -29,7 +28,7 @@ export class AppointmentsComponent implements OnInit {
   openPaymentModal: Boolean;
   openConfirmationModal: Boolean;
   paymentMethodSelected: number;
-  selectedAppointment: string;
+  selectedAppointment: Appointment;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -37,9 +36,9 @@ export class AppointmentsComponent implements OnInit {
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
     private appointmentService: AppointmentService,
-    private areaService: AreaService,
     private calendarService: CalendarService) { 
       this.paymentsArray = [
+        {id: 0, description: 'Impago'},
         {id: 1, description: 'Efectivo'},
         {id: 2, description: 'Débito'},
         {id: 3, description: 'Crédito'}
@@ -52,43 +51,30 @@ export class AppointmentsComponent implements OnInit {
     this.day = this.route.snapshot.paramMap.get('day');
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.appointmentsDate = new Day();
-    this.setAppointmentsDay();
     this.appointments = this.areasData = this.endedAppointments = [];
-    this.getAppointmentsList();
+    this.setAppointmentsDay();
   }
-
-  private getAreasList() {    
-    this.areaService.getAreas$().subscribe(
+  
+  private setAppointmentsDay(): void {
+    this.spinner.show();
+    this.calendarService.getDayToAppointment$(this.day).subscribe(
       response => {
-        this.areasData = response;
-        this.getAreasInformation();
+        this.appointmentsDate = response;
+        this.getAppointmentsList({_id: this.appointmentsDate._id, date: this.appointmentsDate.date});
+        this.spinner.hide();
       },
       error => {
-        this.alertService.error(error);
-      }
-      );
-    }
-    
-    private setAppointmentsDay(): void {
-      this.spinner.show();
-      this.calendarService.getDayToAppointment$(this.day).subscribe(
-        response => {
-          this.appointmentsDate = response;
-          this.spinner.hide();
-        },
-        error => {
         this.spinner.hide();
         this.alertService.error(error);
       }
     );
   }
 
-  private getAppointmentsList(): void {
+  private getAppointmentsList(selectedDay): void {
     this.spinner.show();
-    this.appointmentService.getAppointments$(this.appointmentsDate).subscribe(
+    this.appointmentService.getAppointments$(selectedDay).subscribe(
       response => {
         this.appointments = response;
-        this.getAreasList();
         this.spinner.hide();
       },
       error => {
@@ -96,17 +82,6 @@ export class AppointmentsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
-  }
-
-  private getAreasInformation(): void {
-    this.appointments.forEach((appointment) => {
-      let areasNames = [];
-      // appointment.areas.forEach((areaId) => {
-      //   areasNames.push(this.areasData[areaId-1].description);
-      //   appointment.price += this.areasData[areaId-1].price;
-      // });
-      appointment.areas = areasNames;
-    });
   }
 
   public getAppointmentRowClass(status: number) {
@@ -138,11 +113,21 @@ export class AppointmentsComponent implements OnInit {
   }
 
   onStatusChange(appointmentChanged: any): void {
-    let appointment = this.appointments.find((obj) => {
+    this.selectedAppointment = this.appointments.find((obj) => {
       return obj._id === appointmentChanged.selectedAppointment;
     });
-    appointment.status = (appointmentChanged.newStatus != 6) ? appointmentChanged.newStatus : appointment.status;
-    this.selectedAppointment = appointmentChanged.selectedAppointment;
+    this.selectedAppointment.status = (appointmentChanged.newStatus != 6) ? appointmentChanged.newStatus : this.selectedAppointment.status;
+    this.spinner.show();
+    this.appointmentService.saveAppointment$(this.selectedAppointment, this.day).subscribe(
+      response => {
+        this.selectedAppointment = response;
+        this.spinner.hide();
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
     this.openPaymentModal = (appointmentChanged.newStatus === 6);
   }
 
@@ -151,12 +136,9 @@ export class AppointmentsComponent implements OnInit {
   }
 
   onSubmitPayment(): void {
-    let appointment = this.appointments.find((obj) => {
-      return obj._id === this.selectedAppointment;
-    });
-    appointment.paymentMethod = this.paymentMethodSelected;
-    appointment.price = (this.paymentMethodSelected != 1) ? (appointment.price * 1.2) : appointment.price;
-    appointment.status = 6;
+    this.selectedAppointment.paymentMethod = this.paymentMethodSelected;
+    this.selectedAppointment.price = (this.paymentMethodSelected != 1) ? (this.selectedAppointment.price * 1.2) : this.selectedAppointment.price;
+    this.selectedAppointment.status = 6;
     this.openPaymentModal = false;
   }
 
@@ -180,8 +162,8 @@ export class AppointmentsComponent implements OnInit {
   }
 
   goToAppointmentDetails(appointmentId: number = null) {
-    let detailsUrl = (appointmentId) ? ['/appointment/details/', this.day, appointmentId] 
-    : ['/appointment/details/',this.day ];
+    let detailsUrl = (appointmentId) ? ['/appointment/details/', this.appointmentsDate._id, appointmentId ] 
+    : ['/appointment/details/', this.appointmentsDate._id];
     this.router.navigate(detailsUrl);
   }
 }

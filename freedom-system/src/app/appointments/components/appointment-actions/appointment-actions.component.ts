@@ -1,7 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, SimpleChanges, OnChanges } from '@angular/core';
-import { Appointment } from '../../classes/appointment';
-
-const statusDescriptions = ["Nuevo", "Esperando confirmacion", "Confirmado", "Ausente", "Presente", "Finalizado"];
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'appointment-actions',
@@ -11,7 +8,7 @@ const statusDescriptions = ["Nuevo", "Esperando confirmacion", "Confirmado", "Au
 export class AppointmentActionsComponent implements OnChanges {
  
   @Input() currentStatus: number;
-  @Input() selectedAppointment: number;
+  @Input() selectedAppointment: string;
   actionsList: number[];
   @Output() onStatusChange = new EventEmitter<any>();
 

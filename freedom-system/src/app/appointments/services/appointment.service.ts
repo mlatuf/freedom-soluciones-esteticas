@@ -1,162 +1,91 @@
-import { Injectable } from '@angular/core';
-import { Http }       from '@angular/http';
-import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, retry, catchError }        from "rxjs/operators";
+import { Injectable } from "@angular/core";
+import { Observable, from } from "rxjs";
+import { map, retry } from "rxjs/operators";
 
-import { Appointment }       from 'src/app/appointments/classes/appointment';
-import { Day } from 'src/app/calendar/classes/day';
+import { Appointment } from "src/app/appointments/classes/appointment";
 
-import { AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'Authorization': 'my-auth-token'
-  })
-};
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from "@angular/fire/firestore";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class AppointmentService {
+
   private appointmentsCollection: AngularFirestoreCollection<Appointment>;
-  
-  constructor(private _http: Http, private afs: AngularFirestore) { 
-    this.appointmentsCollection = this.afs.collection<Appointment>('appointments');
-  }
+  private appointmentDoc: AngularFirestoreDocument<Appointment>;
 
-  getAppointments$(day: Day): Observable<Appointment[]> {
-    return this._http
-      .get(`https://api.myjson.com/bins/1133ok`)
-      .pipe(
-        retry(3), 
-        map((res:any) => this.extractData(res)),
-        catchError(this.handleError)
-      );
-  }
+  constructor(private afs: AngularFirestore) {}
 
-  getAppointmentData$(appointmentId: number): Observable<Appointment> {
-    return this._http
-      .get('https://api.myjson.com/bins/wux5c')
-      .pipe(
-        retry(3), 
-        map((res: any) => res.json()),
-        catchError(this.handleError)
-      );
-  }
-
-  saveAppointment$(appointment: Appointment): Observable<any> {
-    return this._http
-    //TODO is a post method
-    .get('https://api.myjson.com/bins/keb7u')
-    .pipe(
-      retry(3), 
-      map((res: any) => res.json()),
-      catchError(this.handleError)
+  getAppointments$(selectedDay: any): Observable<Appointment[]> {
+    this.appointmentsCollection = this.afs.collection<Appointment>("appointments", ref =>
+      ref.where("day", "==", selectedDay)
+    );
+    return this.appointmentsCollection.snapshotChanges().pipe(
+      retry(3),
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Appointment;
+        const _id = a.payload.doc.id;
+        return { _id, ...data };
+      }))
     );
   }
 
-  getAppointmentTimes$(day: Date): Observable<any> {
-    return this._http
-      .get(`https://api.myjson.com/bins/1133ok`)
-      .pipe(
-        retry(3), 
-        map((res: any) =>this.extractDataTimes(res)),
-        catchError(this.handleError)
-      );
+  getAppointmentData$(appointmentId: string): Observable<any> {
+    this.appointmentDoc = this.afs.doc<Appointment>('appointments/'+ appointmentId);
+    return this.appointmentDoc.snapshotChanges().pipe(
+      retry(3),
+      map(a => {
+        const data = a.payload.data() as Appointment;
+        const _id = a.payload.id;
+        return { _id, ...data };
+      })
+    );
   }
 
-  public extractData(res: Response) {
-    let body = res.json();
-    let appointmentsArray = Object.keys(body).map(function(k) { return body[k] });
-    let newAppointmentsList = [];
-    if (appointmentsArray.length > 0) {
-      //sort by time
-      appointmentsArray.sort(function(a,b){
-        return a.time - b.time;
-      });
-      //remove duplicated
-      let appointmentsArrayUnique = appointmentsArray.reduce((x, y) => x.findIndex(e=>e.time==y.time)<0 ? [...x, y]: x, []);
-
-      appointmentsArrayUnique.forEach((appointment) => {
-        let newAppointment = {
-          '_id': appointment._id,
-          'time': appointment.time,
-          'patient': appointment.patient,
-          'areas': appointment.areas,
-          'price': 0,
-          'status': appointment.status,
-          'observations': appointment.observations
-        }
-        newAppointmentsList.push(newAppointment);
-      });
+  saveAppointment$(appointment: Appointment, dayId: string): Observable<any> {
+    this.appointmentsCollection = this.afs.collection<Appointment>("appointment", ref =>
+      ref.where("day", "==", dayId)
+    );
+    if (appointment._id) {
+      this.appointmentDoc = this.afs.doc<Appointment>('/appointments/' + appointment._id);
+      delete appointment._id;
+      return from(this.appointmentDoc.update(appointment))
     }
-    return newAppointmentsList;
+    return from(this.appointmentsCollection.add({...appointment}));
   }
 
-  public extractDataTimes(res: Response) {
-    let body = res.json();
-    const timeMinutes = Array.from(Array(52).keys());
-    let occupiedTimes = []; 
-    let freeTimes = [];
-    let appointmentsTimes = Object.keys(body).map(function(k) { return body[k] });
-    if (appointmentsTimes.length > 0) {
-      //sort by time
-      appointmentsTimes.sort(function(a,b){
-        return a.time - b.time;
-      });
-      //remove duplicated
-      let appointmentsTimesUnique = appointmentsTimes.reduce((x, y) => x.findIndex(e=>e.time==y.time)<0 ? [...x, y]: x, []);
-
-
-      appointmentsTimesUnique.forEach((appointment) => {
-        let newTime = {
-          'time': appointment.time
-        }
-        occupiedTimes.push(newTime);
-      });
-    }
-    freeTimes = timeMinutes.filter(e => !occupiedTimes.find(a => e == a.time));
-    return freeTimes;
+  deleteAppointment$(appointmentId: string): Observable<any> {
+    const appointmentDoc = this.afs.doc<Appointment>('appointments/'+ appointmentId);
+    return from(appointmentDoc.delete());
   }
 
-  private handleError(error: HttpErrorResponse) {
-
-    let errorMsg: string;
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMsg = 'An error occurred:', error.error.message;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMsg =
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`;
+  getInitialTimes$(busyAppointments: Appointment[]): number[] {
+    let initialTimes = Array.from(Array(52).keys());
+    if (busyAppointments) {
+      busyAppointments.forEach((appointment) => {
+        const duration = appointment.areas.reduce((acc, area) => area.duration, 0);
+        initialTimes.splice(appointment.time, duration);
+      });
     }
-    // return an observable with a user-facing error message
-    return Observable.throw(errorMsg);
-  };
+    return initialTimes;
+  }
+
+  updateAvailableTimes$(duration: number, availableTimes: number[]): number[] {
+    let availableTimesUpdated = [];
+    for (let index = 0; index < availableTimes.length - duration; index++) {
+      let possibleTime = true;
+      for (let pos = index; possibleTime && pos < index + duration - 1; pos++) {
+        possibleTime =
+          availableTimes[pos + 1] === availableTimes[pos] + 1;
+      }
+      if (possibleTime) {
+        availableTimesUpdated.push(availableTimes[index]);
+      }
+    }
+    return availableTimesUpdated;
+  }
 }
-
-
-// JSON generator
-// [
-//   '{{repeat(10,20)}}',
-//   {
-//     _id: '{{index()}}',
-//     date: 'Mon Oct 08 2018 00:00:00 GMT-0300 (hora estándar de Argentina)',
-//     time: '{{integer(1, 52)}}',
-//     appointment: {
-//         _id: '{{integer(1, 48)}}',
-//         name: '{{firstName()}} {{surname()}}'
-//     },
-//     areas: [
-//       '{{repeat(1, 4)}}',
-//       '{{integer(1, 10)}}'
-//     ],
-//     price: '{{floating(800, 1500, 0, "0")}}',
-//     status: '{{integer(1, 6)}}',
-//     observations: '{{lorem(1, "paragraphs")}}'
-//   }
-// ]
