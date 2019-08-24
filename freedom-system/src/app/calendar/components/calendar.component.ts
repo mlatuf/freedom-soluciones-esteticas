@@ -34,7 +34,6 @@ export class CalendarComponent implements OnInit {
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
     this.newDate.isFinished = false;
-    this.newDate.availableTimes = Array.from(Array(52).keys(), n => n + 1);
     this.getCalendar(); 
   }
 
@@ -84,8 +83,7 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  goToAppointment(day: Date): void {
-    let dayToString = [day.getFullYear(), day.getMonth() + 1, day.getDate()].join('-');
-    this.router.navigate(['/appointments', dayToString]);
+  goToAppointment(day: string): void {
+    this.router.navigate(['/appointments', day]);
   }
 }
