@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit{
   title = 'Freedom Soluciones Esteticas';
 
-  constructor() {}
+  constructor(db: AngularFirestore) {}
   
   ngOnInit() {}
 }

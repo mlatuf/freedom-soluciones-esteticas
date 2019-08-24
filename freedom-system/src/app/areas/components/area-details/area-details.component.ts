@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Area } from '../../classes/area';
 
@@ -18,8 +19,9 @@ export class AreaDetailsComponent implements OnChanges {
   durationsArray: Array<any>;
   @Output() closeModal: EventEmitter<any>;
   openConfirmation: Boolean;
+  areaForm: FormGroup;
 
-  constructor(private areaService: AreaService, private spinner: NgxSpinnerService, 
+  constructor(private areaService: AreaService, private fb: FormBuilder, private spinner: NgxSpinnerService, 
     private alertService: AlertService) {
       this.durationsArray = [
         {id: 1, description: '15 minutos'},
@@ -29,15 +31,16 @@ export class AreaDetailsComponent implements OnChanges {
       ];
       this.closeModal = new EventEmitter();
       this.openConfirmation = false;
-    }
-
+  }
+  
   ngOnChanges() {
     this.areaModel = new Area;
-    if (this.areaId != 0) {
+    if (this.areaId) {
       this.spinner.show();
       this.areaService.getAreaData$(this.areaId).subscribe(
         response => {
           this.areaModel = response;
+          this.setFormValues(this.areaModel.description, this.areaModel.price, this.areaModel.duration);
           this.spinner.hide();
         },
         error => {
@@ -45,7 +48,17 @@ export class AreaDetailsComponent implements OnChanges {
           this.alertService.error(error);
         }
       );
+    } else {
+      this.setFormValues();
     }
+  }
+
+  private setFormValues(description = '', price = null, duration = null) {
+    this.areaForm = this.fb.group({
+      areaDescription: new FormControl(description, Validators.required),
+      areaPrice: new FormControl(price, Validators.required),
+      areaDuration: new FormControl(duration, Validators.required)
+    });
   }
 
   onChange(event) {
@@ -56,10 +69,9 @@ export class AreaDetailsComponent implements OnChanges {
     this.spinner.show();
     this.areaService.saveArea$(this.areaModel).subscribe(
       response => {
-        this.areaModel = response;
         this.spinner.hide();
         this.closeModal.emit();
-        this.alertService.success("Zona creada con éxito");      
+        this.alertService.success("Zona guardada con éxito");      
       },
       error => {
         this.spinner.hide();
@@ -69,7 +81,7 @@ export class AreaDetailsComponent implements OnChanges {
     );
   }
 
-  cancelEditionModal(formDirty : Boolean) {
+  cancelEditionModal(formDirty) {
     this.openConfirmation = formDirty;
     if (!formDirty) {
       this.closeModal.emit();

@@ -4,6 +4,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -31,6 +37,10 @@ import { AppComponent } from './app.component';
     ClarityModule,
     ClrFormsNextModule,
     NgxSpinnerModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
     CoreModule,
     AreasModule,
     CalendarModule,

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 
 import { AreasComponent } from './components/areas.component';
@@ -15,6 +15,7 @@ import { DurationMinutesPipe } from './pipes/duration-minutes.pipe';
     ClarityModule,
     ClrFormsNextModule,
     FormsModule,
+    ReactiveFormsModule,
     CoreModule
   ],
   declarations: [

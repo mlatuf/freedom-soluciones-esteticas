@@ -1,6 +1,6 @@
 import { Day } from './day';
 
 export class Calendar {
-  _id: number;
+  _id: string;
   days: Date[];
 }

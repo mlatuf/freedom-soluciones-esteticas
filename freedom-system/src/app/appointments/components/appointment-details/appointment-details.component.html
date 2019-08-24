@@ -1,5 +1,5 @@
 <page-title>
-  <div class="toggle-switch" [hidden]="(appointmentId === 0)">
+  <div class="toggle-switch" [hidden]="!appointmentId">
     <input type="checkbox" id="editionMode" [(ngModel)]="editionMode">
     <label for="editionMode">editar</label>
   </div>
@@ -8,29 +8,45 @@
   <div class="clr-row">
     <section class="form-block clr-col-md-4 clr-col-12">
       <clr-input-container>
-        <label for="appointment_date" class="clr-control-label">Fecha</label>
-        <ng-select
-          #appointmentDay
-          [searchable]="false"
-          class="form-autocomplete-select"
-          formControlName="appointmentDay"
-          clrInput
-          required
-          [disabled]="!editionMode">
-          <ng-option *ngFor="let day of availableDays" [value]="selectedDay"> {{ day.date | date:'mediumDate' }} </ng-option>
-        </ng-select>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
         <label for="appointment_patient" class="clr-control-label">Paciente</label>
         <ng-select 
           #appointmentPatient
           class="form-autocomplete-select"
           formControlName="appointmentPatient"
+          (ngModelChange)="onChangeSelector($event, 'patient')"
           clrInput
           required
-          [disabled]="!editionMode">
-          <ng-option *ngFor="let patient of patients" [value]="patient"> {{ patient.fullName }} </ng-option>
+          [attr.disabled]="!editionMode">
+          <ng-option *ngFor="let patient of patients" [value]="patient._id"> {{ patient.fullName }} </ng-option>
+        </ng-select>
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <clr-input-container>
+        <label for="appointment_date" class="clr-control-label">Fecha</label>
+        <ng-select
+          #appointmentDay
+          [searchable]="false"
+          (ngModelChange)="onChangeDay($event)"
+          class="form-autocomplete-select"
+          formControlName="appointmentDay"
+          clrInput
+          required
+          [attr.disabled]="!editionMode">
+          <ng-option *ngFor="let day of availableDays" [value]="day._id"> {{ day.date.toDate() | date:'mediumDate' }} </ng-option>
+        </ng-select>
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <clr-input-container>
+        <label for="appointment_time" class="clr-control-label">Hora</label>
+        <ng-select
+          #appointmentTime
+          class="form-autocomplete-select"
+          formControlName="appointmentTime"
+          (ngModelChange)="onChangeSelector($event, 'time')"
+          clrInput
+          required
+          [attr.disabled]="(!selectedDay._id || !editionMode)">
+          <ng-option *ngFor="let time of availableTimes" [value]="time"> {{ time | timeMinutes }} </ng-option>
         </ng-select>
         <clr-control-error>Este campo no puede estar vacio</clr-control-error>
       </clr-input-container>
@@ -47,26 +63,13 @@
           formControlName="appointmentAreas"
           clrInput
           required
-          [disabled]="!editionMode">
-          <ng-option *ngFor="let area of areas" [value]="area"> {{ area.description }} </ng-option>
+          [attr.disabled]="!editionMode">
+          <ng-option *ngFor="let area of areas" [value]="area._id"> {{ area.description }} </ng-option>
           <clr-control-error>Este campo no puede estar vacio</clr-control-error>
         </ng-select>
       </clr-input-container>
     </section>
     <section class="form-block clr-col-md-4 clr-col-12">
-      <clr-input-container>
-        <label for="appointment_time" class="clr-control-label">Hora</label>
-        <ng-select
-          #appointmentTime
-          class="form-autocomplete-select"
-          formControlName="appointmentTime"
-          clrInput
-          required
-          [disabled]="!editionMode">
-          <ng-option *ngFor="let time of availableTimes" [value]="time"> {{ time | timeMinutes }} </ng-option>
-        </ng-select>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
       <div class="clr-form-control">
         <label for="appointment_duration" class="clr-control-label"> 
           Duracion aproximada en minutos: {{ appointmentDuration }}
@@ -74,13 +77,12 @@
       </div>
       <clr-input-container>
         <label for="appointment_price" class="clr-control-label">Precio</label>
-        <input clrInput type="number" name="appointment_price" [(ngModel)]="appointment.price" [ngModelOptions]="{standalone: true}"
-        [disabled]="!editionMode"/>
+        <input clrInput formControlName="appointmentPrice"/>
       </clr-input-container>
       <clr-textarea-container>
         <label for="appointment_observations" class="clr-control-label">Observaciones</label>
         <textarea clrTextarea name="appointment_observations" [(ngModel)]="appointment.observations" [ngModelOptions]="{standalone: true}"
-        [disabled]="!editionMode">
+        [attr.disabled]="!editionMode">
         </textarea>
       </clr-textarea-container>
     </section>
@@ -88,7 +90,7 @@
   <div class="clr-row">
     <section class="clr-col-md-12 clr-col-12">
       <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !appointmentForm.dirty || !appointmentForm.valid)">Guardar</button>
-      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(appointmentForm.form.dirty)">Cancelar</button>
+      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(appointmentForm.dirty)">Cancelar</button>
     </section>
   </div>
 </form>

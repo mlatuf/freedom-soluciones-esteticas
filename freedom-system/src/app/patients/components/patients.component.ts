@@ -64,7 +64,7 @@ export class PatientsComponent implements OnInit {
     this.patientService.deletePatient$(this.patientSelected).subscribe(
       response => {
         this.spinner.hide();
-        this.alertService.success(response);
+        this.alertService.success("Paciente eliminado con exito");
         this.getPatientList();
       },
       error => {

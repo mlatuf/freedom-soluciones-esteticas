@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AlertService } from '../../core/services/alert/alert.service'
 import { CalendarService } from '../services/calendar.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { Day } from '../classes/day';
-import { Calendar } from '../classes/calendar';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
 
 @Component({
@@ -20,32 +19,22 @@ export class CalendarComponent implements OnInit {
   showNewDateForm: Boolean;
   openHistory: Boolean;
   newDate: Day;
-  calendar: Calendar;
-  calendarHistory: Calendar;
+  calendar: Day[];
+  calendarHistory: Day[];
 
   constructor(private router: Router, private aplicationState: ApplicationStateService,
     private calendarService: CalendarService, 
     private spinner: NgxSpinnerService, 
     private alertService: AlertService) { 
     this.showNewDateForm = this.openHistory = false;
-    this.calendar = new Calendar;
-    this.calendarHistory = new Calendar;
   }
-
+  
   ngOnInit() {
+    this.calendar = this.calendarHistory = [];
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
-    this.spinner.show();
-    this.calendarService.getCalendar$().subscribe(
-      response => {
-        this.calendar = response;
-        this.spinner.hide();
-      },
-      error => {
-        this.spinner.hide();
-        this.alertService.error(error);
-      }
-    );
+    this.newDate.isFinished = false;
+    this.getCalendar(); 
   }
 
   showCalendarHistory(): void {
@@ -63,12 +52,28 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  private getCalendar() {
     this.spinner.show();
-    this.calendarService.addDate$(this.newDate).subscribe(
+    this.calendarService.getCalendar$().subscribe(
       response => {
         this.calendar = response;
         this.spinner.hide();
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
+  }
+
+  onSubmit() {
+    this.spinner.show();
+    this.calendarService.saveDate$(this.newDate).subscribe(
+      response => {
+        this.getCalendar();
+        this.spinner.hide();
+        this.showNewDateForm = false;
+        this.newDate.date = null;
         this.alertService.success("La fecha fue agregada correctamente");
       },
       error => {
@@ -78,8 +83,7 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  goToAppointment(day: Date): void {
-    let dayToString = [day.getFullYear(), day.getMonth() + 1, day.getDate()].join('-');
-    this.router.navigate(['/appointments', dayToString]);
+  goToAppointment(day: string): void {
+    this.router.navigate(['/appointments', day]);
   }
 }

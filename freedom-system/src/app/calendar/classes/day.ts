@@ -1,4 +1,7 @@
+import { Appointment } from "src/app/appointments/classes/appointment";
+
 export class Day {
-  _id: number;
-  date: Date;
+  _id: string;
+  date: any;
+  isFinished: Boolean = false;
 }
