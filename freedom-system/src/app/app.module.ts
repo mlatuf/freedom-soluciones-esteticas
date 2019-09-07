@@ -8,6 +8,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+
 import { environment } from '../environments/environment';
 
 import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
@@ -47,6 +49,7 @@ import { AppComponent } from './app.component';
     PatientsModule,
     AppointmentsModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [AngularFireAuthGuard]
 })
 export class AppModule { }
