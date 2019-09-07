@@ -1,23 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable, from } from "rxjs";
-import { Calendar } from "../classes/calendar";
-import { map, retry, catchError } from "rxjs/operators";
+import { map, retry} from "rxjs/operators";
 import { Day } from "../classes/day";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
   AngularFirestore
 } from "@angular/fire/firestore";
-import { Appointment } from "src/app/appointments/classes/appointment";
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    "Content-Type": "application/json",
-    Authorization: "my-auth-token"
-  })
-};
 
 let currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1);
@@ -29,7 +18,7 @@ export class CalendarService {
   private daysHistoryCollection: AngularFirestoreCollection<Day>;
   private dayDoc: AngularFirestoreDocument<Day>;
 
-  constructor(private _http: Http, private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore) {
     this.daysCollection = this.afs.collection<Day>("days", ref =>
       ref.where("date", ">=", currentDate).orderBy("date")
     );
