@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 import { CoreModule } from '../core/core.module';
@@ -14,7 +14,6 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     CoreModule,
     ClarityModule,
-    ClrFormsNextModule,
     RouterModule
   ],
   declarations: [

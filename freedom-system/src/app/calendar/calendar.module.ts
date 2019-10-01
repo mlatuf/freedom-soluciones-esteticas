@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 import { CoreModule } from '../core/core.module';
@@ -12,8 +12,7 @@ import { MonthNamePipe } from './pipes/month-name.pipe';
     CommonModule,
     FormsModule,
     CoreModule,
-    ClarityModule,
-    ClrFormsNextModule
+    ClarityModule
   ],
   declarations: [
     CalendarComponent,

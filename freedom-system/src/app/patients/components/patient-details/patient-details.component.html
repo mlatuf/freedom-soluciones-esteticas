@@ -1,7 +1,9 @@
 <page-title>
   <div class="toggle-switch" [hidden]="(patientId === 0)">
-    <input type="checkbox" id="editionMode" [(ngModel)]="editionMode">
-    <label for="editionMode">editar</label>
+    <clr-toggle-wrapper>
+      <input type="checkbox" id="editionMode" [(ngModel)]="editionMode" clrToggle />
+      <label for="editionMode">editar</label>
+    </clr-toggle-wrapper>
   </div>
 </page-title>
 
@@ -31,33 +33,57 @@
 
     <section class="checkboxes-container clr-col-md-8 clr-col-12">
       <div class="clr-col">
-        <clr-checkbox type="checkbox" name="patient_hasMedicines" [(ngModel)]="patient.hasMedicines" [clrDisabled]="!editionMode">Medicamentos</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasMedicines" [(ngModel)]="patient.hasMedicines" [disabled]="!editionMode"/>
+          <label>Medicamentos</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasMedicines">
           <textarea clrTextarea name="patient_medicines" [(ngModel)]="patient.medicines" [disabled]="!editionMode"></textarea>
         </clr-textarea-container>
-        <clr-checkbox type="checkbox" name="patient_hasAllergies" [(ngModel)]="patient.hasAllergies" [clrDisabled]="!editionMode">Alergias</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasAllergies" [(ngModel)]="patient.hasAllergies" [disabled]="!editionMode"/>
+          <label>Alergias</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasAllergies">
           <textarea clrTextarea name="patient_allergies" [(ngModel)]="patient.allergies" [disabled]="!editionMode"></textarea>
         </clr-textarea-container>
-        <clr-checkbox type="checkbox" name="patient_hasMoles" [(ngModel)]="patient.hasMoles" [clrDisabled]="!editionMode">Lunares o manchas en la piel</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasMoles" [(ngModel)]="patient.hasMoles" [disabled]="!editionMode"/>
+          <label>Lunares o manchas en la piel</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasMoles">
           <textarea clrTextarea name="patient_molesPlace" [(ngModel)]="patient.molesPlace" [disabled]="!editionMode"></textarea>
         </clr-textarea-container>
       </div>
       <div class="clr-col">
-        <clr-checkbox type="checkbox" name="patient_hasBodyMetals" [(ngModel)]="patient.hasBodyMetals" [clrDisabled]="!editionMode">Metales en el cuerpo</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasBodyMetals" [(ngModel)]="patient.hasBodyMetals" [disabled]="!editionMode"/>
+          <label>Metales en el cuerpo</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasBodyMetals">
           <textarea clrTextarea name="patient_bodyMetalsPlace" [(ngModel)]="patient.bodyMetalsPlace"  [disabled]="!editionMode"></textarea>
         </clr-textarea-container>
-        <clr-checkbox type="checkbox" name="patient_hasTattoos" [(ngModel)]="patient.hasTattoos" [clrDisabled]="!editionMode">Tatuajes</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasTattoos" [(ngModel)]="patient.hasTattoos" [disabled]="!editionMode"/>
+          <label>Tatuajes</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasTattoos">
           <textarea clrTextarea name="patient_tattoosPlace" [(ngModel)]="patient.tattoosPlace" [disabled]="!editionMode"></textarea>
         </clr-textarea-container>
       </div>
       <div class="clr-col">
-        <clr-checkbox type="checkbox" name="patient_hasSkinCancer" [(ngModel)]="patient.hasSkinCancer" [clrDisabled]="!editionMode">Cancer de piel</clr-checkbox>
-        <clr-checkbox type="checkbox" name="patient_hasEpilepsy" [(ngModel)]="patient.hashasEpilepsy" [clrDisabled]="!editionMode">Epilepsia</clr-checkbox>
-        <clr-checkbox type="checkbox" name="patient_hasPreviousTreatment" [(ngModel)]="patient.hasPreviousTreatment" [clrDisabled]="!editionMode">Sesiones previas</clr-checkbox>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasSkinCancer" [(ngModel)]="patient.hasSkinCancer" [disabled]="!editionMode"/>
+          <label>Cancer de piel</label>
+        </clr-checkbox-wrapper>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasEpilepsy" [(ngModel)]="patient.hashasEpilepsy" [disabled]="!editionMode"/>
+          <label>Epilepsia</label>
+        </clr-checkbox-wrapper>
+        <clr-checkbox-wrapper>
+          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasPreviousTreatment" [(ngModel)]="patient.hasPreviousTreatment" [disabled]="!editionMode"/>
+          <label>Sesiones previas</label>
+        </clr-checkbox-wrapper>
         <clr-textarea-container [hidden]="!patient.hasPreviousTreatment">
           <textarea clrTextarea name="patient_previousTreatment" [(ngModel)]="patient.previousTreatment" [disabled]="!editionMode"></textarea>
         </clr-textarea-container>

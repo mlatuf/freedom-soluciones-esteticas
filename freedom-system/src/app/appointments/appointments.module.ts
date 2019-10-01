@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,7 +19,6 @@ import { AppointmentEndDayComponent } from './components/appointment-end-day/app
   imports: [
     CommonModule,
     ClarityModule,
-    ClrFormsNextModule,
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,

@@ -1,7 +1,9 @@
 <page-title>
   <div class="toggle-switch" [hidden]="!appointmentId">
-    <input type="checkbox" id="editionMode" [(ngModel)]="editionMode">
-    <label for="editionMode">editar</label>
+    <clr-toggle-wrapper>
+      <input type="checkbox" clrToggle id="editionMode" [(ngModel)]="editionMode">
+      <label for="editionMode">editar</label>
+    </clr-toggle-wrapper>
   </div>
 </page-title>
 <form clrForm [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">

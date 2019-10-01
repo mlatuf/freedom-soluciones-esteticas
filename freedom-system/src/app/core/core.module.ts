@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { RoutingModule } from '../routing.module';
 
 import { ApplicationStateService } from './services/aplication-state/aplication-state.service';
@@ -27,7 +27,6 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
   imports: [
     CommonModule,
     ClarityModule,
-    ClrFormsNextModule,
     RoutingModule,
     FormsModule,
     ReactiveFormsModule

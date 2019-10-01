@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -12,7 +11,7 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 import { environment } from '../environments/environment';
 
-import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { CoreModule } from './core/core.module';
@@ -31,13 +30,11 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
     RouterModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     ClarityModule,
-    ClrFormsNextModule,
     NgxSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

@@ -5,7 +5,8 @@
       <div class="clr-form-control">
         <label for="user_type" class="clr-control-label">Tipo de usuario</label>
         <div class="select">
-          <select
+          <select 
+            clrSelect
             (ngModelChange)="onChange($event)"
             formControlName="userType">
             <option value="0">Operador</option>
