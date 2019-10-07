@@ -8,6 +8,7 @@ import { AreasComponent } from './components/areas.component';
 import { AreaDetailsComponent } from './components/area-details/area-details.component';
 import { AreaService } from './services/area.service';
 import { DurationMinutesPipe } from './pipes/duration-minutes.pipe';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { DurationMinutesPipe } from './pipes/duration-minutes.pipe';
     AreaDetailsComponent,
     DurationMinutesPipe
   ],
-  providers: [AreaService]
+  providers: [AreaService, AngularFireAuthGuard]
 })
 export class AreasModule { }

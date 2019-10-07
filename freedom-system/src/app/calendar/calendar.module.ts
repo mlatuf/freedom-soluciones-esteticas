@@ -6,6 +6,7 @@ import { CoreModule } from '../core/core.module';
 
 import { CalendarComponent } from './components/calendar.component';
 import { MonthNamePipe } from './pipes/month-name.pipe';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { MonthNamePipe } from './pipes/month-name.pipe';
   declarations: [
     CalendarComponent,
     MonthNamePipe
-  ]
+  ],
+  providers: [AngularFireAuthGuard]
 })
 export class CalendarModule { }

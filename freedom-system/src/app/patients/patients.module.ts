@@ -7,6 +7,7 @@ import { PatientsComponent } from './components/patients.component';
 import { PatientDetailsComponent } from './components/patient-details/patient-details.component';
 import { PatientAppointmentHistoryComponent } from './components/patient-appointment-history/patient-appointment-history.component';
 import { RouterModule } from '@angular/router';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     PatientsComponent,
     PatientDetailsComponent,
     PatientAppointmentHistoryComponent
-  ]
+  ],
+  providers: [AngularFireAuthGuard]
 })
 export class PatientsModule { }
