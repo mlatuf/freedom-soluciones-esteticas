@@ -36,13 +36,13 @@ export class AlertsComponent implements OnInit {
     // return css class based on alert type
     switch (alert.type) {
       case AlertType.Success:
-        return 'alert-success';
+        return 'success';
       case AlertType.Error:
-        return 'alert-danger';
+        return 'danger';
       case AlertType.Info:
-        return 'alert-info';
+        return 'info';
       case AlertType.Warning:
-        return 'alert-warning';
+        return 'warning';
     }
   }
 
