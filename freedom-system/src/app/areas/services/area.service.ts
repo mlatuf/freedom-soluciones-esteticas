@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http }       from '@angular/http';
-import { HttpHeaders, HttpErrorResponse }       from '@angular/common/http';
 import { Observable, from, throwError } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Area }       from '../classes/area';
 import { map, retry, catchError }        from "rxjs/operators";
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'Authorization': 'my-auth-token'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +13,7 @@ export class AreaService {
   private areasCollection: AngularFirestoreCollection<Area>;
   private areaDoc: AngularFirestoreDocument<Area>;
 
-  constructor(private _http: Http, private afs: AngularFirestore) { 
+  constructor(private afs: AngularFirestore) { 
     this.areasCollection = this.afs.collection<Area>('areas');
   }
 

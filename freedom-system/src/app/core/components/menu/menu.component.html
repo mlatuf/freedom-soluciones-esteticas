@@ -24,8 +24,21 @@
       </a>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
         <a href="..." clrDropdownItem>Ajustes</a>
-        <a href="..." clrDropdownItem>Salir</a>
+        <button clrDropdownItem (click)="(openModal = true)">Salir</button>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>
 </clr-header>
+<clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'md'">
+  <h3 class="modal-title">Salir del sistema</h3>
+  <div class="modal-body">
+    <p>
+      Está seguro que desea salir ?
+      <small>Se perderán todos los datos no guardados.</small>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="(openModal = !openModal)">No</button>
+    <button type="button" class="btn btn-outline" (click)="logout()">Si</button>
+  </div>
+</clr-modal>

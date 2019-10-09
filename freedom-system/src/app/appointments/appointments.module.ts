@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ClarityModule,ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -13,13 +13,13 @@ import { TimeMinutesPipe } from './pipes/time-minutes.pipe';
 import { AppointmentDetailsComponent } from './components/appointment-details/appointment-details.component';
 import { AppointmentActionsComponent } from './components/appointment-actions/appointment-actions.component';
 import { AppointmentEndDayComponent } from './components/appointment-end-day/appointment-end-day.component';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 
 @NgModule({
   imports: [
     CommonModule,
     ClarityModule,
-    ClrFormsNextModule,
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
@@ -34,6 +34,7 @@ import { AppointmentEndDayComponent } from './components/appointment-end-day/app
     AreasDescriptionPipe,
     StatusDescriptionPipe,
     TimeMinutesPipe
-  ]
+  ],
+  providers: [AngularFireAuthGuard]
 })
 export class AppointmentsModule { }

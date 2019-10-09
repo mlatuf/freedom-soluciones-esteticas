@@ -1,23 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { Observable, from } from "rxjs";
-import { Calendar } from "../classes/calendar";
-import { map, retry, catchError } from "rxjs/operators";
+import { map, retry} from "rxjs/operators";
 import { Day } from "../classes/day";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
   AngularFirestore
 } from "@angular/fire/firestore";
-import { Appointment } from "src/app/appointments/classes/appointment";
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    "Content-Type": "application/json",
-    Authorization: "my-auth-token"
-  })
-};
+import { AngularFireAuth } from "@angular/fire/auth";
 
 let currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1);
@@ -26,23 +16,19 @@ currentDate.setDate(currentDate.getDate() - 1);
 })
 export class CalendarService {
   private daysCollection: AngularFirestoreCollection<Day>;
-  private daysHistoryCollection: AngularFirestoreCollection<Day>;
   private dayDoc: AngularFirestoreDocument<Day>;
 
-  constructor(private _http: Http, private afs: AngularFirestore) {
-    this.daysCollection = this.afs.collection<Day>("days", ref =>
-      ref.where("date", ">=", currentDate).orderBy("date")
-    );
-    this.daysHistoryCollection = this.afs.collection<Day>("days", ref =>
-      ref.where("date", "<", currentDate).orderBy("date")
-    ); 
+  constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
+    this.reloadCalendarCollection();
   }
 
   getCalendar$(): Observable<Day[]> {
+    this.reloadCalendarCollection();
     let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
       map(actions =>
-        actions.map(a => {
+        actions.filter(a => { return a.payload.doc.data().date.toDate() >= currentDate })
+        .map(a => {
           const _id = a.payload.doc.id;
           const data = a.payload.doc.data() as Day;
           return { _id, ...data };
@@ -54,6 +40,7 @@ export class CalendarService {
   }
 
   getDayToAppointment$(dayId: string): Observable<Day> {
+    this.reloadCalendarCollection();
     this.dayDoc = this.afs.doc<Day>("days/" + dayId);
     return this.dayDoc.snapshotChanges().pipe(
       map(a => {
@@ -65,6 +52,7 @@ export class CalendarService {
   }
 
   getDaysList$(): Observable<Day[]> {
+    this.reloadCalendarCollection();
     let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
       map(actions =>
@@ -79,10 +67,12 @@ export class CalendarService {
   }
 
   getCalendarHistory$(): Observable<Day[]> {
-    let calendar = this.daysHistoryCollection.snapshotChanges().pipe(
+    this.reloadCalendarCollection();
+    let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
       map(actions =>
-        actions.map(a => {
+        actions.filter(a => {return a.payload.doc.data().date.toDate() < currentDate})
+        .map(a => {
           const _id = a.payload.doc.id;
           const data = a.payload.doc.data() as Day;
           return { _id, ...data };
@@ -96,6 +86,7 @@ export class CalendarService {
   saveDate$(newDate: Day): Observable<any> {
     let toDate = new Date(newDate.date);
     newDate.date = toDate;
+    newDate.uid = this.afAuth.auth.currentUser.uid;
     return from(this.daysCollection.add({ ...newDate }));
   }
 
@@ -126,4 +117,10 @@ export class CalendarService {
     return newDaysArray;
   }
 
+
+  private reloadCalendarCollection(): void {
+    this.daysCollection = this.afs.collection<Day>("days", ref =>
+      ref.where("uid", "==", this.afAuth.auth.currentUser.uid).orderBy('date')
+    );
+  }
 }

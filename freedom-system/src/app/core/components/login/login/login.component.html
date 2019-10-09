@@ -1,0 +1,40 @@
+<page-title></page-title>
+<div class="login-wrapper">
+  <form clrForm [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="login-group">
+      <div class="clr-form-control">
+        <label for="user_type" class="clr-control-label">Tipo de usuario</label>
+        <div class="select">
+          <select 
+            clrSelect
+            (ngModelChange)="onChange($event)"
+            formControlName="userType">
+            <option value="0">Operador</option>
+            <option value="1">Administrador</option>
+          </select>
+        </div>
+      </div>
+      <clr-input-container>
+        <label for="user_email" class="clr-control-label">Email</label>
+        <input clrInput type="email" formControlName="userEmail" required />
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <clr-input-container>
+        <label for="user_password" class="clr-control-label">Password</label>
+        <input
+          clrInput
+          type="password"
+          formControlName="userPassword"
+          required
+        />
+        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
+      </clr-input-container>
+      <button
+        type="submit"
+        class="btn btn-outline-success"
+        [disabled]="!loginForm.dirty || !loginForm.valid">
+        Ingresar
+      </button>
+    </div>
+  </form>
+</div>
