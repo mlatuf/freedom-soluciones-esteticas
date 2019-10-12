@@ -1,9 +1,11 @@
-<clr-alerts>
-  <clr-alert *ngFor="let alert of alerts" [clrAlertType]="cssClass(alert)">
-    <clr-alert-item>
-      <span class="alert-text">
-        {{ alert.message }}
-      </span>
-    </clr-alert-item>
-  </clr-alert>
-</clr-alerts>
+<div *ngFor="let alert of alerts" class="alerts alert-{{ cssClass(alert) }} alert-dismissable">
+  <div class="alert-item">
+    <mat-icon>error_outline</mat-icon>
+    <span class="alert-text">
+      {{ alert.message }}
+    </span>
+    <a class="close" (click)="removeAlert(alert)">
+      <mat-icon>close</mat-icon>
+    </a>
+  </div>
+</div>
