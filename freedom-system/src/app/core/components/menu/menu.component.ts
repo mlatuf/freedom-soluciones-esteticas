@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ApplicationInitStatus } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/core/services/login/login.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ApplicationStateService } from '../../services/aplication-state/aplication-state.service';
 
 @Component({
   selector: 'app-menu',
@@ -12,13 +13,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class MenuComponent implements OnInit {
   
   openModal: Boolean = false;
+  mobileView: Boolean;
   
   constructor(private loginService: LoginService,
     private spinner: NgxSpinnerService,
     private alertService: AlertService,
-    private router: Router) { }
+    private router: Router,
+    private aplicationState: ApplicationStateService ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.mobileView = this.aplicationState.getIsMobileResolution();
+  }
 
   logout(): void {
     this.spinner.show();

@@ -1,34 +1,4 @@
-<clr-header class="header-4">
-  <div class="branding">
-    <clr-icon shape="vm-bug"></clr-icon>
-  </div>
-  <div class="header-nav" [clr-nav-level]="1">
-    <a class="nav-link" routerLink="/calendar" routerLinkActive="active">
-      <span class="nav-text">Calendario</span>
-    </a>
-    <a class="nav-link" routerLink="/patients" routerLinkActive="active">
-      <span class="nav-text">Pacientes</span>
-    </a>
-    <a class="nav-link" routerLink="/areas" routerLinkActive="active">
-      <span class="nav-text">Zonas</span>
-    </a>
-    <a class="nav-link" routerLinkActive="active">
-      <span class="nav-text">Caja</span>
-    </a>
-  </div>
-  <div class="header-actions">
-    <clr-dropdown>
-      <a class="nav-icon" clrDropdownTrigger>
-        <clr-icon shape="user"></clr-icon>
-        <clr-icon shape="caret down"></clr-icon>
-      </a>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="..." clrDropdownItem>Ajustes</a>
-        <button clrDropdownItem (click)="(openModal = true)">Salir</button>
-      </clr-dropdown-menu>
-    </clr-dropdown>
-  </div>
-</clr-header>
+
 <clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'md'">
   <h3 class="modal-title">Salir del sistema</h3>
   <div class="modal-body">
@@ -42,3 +12,40 @@
     <button type="button" class="btn btn-outline" (click)="logout()">Si</button>
   </div>
 </clr-modal>
+
+<mat-toolbar color="primary">
+  <mat-toolbar-row *ngIf="!mobileView">
+    <span>Freedom System</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/calendar" routerLinkActive="active">Calendario</button>
+    <button mat-button routerLink="/patients" routerLinkActive="active">Pacientes</button>
+    <button mat-button routerLink="/areas" routerLinkActive="active">Zonas</button>
+    <button mat-button routerLinkActive="active" disabled>Caja</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="(openModal = true)">
+        <span>Salir</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="mobileView">
+    <span>Freedom System</span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="mobile-menu">
+      <button mat-button routerLink="/calendar" routerLinkActive="active">Calendario</button>
+      <mat-divider></mat-divider>
+      <button mat-button routerLink="/patients" routerLinkActive="active">Pacientes</button>
+      <mat-divider></mat-divider>
+      <button mat-button routerLink="/areas" routerLinkActive="active">Zonas</button>
+      <mat-divider></mat-divider>
+      <button mat-button routerLinkActive="active" disabled>Caja</button>
+      <mat-divider></mat-divider>
+      <button mat-button (click)="(openModal = true)">Salir</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

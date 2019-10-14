@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/core/services/login/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
 
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   userModel: User;
   loginForm: FormGroup;
   mobileView: Boolean;
+  validUser: Boolean = true;
 
 
   constructor(private applicationState: ApplicationStateService, 
@@ -32,7 +34,7 @@ export class LoginComponent implements OnInit {
     this.userModel.email = this.userModel.password = '';
     this.loginForm = this.fb.group({
       userType: new FormControl(this.userModel.type, Validators.required),
-      userEmail: new FormControl(this.userModel.email, Validators.required),
+      userEmail: new FormControl(this.userModel.email, [Validators.required, Validators.email]),
       userPassword: new FormControl(this.userModel.password, Validators.required),
     });
   }

@@ -4,6 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 import { RoutingModule } from '../routing.module';
 
+import {
+  MatButtonModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule, MatDividerModule
+} from '@angular/material';
+
 import { ApplicationStateService } from './services/aplication-state/aplication-state.service';
 import { PageTitleComponent } from './components/page-title/page-title.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
@@ -29,7 +33,16 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     ClarityModule,
     RoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatButtonModule, 
+    MatCardModule,
+    MatInputModule,
+    MatMenuModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatDividerModule
   ],
   providers: [ApplicationStateService, AngularFireAuthGuard]
 })
