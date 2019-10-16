@@ -1,28 +1,43 @@
 <page-title>
-  <clr-button-group class="btn-sm">
-    <clr-button title="Nueva Fecha" (click)="(showNewDateForm = !showNewDateForm)">
-      <clr-icon shape="add" class="clr-icon" [hidden]="showNewDateForm"></clr-icon>
-      <clr-icon shape="minus" class="clr-icon" [hidden]="!showNewDateForm"></clr-icon>
-      <span [hidden]="mobileView">Nueva Fecha</span>
-    </clr-button>
-    <clr-button title="Historial" (click)="showCalendarHistory()">
-      <clr-icon shape="history"class="clr-icon"></clr-icon>
-      <span [hidden]="mobileView">Historial</span>
-    </clr-button>
-  </clr-button-group> 
+  <div class="btn-group">
+    <button mat-button 
+      color="primary"
+      (click)="(showNewDateForm = !showNewDateForm)"
+      isRoundButton>
+      <mat-icon [hidden]="showNewDateForm">add</mat-icon>
+      <mat-icon [hidden]="!showNewDateForm">remove</mat-icon>
+      <span [hidden]="mobileView">&nbsp;&nbsp;Nueva Fecha</span>
+    </button>
+    <button mat-button 
+      color="primary"
+      (click)="showCalendarHistory()"
+      isRoundButton>
+      <mat-icon>history</mat-icon>
+      <span [hidden]="mobileView">&nbsp;&nbsp;Historial</span>
+    </button>
+  </div>
 </page-title>
-<form clrForm #dateForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="!showNewDateForm"
-class="clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
-  <section class="form-block">
-    <div class="form-group">
-      <label for="new-date">Seleccionar fecha</label>
-      <input type="date" clrDate name="new-date" [(ngModel)]="newDate.date"/>
-      <button type="submit" class="btn btn-success-outline btn-icon btn-sm" [disabled]="(!dateForm.form.dirty || !dateForm.form.valid)" title="Guardar">
-        <clr-icon shape="check"></clr-icon>
+<mat-card [hidden]="!showNewDateForm" class="newDate-container">
+  <mat-card-content>
+    <form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput 
+          [matDatepicker]="newDatePicker" 
+          placeholder="Seleccionar una fecha" 
+          formControlName="newDate"
+          required/>
+        <mat-datepicker-toggle matSuffix [for]="newDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #newDatePicker></mat-datepicker>
+      </mat-form-field>
+      <button mat-flat-button type="submit" color="primary" [disabled]="(!dateForm.dirty || !dateForm.valid)">
+        <span [hidden]="mobileView">Guardar</span>
+        <mat-icon [hidden]="!mobileView">save</mat-icon>
       </button>
-    </div>
-  </section>
-</form>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
 <clr-datagrid [hidden]="(calendar.length == 0)" 
   class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 calendar-grid">
   <clr-dg-column [clrDgField]="'year'">

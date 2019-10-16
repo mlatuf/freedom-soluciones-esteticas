@@ -1,17 +1,15 @@
-form {
-  .form-block {
-    margin: 0.5rem;
-    .form-group {
-      margin: 0.5rem 0;
-      padding-left: 6.5rem;
+.newDate-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  @media (max-width: 576px) {
+    .mat-form-field {
+      width: 68%;
     }
   }
-  @media (max-width: 576px) {
-    .form-block {
-      .form-group {
-        padding-left: 0px;
-      }
-    }
+  .mat-flat-button {
+    margin-left: 0.5rem;
   }
 }
 .calendar-grid {
