@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Alert, AlertType } from '../../classes/alert';
 import { AlertService } from '../../services/alert/alert.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'alerts',
@@ -10,8 +11,9 @@ import { AlertService } from '../../services/alert/alert.service';
 export class AlertsComponent implements OnInit {
 
   alerts: Alert[] = [];
+  snackbarDuration = 3;
  
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService, private _snackbar: MatSnackBar) { }
 
   ngOnInit() {
     this.alertService.getAlert().subscribe((alert: Alert) => {
@@ -22,7 +24,14 @@ export class AlertsComponent implements OnInit {
       }
       // add alert to array
       this.alerts.push(alert);
+      if (alert.type === AlertType.Success) {
+        this.openSnackbar(alert.message);
+      }
     });
+  }
+
+  openSnackbar(message: string) {
+    this._snackbar.open(message);
   }
 
   removeAlert(alert: Alert) {
@@ -45,5 +54,5 @@ export class AlertsComponent implements OnInit {
         return 'warning';
     }
   }
-
+  
 }

@@ -5,7 +5,7 @@ import { ClarityModule } from '@clr/angular';
 import { RoutingModule } from '../routing.module';
 
 import {
-  MatButtonModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule, MatDividerModule
+  MatButtonModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatIconModule, MatSelectModule, MatDividerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 
 import { ApplicationStateService } from './services/aplication-state/aplication-state.service';
@@ -40,10 +40,10 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatInputModule,
     MatMenuModule,
     MatIconModule,
-    MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatSelectModule,
     MatDividerModule
   ],
-  providers: [ApplicationStateService, AngularFireAuthGuard]
+  providers: [ApplicationStateService, AngularFireAuthGuard,{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}]
 })
 export class CoreModule { }
