@@ -5,7 +5,10 @@ import { ApplicationStateService } from 'src/app/core/services/aplication-state/
 import { User } from 'src/app/core/classes/user';
 import { LoginService } from 'src/app/core/services/login/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AlertService } from 'src/app/core/services/alert/alert.service';
+import { MatDialog } from '@angular/material';
+import { ModalComponent } from '../../modal/modal.component';
+import { redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { ErrorService } from 'src/app/core/services/alert/error.service';
 
 
 @Component({
@@ -25,8 +28,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private spinner: NgxSpinnerService,
-    private alertService: AlertService,
-    private router: Router) { }
+    private router: Router,
+    public dialog: MatDialog,
+    private errorService: ErrorService) { }
 
   ngOnInit() {
     this.mobileView = this.applicationState.getIsMobileResolution();
@@ -57,7 +61,21 @@ export class LoginComponent implements OnInit {
       },
       error => {
         this.spinner.hide();
-        this.alertService.error(error);
+        const dialogRef = this.dialog.open(ModalComponent, {
+          disableClose: true,
+          data: {
+            title: 'Ops! Al parecer tenemos problemas', 
+            text: this.errorService.getErrorText(error),
+            hasError: true
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if(result) {
+            this.loginForm.reset();
+          }
+        });
+
       }
     );
   }

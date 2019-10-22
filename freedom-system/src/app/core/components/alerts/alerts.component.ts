@@ -45,5 +45,5 @@ export class AlertsComponent implements OnInit {
         return 'warning';
     }
   }
-
+  
 }
