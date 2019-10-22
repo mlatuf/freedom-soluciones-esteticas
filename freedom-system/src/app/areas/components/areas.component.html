@@ -5,78 +5,6 @@
   </button>
 </page-title>
 
-<clr-datagrid [hidden]="(areas.length == 0)" 
-  class="clr-col-md-10 clr-offset-md-1 clr-col-sm-12 areas-grid">
-  <clr-dg-column [clrDgField]="'description'">
-    Descripción
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'price'">
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Precio
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Duración
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-    </ng-container>
-  </clr-dg-column>
-
-  <clr-dg-row *clrDgItems="let area of areas">
-    <clr-dg-cell>{{ area.description }}</clr-dg-cell>
-    <clr-dg-cell>{{ area.price | currency }}</clr-dg-cell>
-    <clr-dg-cell>{{ area.duration | durationMinutes }}</clr-dg-cell>
-    <clr-dg-cell class="actions-cell">
-      <button type="button" title="Editar" class="btn btn-icon btn-sm btn-outline" (click)="showAreaModal(area._id)">
-        <clr-icon shape="pencil"></clr-icon>
-      </button>
-      <button type="button" title="Eliminar" class="btn btn-icon btn-sm btn-danger-outline" (click)="deleteArea(area._id, area.description)">
-        <clr-icon shape="trash"></clr-icon>
-      </button>
-    </clr-dg-cell>
-    <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="mobileView">
-      <clr-dg-row-detail *clrIfExpanded>
-        <clr-dg-cell class="actions-cell mobile-view">
-          <div><label>Precio: </label>{{ area.price | currency }}</div>
-          <div><label>Duración: </label>{{ area.duration | durationMinutes }}</div>
-          <clr-button-group class="btn-icon btn-primary-outline btn-sm">
-            <clr-button title="Editar" (click)="showAreaModal(area._id)">
-              <clr-icon shape="pencil"></clr-icon>
-            </clr-button>
-            <clr-button title="Eliminar" class="btn-danger-outline" (click)="deleteArea(area._id, area.description)">
-              <clr-icon shape="trash"></clr-icon>
-            </clr-button>
-          </clr-button-group>
-        </clr-dg-cell>
-      </clr-dg-row-detail>
-    </ng-container>
-  </clr-dg-row>
-
-  <clr-dg-footer>
-    <clr-dg-column-toggle hidden></clr-dg-column-toggle>
-    <clr-dg-pagination #pagination [clrDgPageSize]="10">
-      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-      de {{pagination.totalItems}} zonas
-    </clr-dg-pagination>
-  </clr-dg-footer>
-</clr-datagrid>
-
-<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
-  <h3 class="modal-title">Eliminar zona</h3>
-  <div class="modal-body">
-    <p>
-      Esta seguro que desea eliminar la zona <b>{{ areaNameSelected }}</b> ?
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
-    <button type="button" class="btn btn-outline" (click)="confirmDeleteArea()">Si</button>
-  </div>
-</clr-modal>
-
 <clr-modal [(clrModalOpen)]="openEditionModal" [clrModalSize]="'sm'">
   <h3 class="modal-title">Editar zona</h3>
   <div class="modal-body">
@@ -87,3 +15,43 @@
   </div>
 </clr-modal>
 
+<div class="mat-elevation-z1 table-container">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+      <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+      <td mat-cell *matCellDef="let elm"> {{ elm.price | currency }} </td>
+    </ng-container>
+
+    <!-- Duration Column -->
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Duración</th>
+      <td mat-cell *matCellDef="let elm"> {{ elm.duration | durationMinutes }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let elm">
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="showAreaModal(elm._id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Eliminar" color="warn" (click)="deleteArea(elm._id, elm.description)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
+</div>

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 
 import { Area } from '../classes/area';
 import { AreaService } from '../services/area.service';
 import { AlertService } from '../../core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
- 
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
+import { ErrorService } from 'src/app/core/services/alert/error.service';
 
 @Component({
   selector: 'areas',
@@ -16,19 +18,24 @@ export class AreasComponent implements OnInit {
 
   pageTitle: string;
   areas: Area[];
-  openConfirmation: Boolean;
   openEditionModal: Boolean;
   areaSelectedToDelete: number;
   areaSelectedToEdit: number;
   areaNameSelected: string;
   mobileView: boolean;
 
+  displayedColumns: string[] = ['description', 'price', 'duration', 'actions'];
+  dataSource: MatTableDataSource<Area>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   constructor(private aplicationStateService: ApplicationStateService, 
     private areaService: AreaService, 
     private spinner: NgxSpinnerService, 
-    private alertService: AlertService) {
-    this.openConfirmation = this.openEditionModal = false;
-    
+    private errorService: ErrorService,
+    public dialog: MatDialog,
+    private _snackbar: MatSnackBar) {
+    this.openEditionModal = false;  
   }
   
   ngOnInit() {
@@ -42,11 +49,25 @@ export class AreasComponent implements OnInit {
     this.areaService.getAreas$().subscribe(
       response => {
         this.areas = response;
+        this.dataSource = new MatTableDataSource(this.areas);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
         this.spinner.hide();
-        this.alertService.error(error);
+        const dialogRef = this.dialog.open(ModalComponent, {
+          data: {
+            title: 'Ops! Al parecer tenemos problemas', 
+            text: this.errorService.getErrorText(error),
+            hasError: true
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if(result) {
+            console.log(result);
+          }
+        });
       }
     );
   }
@@ -54,21 +75,46 @@ export class AreasComponent implements OnInit {
   deleteArea(areaId: number, areaName: string) {
     this.areaSelectedToDelete = areaId;
     this.areaNameSelected = areaName;
-    this.openConfirmation = true;
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: 'Eliminar zona ' + this.areaNameSelected, 
+        text: "Esta seguro que desea eliminar la zona ?",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.confirmDeleteArea();
+      }
+    });
   }
 
   confirmDeleteArea() {
-    this.openConfirmation = false;
     this.spinner.show();    
     this.areaService.deleteArea$(this.areaSelectedToDelete).subscribe(
       response => {
         this.spinner.hide();
-        this.alertService.success("Zona eliminada con exito");
+        this._snackbar.open("Zona eliminada con exito","OK", {
+          duration: 100000,
+          panelClass: 'snackbar-container'
+        });
         this.getAreaList();
       },
       error => {
         this.spinner.hide();
-        this.alertService.error(error);
+        const dialogRef = this.dialog.open(ModalComponent, {
+          data: {
+            title: 'Ops! Al parecer tenemos problemas', 
+            text: this.errorService.getErrorText(error),
+            hasError: true
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if(result) {
+            console.log(result);
+          }
+        });
       }
     );
   }
