@@ -96,7 +96,7 @@ export class AreasComponent implements OnInit {
       response => {
         this.spinner.hide();
         this._snackbar.open("Zona eliminada con exito","OK", {
-          duration: 100000,
+          duration: 2000,
           panelClass: 'snackbar-container'
         });
         this.getAreaList();

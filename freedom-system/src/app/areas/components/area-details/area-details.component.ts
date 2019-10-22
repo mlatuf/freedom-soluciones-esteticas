@@ -6,6 +6,8 @@ import { Area } from '../../classes/area';
 import { AreaService } from '../../services/area.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from '../../../core/services/alert/alert.service';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 
 @Component({
   selector: 'area-details',
@@ -22,7 +24,9 @@ export class AreaDetailsComponent implements OnChanges {
   areaForm: FormGroup;
 
   constructor(private areaService: AreaService, private fb: FormBuilder, private spinner: NgxSpinnerService, 
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    public dialog: MatDialog,
+    private _snackbar: MatSnackBar) {
       this.durationsArray = [
         {id: 1, description: '15 minutos'},
         {id: 2, description: '30 minutos'},
@@ -71,7 +75,10 @@ export class AreaDetailsComponent implements OnChanges {
       response => {
         this.spinner.hide();
         this.closeModal.emit();
-        this.alertService.success("Zona guardada con éxito");      
+        this._snackbar.open("Zona guardada con éxito","OK", {
+          duration: 2000,
+          panelClass: 'snackbar-container'
+        });      
       },
       error => {
         this.spinner.hide();
@@ -82,8 +89,20 @@ export class AreaDetailsComponent implements OnChanges {
   }
 
   cancelEditionModal(formDirty) {
-    this.openConfirmation = formDirty;
-    if (!formDirty) {
+    if (formDirty) {
+      const dialogRef = this.dialog.open(ModalComponent, {
+        data: {
+          title: "Cancelar edición", 
+          text: "Está seguro que desea cancelar la edición ?",
+          isConfirmationModal: true
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          this.closeModal.emit();
+        }
+      });
+    } else {
       this.closeModal.emit();
     }
   }
