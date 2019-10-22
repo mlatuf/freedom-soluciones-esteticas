@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+.mat-dialog-title {
+  margin: 0 0 0.5rem;
+  &.warning-dialog {
+    color: mat-color($mat-red,500);
+  }
+  .mat-icon {
+    vertical-align: middle;
+  }
+}
+.mat-dialog-content {
+  margin-top: 0.5rem;
+  p {
+    margin-top: 0px;
+  }
+}
+.mat-dialog-actions {
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-end;
+}

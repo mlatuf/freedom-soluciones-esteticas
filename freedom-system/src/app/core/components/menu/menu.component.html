@@ -1,18 +1,3 @@
-
-<clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'md'">
-  <h3 class="modal-title">Salir del sistema</h3>
-  <div class="modal-body">
-    <p>
-      Está seguro que desea salir ?
-      <small>Se perderán todos los datos no guardados.</small>
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openModal = !openModal)">No</button>
-    <button type="button" class="btn btn-outline" (click)="logout()">Si</button>
-  </div>
-</clr-modal>
-
 <mat-toolbar color="primary">
   <mat-toolbar-row *ngIf="!mobileView">
     <span>Freedom System</span>
@@ -25,7 +10,7 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="(openModal = true)">
+      <button mat-menu-item (click)="openModal()">
         <span>Salir</span>
       </button>
     </mat-menu>
@@ -45,7 +30,7 @@
       <mat-divider></mat-divider>
       <button mat-button routerLinkActive="active" disabled>Caja</button>
       <mat-divider></mat-divider>
-      <button mat-button (click)="(openModal = true)">Salir</button>
+      <button mat-button (click)="openModal()">Salir</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

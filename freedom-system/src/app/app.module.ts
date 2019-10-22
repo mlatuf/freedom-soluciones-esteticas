@@ -27,6 +27,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
 
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { ModalComponent } from './core/components/modal/modal.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { AppComponent } from './app.component';
     AppointmentsModule
   ],
   bootstrap: [AppComponent],
-  providers: [AngularFireAuthGuard]
+  providers: [AngularFireAuthGuard],
+  entryComponents: [ModalComponent]
 })
 export class AppModule { }
