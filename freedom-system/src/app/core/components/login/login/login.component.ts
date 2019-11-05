@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { ModalComponent } from '../../modal/modal.component';
 import { redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { ErrorService } from 'src/app/core/services/alert/error.service';
+import { AlertService } from 'src/app/core/services/alert/alert.service';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     public dialog: MatDialog,
-    private errorService: ErrorService) { }
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.mobileView = this.applicationState.getIsMobileResolution();
@@ -61,21 +62,7 @@ export class LoginComponent implements OnInit {
       },
       error => {
         this.spinner.hide();
-        const dialogRef = this.dialog.open(ModalComponent, {
-          disableClose: true,
-          data: {
-            title: 'Ops! Al parecer tenemos problemas', 
-            text: this.errorService.getErrorText(error),
-            hasError: true
-          }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            this.loginForm.reset();
-          }
-        });
-
+        this.alertService.error(error);
       }
     );
   }
