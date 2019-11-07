@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 import { Day } from '../classes/day';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'calendar',
@@ -21,11 +22,13 @@ export class CalendarComponent implements OnInit {
   newDate: Day;
   calendar: Day[];
   calendarHistory: Day[];
+  dateForm: FormGroup;
 
   constructor(private router: Router, private aplicationState: ApplicationStateService,
     private calendarService: CalendarService, 
     private spinner: NgxSpinnerService, 
-    private alertService: AlertService) { 
+    private alertService: AlertService,
+    private fb: FormBuilder) { 
     this.showNewDateForm = this.openHistory = false;
   }
   
@@ -34,6 +37,9 @@ export class CalendarComponent implements OnInit {
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.newDate = new Day;
     this.newDate.isFinished = false;
+    this.dateForm = this.fb.group({
+      newDate: new FormControl(this.newDate.date, Validators.required)
+    });
     this.getCalendar(); 
   }
 
@@ -68,6 +74,7 @@ export class CalendarComponent implements OnInit {
 
   onSubmit() {
     this.spinner.show();
+    this.newDate.date = this.dateForm.get('newDate').value;
     this.calendarService.saveDate$(this.newDate).subscribe(
       response => {
         this.getCalendar();

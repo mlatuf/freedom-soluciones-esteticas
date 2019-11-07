@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+
+import { MatButtonModule, MatIconModule, MatCardModule, MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule } from '@angular/material';
+
 import { CoreModule } from '../core/core.module';
 
 import { CalendarComponent } from './components/calendar.component';
@@ -12,8 +15,16 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     CoreModule,
-    ClarityModule
+    ClarityModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
   declarations: [
     CalendarComponent,

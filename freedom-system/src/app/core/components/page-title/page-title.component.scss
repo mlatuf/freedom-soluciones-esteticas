@@ -3,18 +3,8 @@
   border-bottom: 1px solid #CCCCCC;
   display: flex;
   margin-bottom: 10px;
-  h3 {
-    margin-top: 0;
+  h2 {
+    margin: 0;
     flex: 0 1 86%;
-  }
-  .btn-sm {
-    clr-icon {
-      margin-right: 0.5rem;
-    }
-    @media (max-width: 576px) {
-      clr-icon {
-        margin-right: 0px;
-      }
-    }
   }
 }
