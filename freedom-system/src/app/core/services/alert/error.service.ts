@@ -13,7 +13,7 @@ export class ErrorService {
       case "auth/user-not-found":
         return "No existe ningún registro de usuario que corresponda al identificador proporcionado.";
       default:
-        return '';
+        return error.message;
     }
   }
 }

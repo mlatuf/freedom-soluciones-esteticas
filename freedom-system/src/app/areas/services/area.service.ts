@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, throwError } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Area }       from '../classes/area';
-import { map, retry, catchError }        from "rxjs/operators";
+import { map }        from "rxjs/operators";
 
 
 @Injectable({
@@ -27,7 +27,7 @@ export class AreaService {
     );
   }
 
-  getAreaData$(areaId: number): Observable<Area> {
+  getAreaData$(areaId: string): Observable<Area> {
     this.areaDoc = this.afs.doc<Area>('areas/' + areaId);
     return this.areaDoc.snapshotChanges().pipe(
       map(a => {
@@ -38,7 +38,7 @@ export class AreaService {
     );
   }
 
-  deleteArea$(areaId: number): Observable<any> {
+  deleteArea$(areaId: string): Observable<any> {
     this.areaDoc = this.afs.doc<Area>('areas/' + areaId);
     return from(this.areaDoc.delete());
   }

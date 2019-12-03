@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// import { redirectUnauthorizedTo, redirectLoggedInTo, AngularFireAuthGuard} from '@angular/fire/auth-guard';
 import { AngularFireAuthGuard} from '@angular/fire/auth-guard';
 
 import { CalendarComponent } from './calendar/components/calendar.component';
@@ -11,6 +10,7 @@ import { AppointmentDetailsComponent } from './appointments/components/appointme
 import { PatientsComponent } from './patients/components/patients.component';
 import { PatientDetailsComponent } from './patients/components/patient-details/patient-details.component';
 import { AreasComponent } from './areas/components/areas.component';
+import { AreaDetailsComponent } from './areas/components/area-details/area-details.component';
 import { RouterModule, Routes } from '@angular/router';
 
 // const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
@@ -32,6 +32,8 @@ const routes: Routes = [
   { path: 'patient/details/:id', component: PatientDetailsComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Detalles del paciente' }},
   
   { path: 'areas', component: AreasComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Zonas' }},
+  { path: 'area/details', component: AreaDetailsComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Nueva Zona' }},
+  { path: 'area/details/:id', component: AreaDetailsComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Detalles de la zona' }},
 ];
 
 @NgModule({

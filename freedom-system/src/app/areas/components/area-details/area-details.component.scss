@@ -1,10 +1,17 @@
-.clr-form {
-  .clr-form-control {
-    .clr-input, .select {
-      width: 9rem;
-    }
+.area-form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 40%;
+  margin: 0 auto;
+  .mat-form-field {
+    width: 100%;
   }
-  .modal-footer {
-    padding-top: 1rem;
+  .button-form-group {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 0.3rem;
+    }
   }
 }

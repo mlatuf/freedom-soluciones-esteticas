@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { Area } from '../classes/area';
 import { AreaService } from '../services/area.service';
 import { AlertService } from '../../core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
- 
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 
 @Component({
   selector: 'areas',
@@ -16,19 +18,23 @@ export class AreasComponent implements OnInit {
 
   pageTitle: string;
   areas: Area[];
-  openConfirmation: Boolean;
-  openEditionModal: Boolean;
-  areaSelectedToDelete: number;
+  areaSelectedToDelete: string;
   areaSelectedToEdit: number;
   areaNameSelected: string;
   mobileView: boolean;
+  showAreaDetails: boolean = false;
+
+  displayedColumns: string[] = ['description', 'price', 'duration', 'actions'];
+  dataSource: MatTableDataSource<Area>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private aplicationStateService: ApplicationStateService, 
     private areaService: AreaService, 
     private spinner: NgxSpinnerService, 
-    private alertService: AlertService) {
-    this.openConfirmation = this.openEditionModal = false;
-    
+    public dialog: MatDialog,
+    private router: Router,
+    private alertService: AlertService) {  
   }
   
   ngOnInit() {
@@ -42,6 +48,9 @@ export class AreasComponent implements OnInit {
     this.areaService.getAreas$().subscribe(
       response => {
         this.areas = response;
+        this.dataSource = new MatTableDataSource(this.areas);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
@@ -51,14 +60,25 @@ export class AreasComponent implements OnInit {
     );
   }
 
-  deleteArea(areaId: number, areaName: string) {
+  deleteArea(areaId: string, areaName: string) {
     this.areaSelectedToDelete = areaId;
     this.areaNameSelected = areaName;
-    this.openConfirmation = true;
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: 'Eliminar zona ' + this.areaNameSelected, 
+        text: "Esta seguro que desea eliminar la zona ?",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.confirmDeleteArea();
+      }
+    });
   }
 
   confirmDeleteArea() {
-    this.openConfirmation = false;
     this.spinner.show();    
     this.areaService.deleteArea$(this.areaSelectedToDelete).subscribe(
       response => {
@@ -73,13 +93,18 @@ export class AreasComponent implements OnInit {
     );
   }
 
-  showAreaModal(areaId: number) {
-    this.areaSelectedToEdit = areaId;
-    this.openEditionModal = true;
+  editArea(areaId: string = null) {
+    if (!areaId) {
+      this.router.navigate(['/area/details']);
+    } else {
+      this.router.navigate(['/area/details/', areaId]);
+    }
+    // this.areaSelectedToEdit = areaId;
+    // this.showAreaDetails = true;
   }
 
   onCloseModal() {
-    this.openEditionModal = !this.openEditionModal;
+    this.showAreaDetails = false;
     this.areaSelectedToEdit = this.areaSelectedToDelete = null;
     this.areaNameSelected = '';
     this.getAreaList();
