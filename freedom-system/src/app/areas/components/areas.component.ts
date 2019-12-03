@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { Area } from '../classes/area';
 import { AreaService } from '../services/area.service';
@@ -7,7 +8,6 @@ import { AlertService } from '../../core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
 import { ModalComponent } from 'src/app/core/components/modal/modal.component';
-import { ErrorService } from 'src/app/core/services/alert/error.service';
 
 @Component({
   selector: 'areas',
@@ -18,11 +18,11 @@ export class AreasComponent implements OnInit {
 
   pageTitle: string;
   areas: Area[];
-  openEditionModal: Boolean;
-  areaSelectedToDelete: number;
+  areaSelectedToDelete: string;
   areaSelectedToEdit: number;
   areaNameSelected: string;
   mobileView: boolean;
+  showAreaDetails: boolean = false;
 
   displayedColumns: string[] = ['description', 'price', 'duration', 'actions'];
   dataSource: MatTableDataSource<Area>;
@@ -32,10 +32,9 @@ export class AreasComponent implements OnInit {
   constructor(private aplicationStateService: ApplicationStateService, 
     private areaService: AreaService, 
     private spinner: NgxSpinnerService, 
-    private errorService: ErrorService,
     public dialog: MatDialog,
-    private _snackbar: MatSnackBar) {
-    this.openEditionModal = false;  
+    private router: Router,
+    private alertService: AlertService) {  
   }
   
   ngOnInit() {
@@ -56,23 +55,12 @@ export class AreasComponent implements OnInit {
       },
       error => {
         this.spinner.hide();
-        const dialogRef = this.dialog.open(ModalComponent, {
-          data: {
-            title: 'Ops! Al parecer tenemos problemas', 
-            text: this.errorService.getErrorText(error),
-            hasError: true
-          }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            console.log(result);
-          }
-        });
+        this.alertService.error(error);
       }
     );
   }
 
-  deleteArea(areaId: number, areaName: string) {
+  deleteArea(areaId: string, areaName: string) {
     this.areaSelectedToDelete = areaId;
     this.areaNameSelected = areaName;
     const dialogRef = this.dialog.open(ModalComponent, {
@@ -95,37 +83,28 @@ export class AreasComponent implements OnInit {
     this.areaService.deleteArea$(this.areaSelectedToDelete).subscribe(
       response => {
         this.spinner.hide();
-        this._snackbar.open("Zona eliminada con exito","OK", {
-          duration: 2000,
-          panelClass: 'snackbar-container'
-        });
+        this.alertService.success("Zona eliminada con exito");
         this.getAreaList();
       },
       error => {
         this.spinner.hide();
-        const dialogRef = this.dialog.open(ModalComponent, {
-          data: {
-            title: 'Ops! Al parecer tenemos problemas', 
-            text: this.errorService.getErrorText(error),
-            hasError: true
-          }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            console.log(result);
-          }
-        });
+        this.alertService.error(error);
       }
     );
   }
 
-  showAreaModal(areaId: number) {
-    this.areaSelectedToEdit = areaId;
-    this.openEditionModal = true;
+  editArea(areaId: string = null) {
+    if (!areaId) {
+      this.router.navigate(['/area/details']);
+    } else {
+      this.router.navigate(['/area/details/', areaId]);
+    }
+    // this.areaSelectedToEdit = areaId;
+    // this.showAreaDetails = true;
   }
 
   onCloseModal() {
-    this.openEditionModal = !this.openEditionModal;
+    this.showAreaDetails = false;
     this.areaSelectedToEdit = this.areaSelectedToDelete = null;
     this.areaNameSelected = '';
     this.getAreaList();

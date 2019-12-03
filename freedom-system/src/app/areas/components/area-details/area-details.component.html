@@ -1,50 +1,39 @@
-<!-- <form clrForm [formGroup]="areaForm" (ngSubmit)="onSubmit()">
-  <section>
-    <clr-input-container>
-      <label for="area_description" class="clr-control-label">Descripción</label>
-      <input clrInput type="text" formControlName="areaDescription" required>
-      <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-    </clr-input-container>
-    <clr-input-container>
-      <label for="area_price" class="clr-control-label">Precio</label>
-      <input clrInput type="number" formControlName="areaPrice" required/>
-      <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-    </clr-input-container>
-    <div class="clr-form-control">
-      <label for="area_duration" class="clr-control-label">Duración</label>
-      <div class="select">
-        <select (ngModelChange)="onChange($event)" formControlName="areaDuration">
-          <option *ngFor="let time of durationsArray" [ngValue]="time.id"> {{ time.description }} </option>
-        </select>
+<page-title>
+  <mat-slide-toggle
+    color="primary"
+    (change)="toggleEditionMode()"
+    [hidden]="(!areaId)">
+    Editar
+  </mat-slide-toggle>
+</page-title>
+<mat-card class="area-form-container">
+  <mat-card-content>
+    <form [formGroup]="areaForm" class="area-form" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput placeholder="Descripcion" type="text" formControlName="areaDescription" required/>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Precio" type="input" formControlName="areaPrice" required/>
+        <span matPrefix>$&nbsp;</span>
+        <span matSuffix>.00</span>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Duracion</mat-label>
+        <mat-select formControlName="areaDuration" required>
+          <mat-option *ngFor="let time of durationsArray" [value]="time.id">{{ time.description }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="button-form-group">
+        <button mat-flat-button type="submit" color="primary" 
+          [disabled]="(!editionMode || !areaForm.dirty || !areaForm.valid)">
+          Guardar
+        </button>
+        <button mat-flat-button type="button" color="warn" 
+          (click)="cancelEdition(areaForm.dirty)">
+          Cancelar
+        </button>
       </div>
-    </div>
-  </section>
-  <section class="modal-footer">
-    <button type="submit" title="Guardar" class="btn btn-icon btn-outline-success"
-      [disabled]="(!areaForm.dirty || !areaForm.valid)">
-      <clr-icon shape="floppy"></clr-icon>
-    </button>
-    <button type="button" title="Cancelar" class="btn btn-icon btn-outline-danger" 
-      (click)="cancelEditionModal(areaForm.dirty)">
-      <clr-icon shape="cancel"></clr-icon>
-    </button>
-  </section>
-</form> -->
-
-<form [formGroup]="areaForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <input matInput placeholder="Descripcion" type="text" formControlName="areaDescription" required />
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Precio" type="input" formControlName="areaPrice" required/>
-    <span matPrefix>$&nbsp;</span>
-    <span matSuffix>.00</span>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Duracion</mat-label>
-    <mat-select [(value)]="selected" formControlName="areaDuration" required>
-      <mat-option *ngFor="let time of durationsArray" value="time.id">{{ time.description }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-</form>   
+    </form>
+  </mat-card-content>
+</mat-card>
   

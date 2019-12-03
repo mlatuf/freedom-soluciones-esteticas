@@ -1,19 +1,13 @@
 <page-title>
-  <button class="btn btn-sm btn" title="Nueva zona" (click)="showAreaModal()">
-    <clr-icon shape="add"></clr-icon>
-    <span [hidden]="mobileView">Nueva Zona</span>
-  </button>
-</page-title>
-
-<clr-modal [(clrModalOpen)]="openEditionModal" [clrModalSize]="'sm'">
-  <h3 class="modal-title">Editar zona</h3>
-  <div class="modal-body">
-    <area-details [areaId]="areaSelectedToEdit"
-      class="area-details"
-      (closeModal)="onCloseModal()">
-    </area-details>
+  <div class="btn-group">
+    <button mat-button 
+      color="primary"
+      (click)="editArea()">
+      <mat-icon >add</mat-icon>
+      <span [hidden]="mobileView">&nbsp;&nbsp;Nueva Zona</span>
+    </button>
   </div>
-</clr-modal>
+</page-title>
 
 <div class="mat-elevation-z1 table-container">
   <table mat-table [dataSource]="dataSource" matSort>
@@ -39,7 +33,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let elm">
-        <button mat-icon-button aria-label="Editar" color="primary" (click)="showAreaModal(elm._id)">
+        <!-- <button mat-icon-button aria-label="Editar" color="primary" routerLink="['/area/details', elm._id]" routerLinkActive="active"> -->
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="editArea(elm._id)">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button aria-label="Eliminar" color="warn" (click)="deleteArea(elm._id, elm.description)">

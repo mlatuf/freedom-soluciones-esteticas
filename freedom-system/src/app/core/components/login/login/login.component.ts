@@ -6,9 +6,6 @@ import { User } from 'src/app/core/classes/user';
 import { LoginService } from 'src/app/core/services/login/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
-import { ModalComponent } from '../../modal/modal.component';
-import { redirectLoggedInTo } from '@angular/fire/auth-guard';
-import { ErrorService } from 'src/app/core/services/alert/error.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
 
 

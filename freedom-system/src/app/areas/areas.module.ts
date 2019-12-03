@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { MatTableModule, MatFormFieldModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatSnackBarModule } from '@angular/material';
+import { MatTableModule, MatFormFieldModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatDialogModule, MatDividerModule, MatCardModule, MatSlideToggleModule } from '@angular/material';
 import { CoreModule } from '../core/core.module';
 
 import { AreasComponent } from './components/areas.component';
@@ -24,7 +24,12 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatSortModule,
     MatIconModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSelectModule,
+    MatInputModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatCardModule,
+    MatSlideToggleModule
   ],
   declarations: [
     AreasComponent,
