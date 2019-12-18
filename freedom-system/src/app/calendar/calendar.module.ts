@@ -3,7 +3,7 @@ import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
-import { MatButtonModule, MatIconModule, MatCardModule, MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatCardModule, MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 import { CoreModule } from '../core/core.module';
 
@@ -24,7 +24,10 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatDatepickerModule,
     MatFormFieldModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   declarations: [
     CalendarComponent,

@@ -30,3 +30,16 @@
     }
   }
 }
+.table-container {
+  width: 80%;
+  margin: 0 auto;
+  table {
+    width: 100%;
+    .days-list {
+      .mat-stroked-button {
+        min-width: 50px;
+        margin-right: 0.2rem;
+      }
+    }
+  }
+}
