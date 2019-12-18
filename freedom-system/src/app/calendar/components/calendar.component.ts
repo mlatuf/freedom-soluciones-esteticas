@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AlertService } from '../../core/services/alert/alert.service'
@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Day } from '../classes/day';
 import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'calendar',
@@ -23,6 +24,11 @@ export class CalendarComponent implements OnInit {
   calendar: Day[];
   calendarHistory: Day[];
   dateForm: FormGroup;
+
+  displayedColumns: string[] = ['year', 'month', 'days'];
+  dataSource: MatTableDataSource<Day>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private router: Router, private aplicationState: ApplicationStateService,
     private calendarService: CalendarService, 
@@ -63,6 +69,9 @@ export class CalendarComponent implements OnInit {
     this.calendarService.getCalendar$().subscribe(
       response => {
         this.calendar = response;
+        this.dataSource = new MatTableDataSource(this.calendar);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
@@ -77,11 +86,12 @@ export class CalendarComponent implements OnInit {
     this.newDate.date = this.dateForm.get('newDate').value;
     this.calendarService.saveDate$(this.newDate).subscribe(
       response => {
-        this.getCalendar();
         this.spinner.hide();
         this.showNewDateForm = false;
         this.newDate.date = null;
+        this.dateForm.reset();
         this.alertService.success("La fecha fue agregada correctamente");
+        this.getCalendar();
       },
       error => {
         this.spinner.hide();
