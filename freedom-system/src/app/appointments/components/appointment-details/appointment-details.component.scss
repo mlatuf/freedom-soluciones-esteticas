@@ -1,40 +1,33 @@
-.clr-form {
-  .clr-row {
-    .clr-form-control {
-      .clr-input {
-        width: 10rem;
-        padding-bottom: 0px;
-      } 
-      .ng-select.form-autocomplete-select::ng-deep {
-        width: 10rem;
-        padding-bottom: 0px;
-        max-height: none;
-        display: inline-block;
-        vertical-align: middle;
-        border-bottom-color: transparent;
-        .ng-select-container {
-          min-height: 0px;
-          .ng-value-container {
-            border-top: none;
-            padding: 0px;
-          }
+.appointment-form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 60%;
+  margin: 0 auto;
+  .form-content {
+    .form-block {
+      display: flex;
+      flex-direction: row;
+      flex-basis: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .mat-form-field {
+        margin: 0.4rem 0;
+        width: 100%;
+        &.mid-field {
+          width: 40%;
         }
       }
-      .ng-select.form-autocomplete-select.ng-invalid.ng-touched::ng-deep {
-        border-bottom-color: #c92100;
-      }
-      .ng-select.form-autocomplete-select.ng-select-multiple::ng-deep {
-        .ng-select-container {
-          .ng-value {
-            background-color: transparent;
-            border: 1px solid #217b9c;
-            color: #217b9c;
-            .ng-value-icon {
-              color: #217b9c;
-            }
-          }
-        }
-      }  
     }
+  }
+  .button-form-group {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 0.3rem;
+    }
+  }
+  &.mobile {
+    width: 100%;
   }
 }

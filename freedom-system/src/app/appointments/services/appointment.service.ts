@@ -47,7 +47,7 @@ export class AppointmentService {
   }
 
   saveAppointment$(appointment: Appointment, dayId: string): Observable<any> {
-    this.appointmentsCollection = this.afs.collection<Appointment>("appointment", ref =>
+    this.appointmentsCollection = this.afs.collection<Appointment>("appointments", ref =>
       ref.where("day", "==", dayId)
     );
     if (appointment._id) {
@@ -55,6 +55,7 @@ export class AppointmentService {
       delete appointment._id;
       return from(this.appointmentDoc.update(appointment))
     }
+    appointment.status = 1;
     return from(this.appointmentsCollection.add({...appointment}));
   }
 
@@ -63,8 +64,10 @@ export class AppointmentService {
     return from(appointmentDoc.delete());
   }
 
-  getInitialTimes$(busyAppointments: Appointment[]): number[] {
+  getInitialTimes$(appointments: Appointment[], currentAppointment: string): number[] {
     let initialTimes = Array.from(Array(52).keys());
+    //to not take in consideration the currentAppointment
+    const busyAppointments = currentAppointment ? appointments.filter(obj => obj._id != currentAppointment) : appointments;
     if (busyAppointments) {
       busyAppointments.forEach((appointment) => {
         const duration = appointment.areas.reduce((acc, area) => area.duration, 0);

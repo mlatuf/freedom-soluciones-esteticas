@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { Appointment } from 'src/app/appointments/classes/appointment';
 import { Area } from 'src/app/areas/classes/area';
@@ -10,11 +12,19 @@ import { CalendarService } from 'src/app/calendar/services/calendar.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 
 @Component({
   selector: 'appointments',
   templateUrl: './appointments.component.html',
-  styleUrls: ['./appointments.component.scss']
+  styleUrls: ['./appointments.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class AppointmentsComponent implements OnInit {
 
@@ -30,13 +40,20 @@ export class AppointmentsComponent implements OnInit {
   paymentMethodSelected: number;
   selectedAppointment: Appointment;
 
+  displayedColumns: string[] = ['time', 'patient', 'areas', 'price', 'status', 'observations', 'actions'];
+  displayedMobileColumns: string[] = ['expand', 'time', 'patient'];
+  dataSource: MatTableDataSource<Appointment>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private aplicationState: ApplicationStateService,
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
     private appointmentService: AppointmentService,
-    private calendarService: CalendarService) { 
+    private calendarService: CalendarService,
+    public dialog: MatDialog) { 
       this.paymentsArray = [
         {id: 0, description: 'Impago'},
         {id: 1, description: 'Efectivo'},
@@ -60,7 +77,7 @@ export class AppointmentsComponent implements OnInit {
     this.calendarService.getDayToAppointment$(this.day).subscribe(
       response => {
         this.appointmentsDate = response;
-        this.getAppointmentsList({_id: this.appointmentsDate._id, date: this.appointmentsDate.date});
+        this.getAppointmentsList(this.appointmentsDate._id);
         this.spinner.hide();
       },
       error => {
@@ -75,6 +92,9 @@ export class AppointmentsComponent implements OnInit {
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       response => {
         this.appointments = response;
+        this.dataSource = new MatTableDataSource(this.appointments);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
@@ -166,4 +186,42 @@ export class AppointmentsComponent implements OnInit {
     : ['/appointment/details/', this.appointmentsDate._id];
     this.router.navigate(detailsUrl);
   }
+
+  deleteDay(): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: "Eliminar dia completo", 
+        text: "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.appointments.forEach(appointment => {
+          this.spinner.show();
+          this.appointmentService.deleteAppointment$(appointment._id).subscribe(
+            response => {
+              this.spinner.hide();
+            },
+            error => {
+              this.spinner.hide();
+              this.alertService.error(error);
+            }
+          );
+        });
+        this.spinner.show();
+        this.calendarService.deleteCalendarDay$(this.appointmentsDate._id).subscribe(
+          response => {
+            this.spinner.hide();
+            this.router.navigate(['/calendar']);
+          },
+          error => {
+            this.spinner.hide();
+            this.alertService.error(error);
+          }
+        )
+      }
+    });
+  } 
 }
