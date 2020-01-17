@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { Appointment } from 'src/app/appointments/classes/appointment';
 import { Area } from 'src/app/areas/classes/area';
@@ -14,7 +16,14 @@ import { ApplicationStateService } from 'src/app/core/services/aplication-state/
 @Component({
   selector: 'appointments',
   templateUrl: './appointments.component.html',
-  styleUrls: ['./appointments.component.scss']
+  styleUrls: ['./appointments.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class AppointmentsComponent implements OnInit {
 
@@ -29,6 +38,12 @@ export class AppointmentsComponent implements OnInit {
   openConfirmationModal: Boolean;
   paymentMethodSelected: number;
   selectedAppointment: Appointment;
+
+  displayedColumns: string[] = ['time', 'patient', 'areas', 'price', 'status', 'observations', 'actions'];
+  displayedMobileColumns: string[] = ['expand', 'time', 'patient'];
+  dataSource: MatTableDataSource<Appointment>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -60,7 +75,7 @@ export class AppointmentsComponent implements OnInit {
     this.calendarService.getDayToAppointment$(this.day).subscribe(
       response => {
         this.appointmentsDate = response;
-        this.getAppointmentsList({_id: this.appointmentsDate._id, date: this.appointmentsDate.date});
+        this.getAppointmentsList(this.appointmentsDate._id);
         this.spinner.hide();
       },
       error => {
@@ -75,6 +90,9 @@ export class AppointmentsComponent implements OnInit {
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       response => {
         this.appointments = response;
+        this.dataSource = new MatTableDataSource(this.appointments);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
