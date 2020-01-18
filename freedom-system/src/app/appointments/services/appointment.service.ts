@@ -55,6 +55,7 @@ export class AppointmentService {
       delete appointment._id;
       return from(this.appointmentDoc.update(appointment))
     }
+    appointment.status = 1;
     return from(this.appointmentsCollection.add({...appointment}));
   }
 

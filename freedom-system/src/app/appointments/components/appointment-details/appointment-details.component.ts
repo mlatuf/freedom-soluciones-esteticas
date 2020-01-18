@@ -247,19 +247,18 @@ export class AppointmentDetailsComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    // this.spinner.show();
-    console.log(this.appointment);
-    // this.appointmentService.saveAppointment$(this.appointment, this.selectedDay._id).subscribe(
-    //   response => {
-    //     this.spinner.hide();
-    //     this.router.navigate(["/appointments",this.selectedDay._id]);
-    //     this.alertService.success("Turno guardado con éxito");      
-    //   },
-    //   error => {
-    //     this.spinner.hide();
-    //     this.alertService.error(error);
-    //   }
-    // );
+    this.spinner.show();
+    this.appointmentService.saveAppointment$(this.appointment, this.selectedDay._id).subscribe(
+      response => {
+        this.spinner.hide();
+        this.router.navigate(["/appointments",this.selectedDay._id]);
+        this.alertService.success("Turno guardado con éxito");      
+      },
+      error => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
   }
   
   public cancelEdition(formDirty): void {

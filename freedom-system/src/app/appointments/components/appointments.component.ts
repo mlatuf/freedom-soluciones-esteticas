@@ -12,6 +12,7 @@ import { CalendarService } from 'src/app/calendar/services/calendar.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 
 @Component({
   selector: 'appointments',
@@ -51,7 +52,8 @@ export class AppointmentsComponent implements OnInit {
     private spinner: NgxSpinnerService, 
     private alertService: AlertService,
     private appointmentService: AppointmentService,
-    private calendarService: CalendarService) { 
+    private calendarService: CalendarService,
+    public dialog: MatDialog) { 
       this.paymentsArray = [
         {id: 0, description: 'Impago'},
         {id: 1, description: 'Efectivo'},
@@ -184,4 +186,42 @@ export class AppointmentsComponent implements OnInit {
     : ['/appointment/details/', this.appointmentsDate._id];
     this.router.navigate(detailsUrl);
   }
+
+  deleteDay(): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: "Eliminar dia completo", 
+        text: "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.appointments.forEach(appointment => {
+          this.spinner.show();
+          this.appointmentService.deleteAppointment$(appointment._id).subscribe(
+            response => {
+              this.spinner.hide();
+            },
+            error => {
+              this.spinner.hide();
+              this.alertService.error(error);
+            }
+          );
+        });
+        this.spinner.show();
+        this.calendarService.deleteCalendarDay$(this.appointmentsDate._id).subscribe(
+          response => {
+            this.spinner.hide();
+            this.router.navigate(['/calendar']);
+          },
+          error => {
+            this.spinner.hide();
+            this.alertService.error(error);
+          }
+        )
+      }
+    });
+  } 
 }
