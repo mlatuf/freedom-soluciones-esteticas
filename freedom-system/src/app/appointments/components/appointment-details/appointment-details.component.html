@@ -44,8 +44,8 @@
             <mat-label>Hora</mat-label>
             <mat-select formControlName="appointmentTime"
               required>
-              <mat-option *ngFor="let time of availableTimes" [value]="time">
-                {{ time | timeMinutes }}
+              <mat-option *ngFor="let time of availableSlots" [value]="time._id">
+                {{ time.startTime }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="appointmentForm.get('appointmentTime').hasError('required')">Este campo no puede estar vacio</mat-error>

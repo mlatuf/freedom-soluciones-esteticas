@@ -19,6 +19,8 @@ import { Appointment } from "src/app/appointments/classes/appointment";
 import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 import { CalendarService } from "src/app/calendar/services/calendar.service";
 import { Day } from "src/app/calendar/classes/day";
+import { Time } from "src/app/appointments/classes/time";
+import { TimeSlot } from "src/app/appointments/classes/timeSlot";
 import { MatDialog } from "@angular/material";
 
 @Component({
@@ -36,8 +38,8 @@ export class AppointmentDetailsComponent implements OnInit {
   appointment: Appointment;
   busyAppointments: Appointment[];
   availableDays: any[];
-  availableTimes: number[];
-  initialTimes: number[];
+  availableSlots: TimeSlot[];
+  initialTimes: Time[];
   @Input() editionMode: Boolean;
   appointmentForm: FormGroup;
 
@@ -173,7 +175,8 @@ export class AppointmentDetailsComponent implements OnInit {
 
   private getSelectorsData(): void {
     this.spinner.show();
-    this.availableTimes = this.appointmentService.getInitialTimes$(this.busyAppointments, this.appointmentId);
+    this.initialTimes = this.appointmentService.getInitialTimes$(this.busyAppointments, this.appointmentId);
+    this.availableSlots = this.appointmentService.updateAvailableSlots$(this.initialTimes);
     this.calendarService.getDaysList$().subscribe(
       response => {
         this.availableDays = response;
@@ -213,8 +216,8 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       response => {
         this.busyAppointments = response;
-        this.initialTimes = this.appointmentService.getInitialTimes$(this.busyAppointments, this.appointmentId);
-        this.availableTimes = this.initialTimes;
+        let times = this.appointmentService.getInitialTimes$(this.busyAppointments, this.appointmentId);
+        this.initialTimes = times.filter((time) => {return time.available});
         this.spinner.hide();
       },
       error => {
@@ -236,10 +239,11 @@ export class AppointmentDetailsComponent implements OnInit {
         this.appointmentDuration += area.duration;
       });
       this.appointmentForm.get('appointmentPrice').patchValue(this.appointment.price);
-      this.availableTimes =
-      selectedAreasObject.length > 0
-      ? this.appointmentService.updateAvailableTimes$(this.appointmentDuration, this.availableTimes)
-      : this.initialTimes;
+      // this.availableSlots =
+      // selectedAreasObject.length > 0
+      // ? this.appointmentService.updateAvailableSlots$(this.appointmentDuration, this.initialTimes)
+      // : this.initialTimes;
+      this.availableSlots = this.appointmentService.updateAvailableSlots$(this.initialTimes, this.appointmentDuration);
       this.appointmentDuration = this.appointmentDuration * 15;
     }
     this.appointment.areas = selectedAreasObject;

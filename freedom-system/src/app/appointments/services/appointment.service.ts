@@ -3,6 +3,8 @@ import { Observable, from } from "rxjs";
 import { map, retry } from "rxjs/operators";
 
 import { Appointment } from "src/app/appointments/classes/appointment";
+import { Time } from "src/app/appointments/classes/time";
+import { TimeSlot } from "src/app/appointments/classes/timeSlot";
 
 import {
   AngularFirestore,
@@ -64,31 +66,50 @@ export class AppointmentService {
     return from(appointmentDoc.delete());
   }
 
-  getInitialTimes$(appointments: Appointment[], currentAppointment: string): number[] {
-    let initialTimes = Array.from(Array(52).keys());
+  getInitialTimes$(appointments: Appointment[], currentAppointment: string): Time[] {
+    let initialTimes = [];
+    for(let i=8; i<21; i++) {
+      for(let j=0; j<4; j++) {
+        initialTimes.push(i + ":" + (j===0 ? "00" : 15*j) );
+      }
+    }  
+    initialTimes = initialTimes.map((value, index) => { 
+      return {
+        _id: index,
+        available: true,
+        time: value
+      }
+    });
     //to not take in consideration the currentAppointment
     const busyAppointments = currentAppointment ? appointments.filter(obj => obj._id != currentAppointment) : appointments;
     if (busyAppointments) {
       busyAppointments.forEach((appointment) => {
-        const duration = appointment.areas.reduce((acc, area) => area.duration, 0);
-        initialTimes.splice(appointment.time, duration);
+        const duration = appointment.areas.reduce((acc, area) => acc + area.duration, 0);
+        for (let index = 0; index < duration; index ++){
+          initialTimes[appointment.time + index].available = false;
+        }
       });
     }
     return initialTimes;
   }
 
-  updateAvailableTimes$(duration: number, availableTimes: number[]): number[] {
-    let availableTimesUpdated = [];
-    for (let index = 0; index < availableTimes.length - duration; index++) {
-      let possibleTime = true;
-      for (let pos = index; possibleTime && pos < index + duration - 1; pos++) {
-        possibleTime =
-          availableTimes[pos + 1] === availableTimes[pos] + 1;
-      }
-      if (possibleTime) {
-        availableTimesUpdated.push(availableTimes[index]);
-      }
-    }
+  updateAvailableSlots$(initialTimes: Time[], duration: number = 1): TimeSlot[] {
+    let availableTimesUpdated: TimeSlot[] = [];
+    let slots = Array.from(Array(initialTimes.length).keys());
+    slots.forEach((slotElm, index) => {
+      let count = 0;
+      for (let i = index; count < duration && i < slots.length; i++) {
+        count++;
+        if (count === duration) {
+          const newSlot = {
+            _id: index,
+            startTime: initialTimes[slotElm].time,
+            slot: initialTimes.slice(slotElm, slotElm + duration).map(t => t._id)
+          }
+          availableTimesUpdated.push(newSlot);
+        }
+      }  
+    });
     return availableTimesUpdated;
   }
 }
