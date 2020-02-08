@@ -123,4 +123,9 @@ export class CalendarService {
       ref.where("uid", "==", this.afAuth.auth.currentUser.uid).orderBy('date')
     );
   }
+
+  deleteCalendarDay$(dayId: string): Observable<any> {
+    this.dayDoc = this.afs.doc<Day>('days/' + dayId);
+    return from(this.dayDoc.delete());
+  }
 }
