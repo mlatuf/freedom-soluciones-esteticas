@@ -6,6 +6,20 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CoreModule } from '../core/core.module';
 import { RouterModule } from '@angular/router';
 
+import { 
+  MatButtonModule, 
+  MatIconModule, 
+  MatTableModule, 
+  MatPaginatorModule, 
+  MatSortModule, 
+  MatSelectModule, 
+  MatInputModule, 
+  MatDialogModule, 
+  MatDividerModule, 
+  MatCardModule, 
+  MatSlideToggleModule, 
+  MatGridListModule } from '@angular/material';
+
 import { AppointmentsComponent } from './components/appointments.component';
 import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
 import { StatusDescriptionPipe } from './pipes/status-description.pipe';
@@ -24,7 +38,20 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     ReactiveFormsModule,
     NgSelectModule,
     RouterModule,
-    CoreModule
+    CoreModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatSelectModule,
+    MatInputModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatCardModule,
+    MatSlideToggleModule,
+    MatGridListModule,
+    MatDialogModule
   ],
   declarations: [ 
     AppointmentsComponent,

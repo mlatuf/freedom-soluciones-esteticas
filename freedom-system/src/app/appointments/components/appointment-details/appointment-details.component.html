@@ -1,112 +1,79 @@
 <page-title>
-  <div class="toggle-switch" [hidden]="!appointmentId">
-    <clr-toggle-wrapper>
-      <input type="checkbox" clrToggle id="editionMode" [(ngModel)]="editionMode">
-      <label for="editionMode">editar</label>
-    </clr-toggle-wrapper>
-  </div>
+  <mat-slide-toggle
+    color="primary"
+    (change)="toggleEditionMode()"
+    [hidden]="!appointmentId">
+    Editar
+  </mat-slide-toggle>
 </page-title>
-<form clrForm [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-  <div class="clr-row">
-    <section class="form-block clr-col-md-4 clr-col-12">
-      <clr-input-container>
-        <label for="appointment_patient" class="clr-control-label">Paciente</label>
-        <ng-select 
-          #appointmentPatient
-          class="form-autocomplete-select"
-          formControlName="appointmentPatient"
-          (ngModelChange)="onChangeSelector($event, 'patient')"
-          clrInput
-          required
-          [attr.disabled]="!editionMode">
-          <ng-option *ngFor="let patient of patients" [value]="patient._id"> {{ patient.fullName }} </ng-option>
-        </ng-select>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="appointment_date" class="clr-control-label">Fecha</label>
-        <ng-select
-          #appointmentDay
-          [searchable]="false"
-          (ngModelChange)="onChangeDay($event)"
-          class="form-autocomplete-select"
-          formControlName="appointmentDay"
-          clrInput
-          required
-          [attr.disabled]="!editionMode">
-          <ng-option *ngFor="let day of availableDays" [value]="day._id"> {{ day.date.toDate() | date:'mediumDate' }} </ng-option>
-        </ng-select>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="appointment_time" class="clr-control-label">Hora</label>
-        <ng-select
-          #appointmentTime
-          class="form-autocomplete-select"
-          formControlName="appointmentTime"
-          (ngModelChange)="onChangeSelector($event, 'time')"
-          clrInput
-          required
-          [attr.disabled]="(!selectedDay._id || !editionMode)">
-          <ng-option *ngFor="let time of availableTimes" [value]="time"> {{ time | timeMinutes }} </ng-option>
-        </ng-select>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-    </section>
-    <section class="form-block clr-col-md-4 clr-col-12">
-      <clr-input-container>
-        <label for="appointment_areas" class="clr-control-label">Zonas</label>
-        <ng-select 
-          #appointmentAreas
-          (ngModelChange)="onChangeAreas($event)"
-          [multiple]="true"
-          [closeOnSelect]="false"
-          class="form-autocomplete-select"
-          formControlName="appointmentAreas"
-          clrInput
-          required
-          [attr.disabled]="!editionMode">
-          <ng-option *ngFor="let area of areas" [value]="area._id"> {{ area.description }} </ng-option>
-          <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-        </ng-select>
-      </clr-input-container>
-    </section>
-    <section class="form-block clr-col-md-4 clr-col-12">
-      <div class="clr-form-control">
-        <label for="appointment_duration" class="clr-control-label"> 
-          Duracion aproximada en minutos: {{ appointmentDuration }}
-        </label>
+<mat-card class="appointment-form-container" [ngClass]="{'mobile' : mobileView}">
+  <mat-card-content>
+    <form class="appointment-form" [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+      <div class="form-content">
+        <section class="form-block">
+          <mat-form-field>
+            <mat-label>Paciente</mat-label>
+            <mat-select formControlName="appointmentPatient"
+              required>
+              <mat-option *ngFor="let patient of patients" [value]="patient._id">{{ patient.fullName }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="appointmentForm.get('appointmentPatient').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Zonas</mat-label>
+            <mat-select multiple
+              formControlName="appointmentAreas"
+              required>
+              <mat-option *ngFor="let area of areas" [value]="area._id">
+                {{ area.description }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="appointmentForm.get('appointmentAreas').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="mid-field">
+            <mat-label>Fecha</mat-label>
+            <mat-select formControlName="appointmentDay" 
+              required>
+              <mat-option *ngFor="let day of availableDays" [value]="day._id">
+                {{ day.date.toDate() | date:'mediumDate' }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="appointmentForm.get('appointmentDay').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="mid-field">
+            <mat-label>Hora</mat-label>
+            <mat-select formControlName="appointmentTime"
+              required>
+              <mat-option *ngFor="let time of availableSlots" [value]="time._id">
+                {{ time.startTime }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="appointmentForm.get('appointmentTime').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="mid-field">
+            <input matInput placeholder="duracion" type="input" formControlName="appointmentDuration"/>
+            <span matSuffix>min.</span>
+          </mat-form-field>
+          <mat-form-field class="mid-field">
+            <input matInput placeholder="Precio" type="input" formControlName="appointmentPrice"/>
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Observaciones" formControlName="appointmentObservations"></textarea>
+          </mat-form-field>
+        </section>        
       </div>
-      <clr-input-container>
-        <label for="appointment_price" class="clr-control-label">Precio</label>
-        <input clrInput formControlName="appointmentPrice"/>
-      </clr-input-container>
-      <clr-textarea-container>
-        <label for="appointment_observations" class="clr-control-label">Observaciones</label>
-        <textarea clrTextarea name="appointment_observations" [(ngModel)]="appointment.observations" [ngModelOptions]="{standalone: true}"
-        [attr.disabled]="!editionMode">
-        </textarea>
-      </clr-textarea-container>
-    </section>
-  </div>
-  <div class="clr-row">
-    <section class="clr-col-md-12 clr-col-12">
-      <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !appointmentForm.dirty || !appointmentForm.valid)">Guardar</button>
-      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(appointmentForm.dirty)">Cancelar</button>
-    </section>
-  </div>
-</form>
-
-<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
-  <h3 class="modal-title">Cancelar edición</h3>
-  <div class="modal-body">
-    <p>
-      Está seguro que desea cancelar la edición ?
-      <small>Se perderán todos los datos no guardados.</small>
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
-    <button type="button" class="btn btn-outline" (click)="confirmCancelation()">Si</button>
-  </div>
-</clr-modal>
+      <div class="button-form-group">
+        <button mat-flat-button type="submit" color="primary" 
+          [disabled]="(!editionMode || !appointmentForm.dirty || !appointmentForm.valid)">
+          Guardar
+        </button>
+        <button mat-flat-button type="button" color="warn" 
+          (click)="cancelEdition(appointmentForm.dirty)">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
