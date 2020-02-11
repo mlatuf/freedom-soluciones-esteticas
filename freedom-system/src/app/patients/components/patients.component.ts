@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { Patient } from '../classes/patient';
 import { PatientService } from '../services/patient.service';
@@ -10,7 +12,14 @@ import { ApplicationStateService } from '../../core/services/aplication-state/ap
 @Component({
   selector: 'patients',
   templateUrl: './patients.component.html',
-  styleUrls: ['./patients.component.scss']
+  styleUrls: ['./patients.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class PatientsComponent implements OnInit {
 
@@ -20,6 +29,12 @@ export class PatientsComponent implements OnInit {
   openConfirmation: Boolean;
   patientSelected: number;
   patientNameSelected: string;
+
+  displayedColumns: string[] = ['fullName', 'phone', 'actions'];
+  displayedMobileColumns: string[] = ['expand', 'fullName'];
+  dataSource: MatTableDataSource<Patient>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private aplicationStateService: ApplicationStateService, 
     private patientService: PatientService, 
@@ -38,6 +53,9 @@ export class PatientsComponent implements OnInit {
     this.patientService.getPatients$().subscribe(
       response => {
         this.patients = response;
+        this.dataSource = new MatTableDataSource(this.patients);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {
@@ -45,6 +63,11 @@ export class PatientsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   showHistoryModal(patientId: number) {

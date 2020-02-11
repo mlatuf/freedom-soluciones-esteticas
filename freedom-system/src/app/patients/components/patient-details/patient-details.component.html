@@ -1,108 +1,73 @@
 <page-title>
-  <div class="toggle-switch" [hidden]="(patientId === 0)">
-    <clr-toggle-wrapper>
-      <input type="checkbox" id="editionMode" [(ngModel)]="editionMode" clrToggle />
-      <label for="editionMode">editar</label>
-    </clr-toggle-wrapper>
-  </div>
+  <mat-slide-toggle
+    color="primary"
+    (change)="toggleEditionMode()"
+    [hidden]="!patientId">
+    Editar
+  </mat-slide-toggle>
 </page-title>
-
-<form clrForm #patientForm="ngForm" (ngSubmit)="onSubmit()">
-  <div class="clr-row">
-    <section class="clr-col-md-4 clr-col-12">
-      <clr-input-container>
-        <label for="patient_name" class="clr-control-label">Nombre</label>
-        <input clrInput type="text" name="patient_name" [(ngModel)]="patient.name" [disabled]="!editionMode" required/>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="patient_lastname" class="clr-control-label">Apellido</label>
-        <input clrInput type="text" name="patient_lastname" [(ngModel)]="patient.lastName" [disabled]="!editionMode" required/>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="patient_age" class="clr-control-label">Edad</label>
-        <input clrInput type="number" name="patient_age" [(ngModel)]="patient.age" [disabled]="!editionMode" required/>
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="patient_phone" class="clr-control-label">Telefono</label>
-        <input clrInput type="tel"name="patient_phone" [(ngModel)]="patient.phone" [disabled]="!editionMode"/>
-      </clr-input-container>
-    </section>
-
-    <section class="checkboxes-container clr-col-md-8 clr-col-12">
-      <div class="clr-col">
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasMedicines" [(ngModel)]="patient.hasMedicines" [disabled]="!editionMode"/>
-          <label>Medicamentos</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasMedicines">
-          <textarea clrTextarea name="patient_medicines" [(ngModel)]="patient.medicines" [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasAllergies" [(ngModel)]="patient.hasAllergies" [disabled]="!editionMode"/>
-          <label>Alergias</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasAllergies">
-          <textarea clrTextarea name="patient_allergies" [(ngModel)]="patient.allergies" [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasMoles" [(ngModel)]="patient.hasMoles" [disabled]="!editionMode"/>
-          <label>Lunares o manchas en la piel</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasMoles">
-          <textarea clrTextarea name="patient_molesPlace" [(ngModel)]="patient.molesPlace" [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
+<mat-card class="patient-form-container" [ngClass]="{'mobile' : mobileView}">
+  <mat-card-content>
+    <form [formGroup]="patientForm" class="patient-form" (ngSubmit)="onSubmit()">
+      <div class="form-content">
+        <section class="form-block">
+          <mat-form-field>
+            <input matInput placeholder="Nombre" type="text" formControlName="patientName" required/>
+            <mat-error *ngIf="patientForm.get('patientName').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Apellido" type="text" formControlName="patientLastName" required/>
+            <mat-error *ngIf="patientForm.get('patientLastName').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Edad" type="number" formControlName="patientAge" required/>
+            <mat-error *ngIf="patientForm.get('patientAge').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Telefono" type="number" formControlName="patientPhone" required/>
+            <mat-error *ngIf="patientForm.get('patientPhone').hasError('required')">Este campo no puede estar vacio</mat-error>
+          </mat-form-field>
+        </section>
+        <section class="form-block">
+          <mat-form-field>
+            <textarea matInput placeholder="Toma medicamentos?" formControlName="patientMedicines"></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Tiene alergias?" formControlName="patientAllergies"></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Tiene lunares?" formControlName="patientMoles"></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Tiene protesis metalicas?" formControlName="patientBodyMetals"></textarea>
+          </mat-form-field>
+        </section>
+        <section class="form-block">
+          <mat-form-field>
+            <textarea matInput placeholder="Tiene tatuajes?" formControlName="patientTattoos"></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Realizo tratamiento previo?" formControlName="patientPreviousTreatment"></textarea>
+          </mat-form-field>
+          <mat-checkbox formControlName="patientSkinCancer">Cancer de piel</mat-checkbox>
+          <mat-checkbox formControlName="patientEpilepsy">Epilepsia</mat-checkbox>
+          <mat-checkbox formControlName="patientPregnant">Esta embarazada?</mat-checkbox>
+        </section>
       </div>
-      <div class="clr-col">
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasBodyMetals" [(ngModel)]="patient.hasBodyMetals" [disabled]="!editionMode"/>
-          <label>Metales en el cuerpo</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasBodyMetals">
-          <textarea clrTextarea name="patient_bodyMetalsPlace" [(ngModel)]="patient.bodyMetalsPlace"  [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasTattoos" [(ngModel)]="patient.hasTattoos" [disabled]="!editionMode"/>
-          <label>Tatuajes</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasTattoos">
-          <textarea clrTextarea name="patient_tattoosPlace" [(ngModel)]="patient.tattoosPlace" [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
+     
+      <div class="button-form-group">
+        <button mat-flat-button type="submit" color="primary" 
+          [disabled]="(!editionMode || !patientForm.dirty || !patientForm.valid)">
+          Guardar
+        </button>
+        <button mat-flat-button type="button" color="warn" 
+          (click)="cancelEdition(patientForm.dirty)">
+          Cancelar
+        </button>
       </div>
-      <div class="clr-col">
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasSkinCancer" [(ngModel)]="patient.hasSkinCancer" [disabled]="!editionMode"/>
-          <label>Cancer de piel</label>
-        </clr-checkbox-wrapper>
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasEpilepsy" [(ngModel)]="patient.hashasEpilepsy" [disabled]="!editionMode"/>
-          <label>Epilepsia</label>
-        </clr-checkbox-wrapper>
-        <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox type="checkbox" name="patient_hasPreviousTreatment" [(ngModel)]="patient.hasPreviousTreatment" [disabled]="!editionMode"/>
-          <label>Sesiones previas</label>
-        </clr-checkbox-wrapper>
-        <clr-textarea-container [hidden]="!patient.hasPreviousTreatment">
-          <textarea clrTextarea name="patient_previousTreatment" [(ngModel)]="patient.previousTreatment" [disabled]="!editionMode"></textarea>
-        </clr-textarea-container>
-      </div>
-    </section>
-  </div>
-  <div class="clr-row" [hidden]="!patientId">
-    <patient-appointment-history
-      [patientId]="patientId"
-      class="clr-col-md-12 clr-col-12">
-    </patient-appointment-history>
-  </div>
-  <div class="clr-row">
-    <section class="clr-col-md-12 clr-col-12">
-      <button type="submit" class="btn btn-success-outline" [disabled]="(!editionMode || !patientForm.form.dirty || !patientForm.form.valid)">Guardar</button>
-      <button type="button" class="btn btn-danger-outline" (click)="cancelEdition(patientForm.form.dirty)">Cancelar</button>
-    </section>
-  </div>
-</form>
+    </form>
+  </mat-card-content>
+</mat-card>
 
 <clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
   <h3 class="modal-title">Cancelar edición</h3>
