@@ -1,4 +1,27 @@
-.datagrid .datagrid-cell, .datagrid .datagrid-column, .datagrid .datagrid-head .datagrid-row-actions {
-  text-align: left;
-  min-width: 4rem;
+.table-container {
+  width: 100%;
+  margin: 0 auto;
+  table {
+    width: 100%;
+    .actions-header {
+      text-align: center;
+    }
+  }
+  &.mobile {
+    .expand-cell-action {
+      cursor: pointer;
+    }
+    .patient-detail {
+      padding-left: 5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      label {
+        font-weight: bold;
+      }
+    }
+    tr.patient-detail-row {
+      height: 0;
+    }
+  }
 }

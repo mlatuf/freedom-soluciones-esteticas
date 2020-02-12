@@ -1,26 +1,80 @@
-<clr-datagrid [hidden]="(appointmentHistory.length == 0)">
-  <clr-dg-column [clrDgField]="'date'">
-    Fecha
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'areas'">
-    Zonas
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'status'">
-    Estado del turno
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'observations'">
-    Observaciones
-  </clr-dg-column>
+<div class="mat-elevation-z1 table-container" *ngIf="!mobileView">
+  <table mat-table [dataSource]="dataSource" matSort>
 
-  <clr-dg-row *clrDgItems="let appointment of appointmentHistory">
-    <clr-dg-cell>{{ appointment.date.toDate() | date:'shortDate'}}</clr-dg-cell>
-    <clr-dg-cell>{{ appointment.areas }}</clr-dg-cell>
-    <clr-dg-cell>{{ appointment.status }}</clr-dg-cell>
-    <clr-dg-cell>{{ appointment.observations }}</clr-dg-cell>
-  </clr-dg-row>
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.date.toDate() | date:'shortDate'}} </td>
+    </ng-container>
 
-  <!-- <clr-dg-footer>
-    <clr-dg-pagination #pagination [clrDgPageSize]="10">
-    </clr-dg-pagination>
-  </clr-dg-footer> -->
-</clr-datagrid>
+    <!-- Areas Column -->
+    <ng-container matColumnDef="areas">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zonas</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.areas | areasDescription }} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.status }} </td>
+    </ng-container>
+
+    <!-- Observations Column -->
+    <ng-container matColumnDef="observations">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.observations }} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSize]="5" [hidePageSize]="true"></mat-paginator>
+</div>
+
+<div class="mat-elevation-z1 table-container mobile" *ngIf="mobileView">
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let appointment" 
+        class="expand-cell-action"
+        (click)="expandedAppointment = (expandedAppointment === appointment ? null : appointment)">
+        <mat-icon *ngIf="(expandedAppointment != appointment)">expand_more</mat-icon>
+        <mat-icon *ngIf="(expandedAppointment === appointment)">expand_less</mat-icon>
+      </td>
+    </ng-container>
+
+     <!-- Date Column -->
+     <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.date.toDate() | date:'shortDate'}} </td>
+    </ng-container>
+
+    <!-- Areas Column -->
+    <ng-container matColumnDef="areas">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zonas</th>
+      <td mat-cell *matCellDef="let appointment"> {{ appointment.areas | areasDescription }} </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let appointment" [attr.colspan]="displayedMobileColumns.length">
+        <div class="patient-detail"
+          [@detailExpand]="(appointment === expandedAppointment ? 'expanded' : 'collapsed')">
+          <div><label>Estado: </label>{{ appointment.status }}</div>
+          <div><label>Observaciones: </label>{{ appointment.observations }}</div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedMobileColumns"></tr>
+    <tr mat-row *matRowDef="let appointment; columns: displayedMobileColumns;"
+      class="patient-row"
+      [class.expanded-row]="expandedAppointment === appointment"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="patient-detail-row"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="5" [hidePageSize]="true"></mat-paginator>
+</div>
