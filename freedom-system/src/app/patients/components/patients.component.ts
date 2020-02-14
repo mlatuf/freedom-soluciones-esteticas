@@ -4,9 +4,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import { Patient } from '../classes/patient';
 import { PatientService } from '../services/patient.service';
-import { AlertService } from '../../core/services/alert/alert.service'
+import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ApplicationStateService } from '../../core/services/aplication-state/aplication-state.service';
+import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
+import { ModalComponent } from 'src/app/core/components/modal/modal.component';
+import { PatientAppointmentHistoryComponent } from '../components/patient-appointment-history/patient-appointment-history.component';
 
 
 @Component({
@@ -25,8 +27,6 @@ export class PatientsComponent implements OnInit {
 
   mobileView: Boolean;
   patients: Patient[];
-  openHistory: Boolean;
-  openConfirmation: Boolean;
   patientSelected: number;
   patientNameSelected: string;
 
@@ -38,9 +38,9 @@ export class PatientsComponent implements OnInit {
 
   constructor(private aplicationStateService: ApplicationStateService, 
     private patientService: PatientService, 
-    private spinner:   NgxSpinnerService, private alertService: AlertService) {
-    this.openHistory = this.openConfirmation = false;
-  }
+    private spinner:   NgxSpinnerService, 
+    private alertService: AlertService,
+    public dialog: MatDialog) {}
   
   ngOnInit() {
     this.mobileView = this.aplicationStateService.getIsMobileResolution();
@@ -70,19 +70,34 @@ export class PatientsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  showHistoryModal(patientId: number) {
-    this.patientSelected = patientId;
-    this.openHistory = true;
+  showHistoryModal(patientId: string) {
+    const dialogRef = this.dialog.open(PatientAppointmentHistoryComponent, {
+      width: '80%',
+      data: {
+        title: 'Historial de sesiones',
+        patientId: patientId
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {});
   }
 
   deletePatient(patientId: number, patientName: string) {
-    this.patientSelected = patientId;
-    this.patientNameSelected = patientName;
-    this.openConfirmation = true;
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: 'Eliminar paciente ' + patientName, 
+        text: "Esta seguro que desea eliminar el paciente? Se perderan todos los datos del mismo y su historial de sesiones",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.confirmDeletePatient();
+      }
+    });
   }
 
   confirmDeletePatient() {
-    this.openConfirmation = false;
     this.spinner.show();    
     this.patientService.deletePatient$(this.patientSelected).subscribe(
       response => {

@@ -52,6 +52,7 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     PatientDetailsComponent,
     PatientAppointmentHistoryComponent
   ],
+  entryComponents: [PatientAppointmentHistoryComponent],
   providers: [AngularFireAuthGuard]
 })
 export class PatientsModule { }

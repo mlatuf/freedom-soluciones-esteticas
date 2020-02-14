@@ -102,7 +102,7 @@
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
 </div>
 
-<clr-modal [(clrModalOpen)]="openHistory" [clrModalSize]="'lg'">
+<!-- <clr-modal [(clrModalOpen)]="openHistory" [clrModalSize]="'lg'">
   <h3 class="modal-title">Historial de sesiones</h3>
   <div class="modal-body">
     <patient-appointment-history
@@ -110,17 +110,4 @@
       class="clr-col-md-12 clr-col-12">
     </patient-appointment-history>
   </div>
-</clr-modal>
-
-<clr-modal [(clrModalOpen)]="openConfirmation" [clrModalSize]="'md'">
-  <h3 class="modal-title">Eliminar paciente</h3>
-  <div class="modal-body">
-    <p>
-      Esta seguro que desea eliminar al paciente <b>{{ patientNameSelected }}</b> ?
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmation = !openConfirmation)">No</button>
-    <button type="button" class="btn btn-outline" (click)="confirmDeletePatient()">Si</button>
-  </div>
-</clr-modal>
+</clr-modal> -->
