@@ -21,7 +21,7 @@ import {
   MatGridListModule } from '@angular/material';
 
 import { AppointmentsComponent } from './components/appointments.component';
-import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
+// import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
 import { StatusDescriptionPipe } from './pipes/status-description.pipe';
 import { TimeMinutesPipe } from './pipes/time-minutes.pipe';
 import { AppointmentDetailsComponent } from './components/appointment-details/appointment-details.component';
@@ -58,7 +58,7 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     AppointmentDetailsComponent,
     AppointmentActionsComponent,
     AppointmentEndDayComponent,
-    AreasDescriptionPipe,
+    // AreasDescriptionPipe,
     StatusDescriptionPipe,
     TimeMinutesPipe
   ],

@@ -1,15 +1,36 @@
-.patients-grid {
-  .actions-cell {
-    text-align: center;
-    padding: 0.2rem 0.5rem 0;
-    .btn {
-      margin-top: 0;
+.filter-field {
+  width: 80%;
+  margin: 0.5rem auto;
+  display: block;
+  &.mobile {
+    width: 100%;
+  }
+}
+.table-container {
+  width: 80%;
+  margin: 0 auto;
+  table {
+    width: 100%;
+    .actions-header {
+      text-align: center;
     }
-    &.mobile-view {
-      text-align: start;
-      clr-button-group {
-        margin: 0.5rem 0;
+  }
+  &.mobile {
+    width: 100%;
+    .expand-cell-action {
+      cursor: pointer;
+    }
+    .patient-detail {
+      padding-left: 5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      label {
+        font-weight: bold;
       }
+    }
+    tr.patient-detail-row {
+      height: 0;
     }
   }
 }

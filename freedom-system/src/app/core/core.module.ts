@@ -15,6 +15,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { LoginComponent } from './components/login/login/login.component';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { ModalComponent } from './components/modal/modal.component';
+import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
 
 
 @NgModule({
@@ -23,12 +24,14 @@ import { ModalComponent } from './components/modal/modal.component';
     AlertsComponent,
     MenuComponent,
     LoginComponent,
-    ModalComponent
+    ModalComponent,
+    AreasDescriptionPipe
   ],
   exports: [
     PageTitleComponent,
     AlertsComponent,
-    MenuComponent
+    MenuComponent,
+    AreasDescriptionPipe
   ],
   imports: [
     CommonModule,
