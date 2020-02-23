@@ -44,7 +44,6 @@ export class AppointmentsComponent implements OnInit {
   displayedMobileColumns: string[] = ['expand', 'time', 'patient'];
   dataSource: MatTableDataSource<Appointment>;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -91,10 +90,9 @@ export class AppointmentsComponent implements OnInit {
     this.spinner.show();
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       response => {
-        this.appointments = response;
+        this.appointments = response.sort((a,b) => (a.time - b.time));
         this.dataSource = new MatTableDataSource(this.appointments);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
       error => {

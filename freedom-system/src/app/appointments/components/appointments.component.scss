@@ -1,5 +1,13 @@
+page-title {
+  .btn-group {
+    margin: 0;
+    button {
+      margin-left: 0.2rem;
+      background-color: whitesmoke;
+    }
+  }
+}
 .table-container {
-  width: 80%;
   margin: 0 auto;
   table {
     width: 100%;
@@ -40,7 +48,6 @@
     }
   }
   &.mobile {
-    width: 100%;
     .expand-cell-action {
       cursor: pointer;
     }

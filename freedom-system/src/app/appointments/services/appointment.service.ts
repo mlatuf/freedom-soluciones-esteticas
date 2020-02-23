@@ -90,6 +90,7 @@ export class AppointmentService {
         }
       });
     }
+
     return initialTimes;
   }
 
@@ -97,18 +98,21 @@ export class AppointmentService {
     let availableTimesUpdated: TimeSlot[] = [];
     let slots = Array.from(Array(initialTimes.length).keys());
     slots.forEach((slotElm, index) => {
-      let count = 0;
-      for (let i = index; count < duration && i < slots.length; i++) {
-        count++;
-        if (count === duration) {
-          const newSlot = {
-            _id: index,
-            startTime: initialTimes[slotElm].time,
-            slot: initialTimes.slice(slotElm, slotElm + duration).map(t => t._id)
+      // TODO necesito todos los initialtimes para saber cuales estan available
+      if (initialTimes[index].available) {
+        let count = 0;
+        for (let i = index; i < slots.length && count < duration && initialTimes[i].available; i++) {
+          count++;
+          if (count === duration) {
+            const newSlot = {
+              _id: index,
+              startTime: initialTimes[slotElm].time,
+              slot: initialTimes.slice(slotElm, slotElm + duration).map(t => t._id)
+            }
+            availableTimesUpdated.push(newSlot);
           }
-          availableTimesUpdated.push(newSlot);
-        }
-      }  
+        }      
+      }
     });
     return availableTimesUpdated;
   }
