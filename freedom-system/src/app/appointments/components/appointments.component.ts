@@ -13,6 +13,7 @@ import { AlertService } from 'src/app/core/services/alert/alert.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
 import { ModalComponent } from 'src/app/core/components/modal/modal.component';
+import { AppointmentEndDayComponent } from './appointment-end-day/appointment-end-day.component';
 
 @Component({
   selector: 'appointments',
@@ -164,12 +165,16 @@ export class AppointmentsComponent implements OnInit {
     this.endedAppointments = this.appointments.filter((obj) => {
       return (obj.status === 6);
     });
-    this.openConfirmationModal = !this.openConfirmationModal;
-  }
-
-  onEndDay(): void {
-    this.appointmentsDate.isFinished = true;
-    this.openConfirmationModal = false;
+    const dialogRef = this.dialog.open(AppointmentEndDayComponent, {
+      width: '80%',
+      data: {
+        title: 'Terminar dia',
+        appointments: this.endedAppointments
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.appointmentsDate.isFinished = result;
+    });
   }
 
   endDayDisabled(): Boolean {

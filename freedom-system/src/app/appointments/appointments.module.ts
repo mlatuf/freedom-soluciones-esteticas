@@ -18,7 +18,8 @@ import {
   MatDividerModule, 
   MatCardModule, 
   MatSlideToggleModule, 
-  MatGridListModule } from '@angular/material';
+  MatGridListModule,
+  MatListModule } from '@angular/material';
 
 import { AppointmentsComponent } from './components/appointments.component';
 import { StatusDescriptionPipe } from './pipes/status-description.pipe';
@@ -50,7 +51,8 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatCardModule,
     MatSlideToggleModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   declarations: [ 
     AppointmentsComponent,
@@ -61,6 +63,7 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     StatusDescriptionPipe,
     TimeMinutesPipe
   ],
+  entryComponents: [AppointmentEndDayComponent],
   providers: [AngularFireAuthGuard]
 })
 export class AppointmentsModule { }

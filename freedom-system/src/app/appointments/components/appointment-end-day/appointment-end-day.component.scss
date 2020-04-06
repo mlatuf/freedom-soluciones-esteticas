@@ -1,12 +1,23 @@
-.takings-list {
-  li {
-    list-style: none;
-    label {
-      font-weight: bold;
-    }
-    &.total-row {
-      border-top: 1px solid #ddd;
-      padding-top: 5px;
-    }
+.mat-dialog-title {
+  margin: 0 0 0.5rem;
+  .mat-icon {
+    vertical-align: middle;
   }
+}
+.mat-dialog-content {
+  margin-top: 0.5rem;
+  table {
+    width: 100%;
+  }
+  tr.mat-footer-row {
+    font-weight: bold;
+  }
+  p {
+    margin-top: 0px;
+  }
+}
+.mat-dialog-actions {
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-end;
 }

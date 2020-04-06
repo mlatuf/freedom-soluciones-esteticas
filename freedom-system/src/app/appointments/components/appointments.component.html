@@ -9,8 +9,8 @@
     </button>
     <button mat-stroked-button 
       color="primary"
-      (click)="showConfirmationModal()"
-      [disabled]="(isFinished || endDayDisabled())">
+      (click)="showConfirmationModal()">
+      <!-- [disabled]="(isFinished || endDayDisabled())"> -->
       <mat-icon>assignment_turned_in</mat-icon>
       <span [hidden]="mobileView">&nbsp;Finalizar</span>
     </button>
@@ -163,7 +163,7 @@
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
 </div>
 
-<clr-modal [(clrModalOpen)]="openPaymentModal" [clrModalSize]="'md'" class="payment-modal">
+<!-- <clr-modal [(clrModalOpen)]="openPaymentModal" [clrModalSize]="'md'" class="payment-modal">
   <h3 class="modal-title">Finalizar turno</h3>
   <div class="modal-body">
     <form clrForm #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()"
@@ -175,9 +175,9 @@
             <option *ngFor="let paymentMethod of paymentsArray" [ngValue]="paymentMethod.id"> {{ paymentMethod.description }} </option>
           </select>
         </div>
-      </div>
+      </div> -->
       <!-- TODO obtener el porcentaje del BE -->
-      <small [hidden]="(paymentMethodSelected == 1)">Este medio de pago aplicará automaticamente un 20% de aumento al precio del turno</small>
+      <!-- <small [hidden]="(paymentMethodSelected == 1)">Este medio de pago aplicará automaticamente un 20% de aumento al precio del turno</small>
       <div class="modal-footer">
         <button type="submit" title="Guardar" class="btn btn-sm btn-icon btn-outline-success">
           <clr-icon shape="check"></clr-icon>
@@ -185,20 +185,4 @@
       </div>
     </form>
   </div>
-</clr-modal>
-
-<clr-modal [(clrModalOpen)]="openConfirmationModal" [clrModalSize]="'md'">
-  <h3 class="modal-title">Terminar dia</h3>
-  <div class="modal-body">
-    <appointment-end-day [endedAppointments]="endedAppointments">
-    </appointment-end-day>
-    <p>
-      Está seguro que desea finalizar el dia de depilación ?
-    </p>
-    <small>Al terminar el día no se podrá volver a editar ninguno de los turnos correspondientes. Se guardará la recaudación actual y el historial de los pacientes</small>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmationModal = !openConfirmationModal)">No</button>
-    <button type="button" class="btn btn-outline" (click)="this.onEndDay()">Terminar</button>
-  </div>
-</clr-modal>
+</clr-modal> -->
