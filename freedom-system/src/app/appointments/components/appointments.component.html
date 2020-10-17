@@ -80,7 +80,8 @@
           [selectedAppointment]='appointment._id'
           (onStatusChange)='onStatusChange($event)'>
         </appointment-actions>
-        <button mat-icon-button aria-label="Eliminar" title="Eliminar" color="warn">
+        <button mat-icon-button aria-label="Eliminar" title="Eliminar" color="warn"
+        (click)="deleteAppointment(appointment._id)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>
@@ -143,7 +144,8 @@
               [selectedAppointment]='appointment._id'
               (onStatusChange)='onStatusChange($event)'>
             </appointment-actions>
-            <button mat-icon-button aria-label="Eliminar" color="warn">
+            <button mat-icon-button aria-label="Eliminar" color="warn" 
+              (click)="deleteAppointment(appointment._id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -162,27 +164,3 @@
 
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
 </div>
-
-<!-- <clr-modal [(clrModalOpen)]="openPaymentModal" [clrModalSize]="'md'" class="payment-modal">
-  <h3 class="modal-title">Finalizar turno</h3>
-  <div class="modal-body">
-    <form clrForm #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()"
-      clrLayout="horizontal">
-      <div class="clr-form-control">
-        <label for="payment_method" class="clr-control-label">Medio de pago</label>
-        <div class="select">
-          <select [(ngModel)]="paymentMethodSelected" (ngModelChange)="onChangePayment($event)" [ngModelOptions]="{standalone: true}">
-            <option *ngFor="let paymentMethod of paymentsArray" [ngValue]="paymentMethod.id"> {{ paymentMethod.description }} </option>
-          </select>
-        </div>
-      </div> -->
-      <!-- TODO obtener el porcentaje del BE -->
-      <!-- <small [hidden]="(paymentMethodSelected == 1)">Este medio de pago aplicará automaticamente un 20% de aumento al precio del turno</small>
-      <div class="modal-footer">
-        <button type="submit" title="Guardar" class="btn btn-sm btn-icon btn-outline-success">
-          <clr-icon shape="check"></clr-icon>
-        </button>
-      </div>
-    </form>
-  </div>
-</clr-modal> -->

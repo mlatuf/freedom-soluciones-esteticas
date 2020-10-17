@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { Appointment } from 'src/app/appointments/classes/appointment';
@@ -14,6 +14,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
 import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 import { AppointmentEndDayComponent } from './appointment-end-day/appointment-end-day.component';
+import { getStatusByKey, StatusList } from 'src/app/appointments/constants/status.enum';
+import { PaymentList } from '../constants/payments.enum';
 
 @Component({
   selector: 'appointments',
@@ -35,7 +37,6 @@ export class AppointmentsComponent implements OnInit {
   appointments: Appointment[];
   endedAppointments: Appointment[];
   areasData: Area[];
-  paymentsArray: any[];
   openPaymentModal: Boolean;
   openConfirmationModal: Boolean;
   paymentMethodSelected: number;
@@ -54,14 +55,8 @@ export class AppointmentsComponent implements OnInit {
     private appointmentService: AppointmentService,
     private calendarService: CalendarService,
     public dialog: MatDialog) { 
-      this.paymentsArray = [
-        {id: 0, description: 'Impago'},
-        {id: 1, description: 'Efectivo'},
-        {id: 2, description: 'Débito'},
-        {id: 3, description: 'Crédito'}
-      ];
       this.openPaymentModal = this.openConfirmationModal = false;
-      this.paymentMethodSelected = 1;
+      this.paymentMethodSelected = PaymentList.NonPayment.key;
     }
     
   ngOnInit() {
@@ -104,38 +99,12 @@ export class AppointmentsComponent implements OnInit {
   }
 
   public getAppointmentRowClass(status: number) {
-    let returnedClass = '';
-    switch (status) {
-      case 1:
-        returnedClass = 'new';
-      break;
-      case 2:
-        returnedClass = 'waiting-confirmation';
-      break;
-      case 3:
-        returnedClass =  'confirmed';
-      break;
-      case 4:
-        returnedClass =  'missing';
-      break;
-      case 5:
-        returnedClass =  'present';
-      break;
-      case 6:
-        returnedClass =  'terminated';
-      break;
-      default:
-        returnedClass =  'new';
-      break;
-    }
-    return returnedClass;
+    return getStatusByKey(status).classRow;
   }
 
   onStatusChange(appointmentChanged: any): void {
-    this.selectedAppointment = this.appointments.find((obj) => {
-      return obj._id === appointmentChanged.selectedAppointment;
-    });
-    this.selectedAppointment.status = (appointmentChanged.newStatus != 6) ? appointmentChanged.newStatus : this.selectedAppointment.status;
+    this.selectedAppointment = this.appointments.find((obj) => obj._id === appointmentChanged.selectedAppointment);
+    this.selectedAppointment.status = (appointmentChanged.newStatus != StatusList.Ended.key) ? appointmentChanged.newStatus : this.selectedAppointment.status;
     this.spinner.show();
     this.appointmentService.saveAppointment$(this.selectedAppointment, this.day).subscribe(
       response => {
@@ -147,7 +116,7 @@ export class AppointmentsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
-    this.openPaymentModal = (appointmentChanged.newStatus === 6);
+    this.openPaymentModal = (appointmentChanged.newStatus === StatusList.Ended.key);
   }
 
   onChangePayment(event): void {
@@ -157,14 +126,12 @@ export class AppointmentsComponent implements OnInit {
   onSubmitPayment(): void {
     this.selectedAppointment.paymentMethod = this.paymentMethodSelected;
     this.selectedAppointment.price = (this.paymentMethodSelected != 1) ? (this.selectedAppointment.price * 1.2) : this.selectedAppointment.price;
-    this.selectedAppointment.status = 6;
+    this.selectedAppointment.status = StatusList.Ended.key;
     this.openPaymentModal = false;
   }
 
   showConfirmationModal(): void {
-    this.endedAppointments = this.appointments.filter((obj) => {
-      return (obj.status === 6);
-    });
+    this.endedAppointments = this.appointments.filter((obj) => (obj.status === StatusList.Ended.key));
     const dialogRef = this.dialog.open(AppointmentEndDayComponent, {
       width: '80%',
       data: {
@@ -178,10 +145,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   endDayDisabled(): Boolean {
-    let filteredList = this.appointments.filter((obj) => {
-      return (obj.status != 6 && obj.status != 4);
-    });
-    return (filteredList.length > 0);
+    return this.appointments.filter((obj) => (obj.status != StatusList.Ended.key && obj.status != StatusList.Missing.key)).length > 0;
   }
 
   goToAppointmentDetails(appointmentId: number = null) {
@@ -224,6 +188,31 @@ export class AppointmentsComponent implements OnInit {
             this.alertService.error(error);
           }
         )
+      }
+    });
+  } 
+  
+  deleteAppointment(appointmentId: string): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: "Eliminar turno", 
+        text: "Está seguro que desea eliminar el turno? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        isConfirmationModal: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.spinner.show();
+        this.appointmentService.deleteAppointment$(appointmentId).subscribe(
+          response => {
+            this.spinner.hide();
+          },
+          error => {
+            this.spinner.hide();
+            this.alertService.error(error);
+          }
+        );
       }
     });
   } 
