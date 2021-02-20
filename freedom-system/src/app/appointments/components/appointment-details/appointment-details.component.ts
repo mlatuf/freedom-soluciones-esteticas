@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -22,6 +22,7 @@ import { Day } from "src/app/calendar/classes/day";
 import { Time } from "src/app/appointments/classes/time";
 import { TimeSlot } from "src/app/appointments/classes/timeSlot";
 import { MatDialog } from "@angular/material";
+import { PaymentList } from "../../constants/payments.enum";
 
 @Component({
   selector: "appointment-details",
@@ -214,13 +215,6 @@ export class AppointmentDetailsComponent implements OnInit {
           this.busyAppointments,
           this.appointmentId
         );
-        // let times = this.appointmentService.getInitialTimes$(
-        //   this.busyAppointments,
-        //   this.appointmentId
-        // );
-        // this.initialTimes = times.filter(time => {
-        //   return !!time.available;
-        // });
         this.availableSlots = this.appointmentService.updateAvailableSlots$(
           this.initialTimes
         );
@@ -263,6 +257,7 @@ export class AppointmentDetailsComponent implements OnInit {
 
   public onSubmit(): void {
     this.spinner.show();
+    this.appointment.paymentMethod = PaymentList.NonPayment.key;
     this.appointmentService
       .saveAppointment$(this.appointment, this.selectedDay._id)
       .subscribe(

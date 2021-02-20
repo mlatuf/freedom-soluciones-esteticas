@@ -9,8 +9,8 @@
     </button>
     <button mat-stroked-button 
       color="primary"
-      (click)="showConfirmationModal()">
-      <!-- [disabled]="(isFinished || endDayDisabled())"> -->
+      (click)="showEndDayModal()"
+      [disabled]="(isFinished || endDayDisabled())">
       <mat-icon>assignment_turned_in</mat-icon>
       <span [hidden]="mobileView">&nbsp;Finalizar</span>
     </button>

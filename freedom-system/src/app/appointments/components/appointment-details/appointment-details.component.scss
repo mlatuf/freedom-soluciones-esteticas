@@ -1,8 +1,7 @@
-.appointment-form-container {
+.payment-form-container {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  width: 60%;
   margin: 0 auto;
   .form-content {
     .form-block {
@@ -26,8 +25,5 @@
     button {
       margin-left: 0.3rem;
     }
-  }
-  &.mobile {
-    width: 100%;
   }
 }

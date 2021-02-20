@@ -28,6 +28,7 @@ import { AppointmentDetailsComponent } from './components/appointment-details/ap
 import { AppointmentActionsComponent } from './components/appointment-actions/appointment-actions.component';
 import { AppointmentEndDayComponent } from './components/appointment-end-day/appointment-end-day.component';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { AppointmentPaymentComponent } from './components/appointment-payment/appointment-payment.component';
 
 
 @NgModule({
@@ -61,9 +62,10 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     AppointmentEndDayComponent,
     // AreasDescriptionPipe,
     StatusDescriptionPipe,
-    TimeMinutesPipe
+    TimeMinutesPipe,
+    AppointmentPaymentComponent
   ],
-  entryComponents: [AppointmentEndDayComponent],
+  entryComponents: [AppointmentEndDayComponent, AppointmentPaymentComponent],
   providers: [AngularFireAuthGuard]
 })
 export class AppointmentsModule { }

@@ -16,6 +16,7 @@ import { ModalComponent } from 'src/app/core/components/modal/modal.component';
 import { AppointmentEndDayComponent } from './appointment-end-day/appointment-end-day.component';
 import { getStatusByKey, StatusList } from 'src/app/appointments/constants/status.enum';
 import { PaymentList } from '../constants/payments.enum';
+import { AppointmentPaymentComponent } from './appointment-payment/appointment-payment.component';
 
 @Component({
   selector: 'appointments',
@@ -35,7 +36,6 @@ export class AppointmentsComponent implements OnInit {
   appointmentsDate: Day;
   day: string;
   appointments: Appointment[];
-  endedAppointments: Appointment[];
   areasData: Area[];
   openPaymentModal: Boolean;
   openConfirmationModal: Boolean;
@@ -63,7 +63,7 @@ export class AppointmentsComponent implements OnInit {
     this.day = this.route.snapshot.paramMap.get('day');
     this.mobileView = this.aplicationState.getIsMobileResolution();
     this.appointmentsDate = new Day();
-    this.appointments = this.areasData = this.endedAppointments = [];
+    this.appointments = this.areasData = [];
     this.setAppointmentsDay();
   }
   
@@ -98,16 +98,11 @@ export class AppointmentsComponent implements OnInit {
     );
   }
 
-  public getAppointmentRowClass(status: number) {
-    return getStatusByKey(status).classRow;
-  }
-
-  onStatusChange(appointmentChanged: any): void {
-    this.selectedAppointment = this.appointments.find((obj) => obj._id === appointmentChanged.selectedAppointment);
-    this.selectedAppointment.status = (appointmentChanged.newStatus != StatusList.Ended.key) ? appointmentChanged.newStatus : this.selectedAppointment.status;
+  private saveAppointment(): void {
     this.spinner.show();
     this.appointmentService.saveAppointment$(this.selectedAppointment, this.day).subscribe(
       response => {
+        console.log(response);
         this.selectedAppointment = response;
         this.spinner.hide();
       },
@@ -116,27 +111,45 @@ export class AppointmentsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
-    this.openPaymentModal = (appointmentChanged.newStatus === StatusList.Ended.key);
   }
 
-  onChangePayment(event): void {
-    this.paymentMethodSelected = event;
+  public getAppointmentRowClass(status: number) {
+    return getStatusByKey(status).classRow;
   }
 
-  onSubmitPayment(): void {
-    this.selectedAppointment.paymentMethod = this.paymentMethodSelected;
-    this.selectedAppointment.price = (this.paymentMethodSelected != 1) ? (this.selectedAppointment.price * 1.2) : this.selectedAppointment.price;
-    this.selectedAppointment.status = StatusList.Ended.key;
-    this.openPaymentModal = false;
+  public onStatusChange(appointmentChanged: any): void {
+    this.selectedAppointment = this.appointments.find((obj) => obj._id === appointmentChanged.selectedAppointment);
+    switch (appointmentChanged.newStatus) {
+      case StatusList.Ended.key:
+          this.endAppointment(this.selectedAppointment);
+        break;
+        case StatusList.Terminated.key:
+          this.appointmentService.deleteAppointment$(this.selectedAppointment._id).subscribe(
+            response => {
+              this.spinner.hide();
+            },
+            error => {
+              this.spinner.hide();
+              this.alertService.error(error);
+            }
+          );
+        break;
+      default:
+        this.selectedAppointment.status = appointmentChanged.newStatus;
+        this.saveAppointment();
+        break;
+    }
   }
-
-  showConfirmationModal(): void {
-    this.endedAppointments = this.appointments.filter((obj) => (obj.status === StatusList.Ended.key));
+  
+  public showEndDayModal(): void {
+    const billableAppointments = this.appointments.filter((appointment) => (
+      appointment.status === StatusList.Ended.key || appointment.status === StatusList.Present.key
+    ));
     const dialogRef = this.dialog.open(AppointmentEndDayComponent, {
       width: '80%',
       data: {
         title: 'Terminar dia',
-        appointments: this.endedAppointments
+        appointments: billableAppointments
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -144,17 +157,20 @@ export class AppointmentsComponent implements OnInit {
     });
   }
 
-  endDayDisabled(): Boolean {
-    return this.appointments.filter((obj) => (obj.status != StatusList.Ended.key && obj.status != StatusList.Missing.key)).length > 0;
+  public endDayDisabled(): Boolean {
+    return this.appointments.filter((appointment) => { 
+      const statusObj = getStatusByKey(appointment.status);
+      return (statusObj != StatusList.Present && statusObj != StatusList.Ended);
+    }).length > 0; 
   }
 
-  goToAppointmentDetails(appointmentId: number = null) {
+  public goToAppointmentDetails(appointmentId: number = null): void {
     let detailsUrl = (appointmentId) ? ['/appointment/details/', this.appointmentsDate._id, appointmentId ] 
     : ['/appointment/details/', this.appointmentsDate._id];
     this.router.navigate(detailsUrl);
   }
 
-  deleteDay(): void {
+  public deleteDay(): void {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar dia completo", 
@@ -192,7 +208,7 @@ export class AppointmentsComponent implements OnInit {
     });
   } 
   
-  deleteAppointment(appointmentId: string): void {
+  public deleteAppointment(appointmentId: string): void {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar turno", 
@@ -215,5 +231,23 @@ export class AppointmentsComponent implements OnInit {
         );
       }
     });
-  } 
+  }
+
+  public endAppointment(selectedAppointment: Appointment): void {
+    const dialogRef = this.dialog.open(AppointmentPaymentComponent, {
+      data: {
+        title: "Finalizar turno", 
+        price: selectedAppointment.price,
+        method: selectedAppointment.paymentMethod,
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.selectedAppointment.price = (result.paymentMethod != 1) ? (result.price * 1.2) : result.price;
+        this.selectedAppointment.paymentMethod = result.paymentMethod;
+        this.selectedAppointment.status = StatusList.Ended.key;
+        this.saveAppointment();
+      }
+    });
+  }
 }
