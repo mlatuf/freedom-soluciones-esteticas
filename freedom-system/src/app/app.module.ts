@@ -9,6 +9,11 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
+import {
+  MatButtonModule, MatCardModule, MatDialogModule, MatInputModule, MatTableModule,
+  MatToolbarModule, MatMenuModule,MatIconModule, MatProgressSpinnerModule
+} from '@angular/material';
+
 import { environment } from '../environments/environment';
 
 import { ClarityModule } from '@clr/angular';
@@ -22,6 +27,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
 
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { ModalComponent } from './core/components/modal/modal.component';
 
 
 @NgModule({
@@ -40,6 +46,15 @@ import { AppComponent } from './app.component';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    MatToolbarModule,
+    MatButtonModule, 
+    MatCardModule,
+    MatInputModule,
+    MatDialogModule,
+    MatTableModule,
+    MatMenuModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     CoreModule,
     AreasModule,
     CalendarModule,
@@ -47,6 +62,7 @@ import { AppComponent } from './app.component';
     AppointmentsModule
   ],
   bootstrap: [AppComponent],
-  providers: [AngularFireAuthGuard]
+  providers: [AngularFireAuthGuard],
+  entryComponents: [ModalComponent]
 })
 export class AppModule { }

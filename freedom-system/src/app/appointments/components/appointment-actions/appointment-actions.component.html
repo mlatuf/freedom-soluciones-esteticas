@@ -1,30 +1,30 @@
-<button type="button" title="Solicitar confirmación" class="btn btn-icon btn-sm btn-outline-primary"
+<button mat-icon-button title="Solicitar confirmación" color="primary"
   [hidden]='!actionsList.includes(2)'
   (click)="changeStatus(2)">
-  <clr-icon shape="bubble-exclamation"></clr-icon>
+  <mat-icon>message</mat-icon>
 </button>
-<button type="button" title="Confirmar" class="btn btn-icon btn-sm btn-outline-primary"
+<button mat-icon-button title="Confirmar" color="primary"
   [hidden]='!actionsList.includes(3)'
   (click)="changeStatus(3)">
-  <clr-icon shape="event"></clr-icon>
+  <mat-icon>event_available</mat-icon>
 </button>
-<button type="button" title="Ausente" class="btn btn-icon btn-sm btn-outline-primary"
+<button mat-icon-button title="Ausente" color="primary"
   [hidden]='!actionsList.includes(4)'
   (click)="changeStatus(4)">
-  <clr-icon shape="sad-face"></clr-icon>
+  <mat-icon>sentiment_very_dissatisfied</mat-icon>
 </button>
-<button type="button" title="Presente" class="btn btn-icon btn-sm btn-outline-primary"
+<button mat-icon-button title="Presente" color="primary"
   [hidden]='!actionsList.includes(5)'
   (click)="changeStatus(5)">
-  <clr-icon shape="happy-face"></clr-icon>
+  <mat-icon>sentiment_very_satisfied</mat-icon>
 </button>
-<button type="button" title="Finalizar" class="btn btn-icon btn-sm btn-outline-primary"
+<button mat-icon-button title="Finalizar" color="primary"
   [hidden]='!actionsList.includes(6)'
   (click)="changeStatus(6)">
-  <clr-icon shape="dollar"></clr-icon>
+  <mat-icon>monetization_on</mat-icon>
 </button>
-<button type="button" title="Cancelar" class="btn btn-icon btn-sm btn-outline-danger"
+<button mat-icon-button title="Cancelar" color="warn"
   [hidden]='!actionsList.includes(7)'
   (click)="changeStatus(7)">
-  <clr-icon shape="ban"></clr-icon>
+  <mat-icon>not_interested</mat-icon>
 </button>

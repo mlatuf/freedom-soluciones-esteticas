@@ -1,0 +1,55 @@
+.mat-dialog-title {
+  margin: 0 0 0.5rem;
+  .mat-icon {
+    vertical-align: middle;
+  }
+}
+.mat-dialog-content {
+  margin-top: 0.5rem;
+  .table-container {
+    width: 100%;
+    margin: 0 auto;
+    table {
+      width: 100%;
+      .actions-header {
+        text-align: center;
+      }
+      .days-list {
+        .mat-stroked-button {
+          min-width: 50px;
+          margin-right: 0.2rem;
+        }
+      }
+    }
+    &.mobile {
+      .expand-cell-action {
+        cursor: pointer;
+      }
+      .day-detail {
+        padding-left: 5rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        label {
+          font-weight: bold;
+        }
+        .days-list {
+          margin: 0.5rem 0rem;
+          .mat-stroked-button {
+            min-width: 30px;
+            margin-right: 0.2rem;
+            padding: 0 5px;
+          }
+        }
+      }
+      tr.day-detail-row {
+        height: 0;
+      }
+    }
+  }
+}
+.mat-dialog-actions {
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-end;
+}

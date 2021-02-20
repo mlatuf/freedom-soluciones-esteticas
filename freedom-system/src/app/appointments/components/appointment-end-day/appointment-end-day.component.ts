@@ -1,42 +1,47 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 import { Appointment } from '../../classes/appointment';
+import { getPayments} from '../../constants/payments.enum';
+import { Taking } from '../../classes/taking';
+
+export interface ModalData {
+  title: string;
+  appointments: Appointment[]; 
+}
 
 @Component({
   selector: 'appointment-end-day',
   templateUrl: './appointment-end-day.component.html',
-  styleUrls: ['./appointment-end-day.component.scss']
+  styleUrls: ['./appointment-end-day.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
-export class AppointmentEndDayComponent implements OnChanges {
+export class AppointmentEndDayComponent implements OnInit {
+  displayedColumns: string[] = ['label', 'cost'];
+  takings: Taking[] = getPayments().map((payment) => ({key: payment.key, label: payment.label, value: 0}));
 
-  @Input() endedAppointments: Appointment[];
-  takings: any;
+  constructor(public dialogRef: MatDialogRef<AppointmentEndDayComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ModalData) {}
 
-  constructor() { 
-    this.takings = {
-      'cash': 0,
-      'debit': 0,
-      'credit': 0,
-      'total': 0
-    }
+  getTotalCost() {
+    return this.takings.map(t => t.value).reduce((acc, value) => acc + value, 0);
   }
 
-  ngOnChanges(): void {
-    this.endedAppointments.forEach((appointment) => {
-      switch (appointment.paymentMethod) {
-        case 1:
-          this.takings.cash += appointment.price; 
-        break;
-        case 2:
-          this.takings.debit += appointment.price; 
-        break;
-        case 3:
-          this.takings.credit += appointment.price; 
-        break;
-        default:
-          this.takings.cash += appointment.price; 
-        break;
-      }
-      this.takings.total = this.takings.cash + this.takings.debit + this.takings.credit;
+  ngOnInit(): void {
+    this.data.appointments.forEach((appointment) => {
+      this.takings[appointment.paymentMethod - 1].value += appointment.price;
     });
   }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
+

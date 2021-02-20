@@ -1,18 +1,34 @@
-<ul class="takings-list clr-col-md-8 clr-offset-md-2 clr-col-sm-12">
-  <li>
-    <label>Efectivo: </label>
-    <span>{{ takings.cash | currency }}</span>
-  </li>
-  <li>
-    <label>Debito: </label>
-    <span>{{ takings.debit | currency }}</span>
-  </li>
-  <li>
-    <label>Credito: </label>
-    <span>{{ takings.credit | currency }}</span>
-  </li>
-  <li class="total-row">
-    <label>Total: </label>
-    <span>{{ takings.total | currency }}</span>
-  </li>
-</ul>
+<h1 mat-dialog-title>
+  {{ data.title }}
+</h1>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <p>
+    Está seguro que desea finalizar el dia de depilación ?
+  </p>
+  <small>Al terminar el día no se podrá volver a editar ninguno de los turnos correspondientes. Se guardará la recaudación actual y el historial de los pacientes</small>
+
+  <table mat-table [dataSource]="takings" class="mat-elevation-z1">
+    <!-- Item Column -->
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef> Item </th>
+      <td mat-cell *matCellDef="let taking"> {{taking.label}} </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+  
+    <!-- Cost Column -->
+    <ng-container matColumnDef="cost">
+      <th mat-header-cell *matHeaderCellDef> Recaudación </th>
+      <td mat-cell *matCellDef="let taking"> {{taking.value | currency}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="onNoClick()">No</button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="true">Si</button>
+</div>

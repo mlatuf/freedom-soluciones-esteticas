@@ -1,40 +1,23 @@
 <page-title></page-title>
-<div class="login-wrapper">
-  <form clrForm [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="login-group">
-      <div class="clr-form-control">
-        <label for="user_type" class="clr-control-label">Tipo de usuario</label>
-        <div class="select">
-          <select 
-            clrSelect
-            (ngModelChange)="onChange($event)"
-            formControlName="userType">
-            <option value="0">Operador</option>
-            <option value="1">Administrador</option>
-          </select>
-        </div>
-      </div>
-      <clr-input-container>
-        <label for="user_email" class="clr-control-label">Email</label>
-        <input clrInput type="email" formControlName="userEmail" required />
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <clr-input-container>
-        <label for="user_password" class="clr-control-label">Password</label>
-        <input
-          clrInput
-          type="password"
-          formControlName="userPassword"
-          required
-        />
-        <clr-control-error>Este campo no puede estar vacio</clr-control-error>
-      </clr-input-container>
-      <button
-        type="submit"
-        class="btn btn-outline-success"
-        [disabled]="!loginForm.dirty || !loginForm.valid">
-        Ingresar
-      </button>
-    </div>
-  </form>
-</div>
+<mat-card class="login-container">
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <mat-label>Tipo de usuario</mat-label>
+        <mat-select [(value)]="selected">
+          <mat-option value="0">Operador</mat-option>
+          <mat-option value="1">Administrador</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Email" type="email" formControlName="userEmail" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Password" type="password" formControlName="userPassword" required/>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button (click)="onSubmit()" type="submit" color="primary" [disabled]="!loginForm.dirty || !loginForm.valid">Ingresar</button>
+  </mat-card-actions>
+</mat-card>

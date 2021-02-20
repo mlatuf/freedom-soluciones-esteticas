@@ -1,137 +1,166 @@
 <page-title>
-  <clr-button-group class="btn-sm">
-    <clr-button title="Agregar turno" [disabled]="appointmentsDate.isFinished" (click)="goToAppointmentDetails()"> 
-      <clr-icon shape="add" class="clr-icon"></clr-icon>
-      <span [hidden]="mobileView">Agregar turno</span>
-    </clr-button>
-    <clr-button title="Finalizar dia" (click)="showConfirmationModal()"
+  <div class="btn-group">
+    <button mat-stroked-button 
+      color="primary"
+      (click)="goToAppointmentDetails()"
+      [disabled]="appointmentsDate.isFinished">
+      <mat-icon>add</mat-icon>
+      <span [hidden]="mobileView">&nbsp;&nbsp;Agregar turno</span>
+    </button>
+    <button mat-stroked-button 
+      color="primary"
+      (click)="showEndDayModal()"
       [disabled]="(isFinished || endDayDisabled())">
-      <clr-icon shape="tasks"></clr-icon>
-      <span [hidden]="mobileView">Finalizar dia</span>
-    </clr-button>
-  </clr-button-group>
+      <mat-icon>assignment_turned_in</mat-icon>
+      <span [hidden]="mobileView">&nbsp;Finalizar</span>
+    </button>
+    <button mat-stroked-button 
+      color="warn"
+      (click)="deleteDay()">
+      <mat-icon>delete</mat-icon>
+      <span [hidden]="mobileView">&nbsp;Eliminar</span>
+    </button>
+  </div>
 </page-title>
-<clr-datagrid [hidden]="(appointments.length == 0)" 
-  class="clr-col-12 appointments-grid">
-  <clr-dg-column [clrDgField]="'time'">
-    Hora
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'patient'">
-    Paciente
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'areas'">
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Zonas
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'price'">
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Precio
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'status'">
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Estado
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'observations'">
-    <ng-container *clrDgHideableColumn="{hidden:mobileView}">
-      Observaciones
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container *clrDgHideableColumn="{hidden:(mobileView || isFinished)}">
-    </ng-container>
-  </clr-dg-column>
 
-  <clr-dg-row *clrDgItems="let appointment of appointments"
-    [ngClass]="getAppointmentRowClass(appointment.status)">
-    <clr-dg-cell>{{ appointment.time | timeMinutes }}</clr-dg-cell>
-    <clr-dg-cell>
-      <a [routerLink]="['/patient/details', appointment.patient._id]">
-        {{ appointment.patient.fullName }}
-      </a>
-    </clr-dg-cell>
-    <clr-dg-cell>{{ appointment.areas | areasDescription }}</clr-dg-cell>
-    <clr-dg-cell>{{ appointment.price | currency }}</clr-dg-cell>
-    <clr-dg-cell>{{ appointment.status | statusDescription }}</clr-dg-cell>
-    <clr-dg-cell><small>{{ appointment.observations }}</small></clr-dg-cell>
-    <clr-dg-cell class="actions-cell">
-      <button type="button" title="Editar" class="btn btn-icon btn-sm btn-outline" (click)="goToAppointmentDetails(appointment._id)">
-        <clr-icon shape="pencil"></clr-icon>
-      </button>
-      <appointment-actions
-        [currentStatus]='appointment.status'
-        [selectedAppointment]='appointment._id'
-        (onStatusChange)='onStatusChange($event)'>
-      </appointment-actions>
-      <button type="button" title="Eliminar" class="btn btn-icon btn-sm btn-danger-outline">
-        <clr-icon shape="trash"></clr-icon>
-      </button>
-    </clr-dg-cell>
-    <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="mobileView">
-      <clr-dg-row-detail *clrIfExpanded>
-        <clr-dg-cell class="actions-cell mobile-view">
+<div class="mat-elevation-z1 table-container" *ngIf="!mobileView">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Time Column -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef>Hora</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.time | timeMinutes }} </td>
+    </ng-container>
+
+    <!-- Patient Column -->
+    <ng-container matColumnDef="patient">
+      <th mat-header-cell *matHeaderCellDef>Paciente</th>
+      <td mat-cell *matCellDef="let appointment">
+        <a [routerLink]="['/patient/details', appointment.patient._id]">
+          {{ appointment.patient.fullName }}
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- Areas Column -->
+    <ng-container matColumnDef="areas">
+      <th mat-header-cell *matHeaderCellDef>Zonas</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.areas | areasDescription }}</td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Precio</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.price | currency }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.status | statusDescription }}</td>
+    </ng-container>
+
+    <!-- Observations Column -->
+    <ng-container matColumnDef="observations">
+      <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+      <td mat-cell *matCellDef="let appointment">
+        <small>{{ appointment.observations }}</small>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+      <td mat-cell *matCellDef="let appointment" class="actions-header">
+        <button mat-icon-button aria-label="Editar" title="Editar" color="primary" 
+          (click)="goToAppointmentDetails(appointment._id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <appointment-actions
+          [currentStatus]='appointment.status'
+          [selectedAppointment]='appointment._id'
+          (onStatusChange)='onStatusChange($event)'>
+        </appointment-actions>
+        <button mat-icon-button aria-label="Eliminar" title="Eliminar" color="warn"
+        (click)="deleteAppointment(appointment._id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let appointment; columns: displayedColumns;"
+      [ngClass]="getAppointmentRowClass(appointment.status)">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
+</div>
+
+<div class="mat-elevation-z1 table-container mobile" *ngIf="mobileView">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let appointment" 
+        class="expand-cell-action"
+        (click)="expandedAppointment = (expandedAppointment === appointment ? null : appointment)">
+        <mat-icon *ngIf="(expandedAppointment != appointment)">expand_more</mat-icon>
+        <mat-icon *ngIf="(expandedAppointment === appointment)">expand_less</mat-icon>
+      </td>
+    </ng-container>
+    <!-- Time Column -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef>Hora</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.time | timeMinutes }} </td>
+    </ng-container>
+
+    <!-- Patient Column -->
+    <ng-container matColumnDef="patient">
+      <th mat-header-cell *matHeaderCellDef>Paciente</th>
+      <td mat-cell *matCellDef="let appointment">
+        <a [routerLink]="['/patient/details', appointment.patient._id]">
+          {{ appointment.patient.fullName }}
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let appointment" [attr.colspan]="displayedMobileColumns.length">
+        <div class="appointment-detail"
+          [@detailExpand]="(appointment === expandedAppointment ? 'expanded' : 'collapsed')">
           <div><label>Zonas: </label>{{ appointment.areas | areasDescription }}</div>
           <div><label>Precio: </label>{{ appointment.price | currency }}</div>
           <div><label>Estado: </label>{{ appointment.status | statusDescription }}</div>
           <div>
             <label>Observaciones: </label>
-            <small>{{ appointment.observations }}</small>.
+            <small>{{ appointment.observations }}</small>
           </div>
-          <button type="button" title="Editar" class="btn btn-icon btn-sm btn-outline" (click)="goToAppointmentDetails(appointment._id)">
-            <clr-icon shape="pencil"></clr-icon>
-          </button>
-          <appointment-actions
-            [currentStatus]='appointment.status'
-            [selectedAppointment]='appointment._id'
-            (onStatusChange)='onStatusChange($event)'>
-          </appointment-actions>
-          <button type="button" title="Eliminar" class="btn btn-icon btn-sm btn-danger-outline">
-            <clr-icon shape="trash"></clr-icon>
-          </button>
-        </clr-dg-cell>
-      </clr-dg-row-detail>
-    </ng-container>
-  </clr-dg-row>
-</clr-datagrid>
-
-<clr-modal [(clrModalOpen)]="openPaymentModal" [clrModalSize]="'md'" class="payment-modal">
-  <h3 class="modal-title">Finalizar turno</h3>
-  <div class="modal-body">
-    <form clrForm #paymentForm="ngForm" (ngSubmit)="onSubmitPayment()"
-      clrLayout="horizontal">
-      <div class="clr-form-control">
-        <label for="payment_method" class="clr-control-label">Medio de pago</label>
-        <div class="select">
-          <select [(ngModel)]="paymentMethodSelected" (ngModelChange)="onChangePayment($event)" [ngModelOptions]="{standalone: true}">
-            <option *ngFor="let paymentMethod of paymentsArray" [ngValue]="paymentMethod.id"> {{ paymentMethod.description }} </option>
-          </select>
+          <div>
+            <button mat-icon-button aria-label="Editar" color="primary" (click)="goToAppointmentDetails(appointment._id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <appointment-actions
+              [currentStatus]='appointment.status'
+              [selectedAppointment]='appointment._id'
+              (onStatusChange)='onStatusChange($event)'>
+            </appointment-actions>
+            <button mat-icon-button aria-label="Eliminar" color="warn" 
+              (click)="deleteAppointment(appointment._id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
-      <!-- TODO obtener el porcentaje del BE -->
-      <small [hidden]="(paymentMethodSelected == 1)">Este medio de pago aplicará automaticamente un 20% de aumento al precio del turno</small>
-      <div class="modal-footer">
-        <button type="submit" title="Guardar" class="btn btn-sm btn-icon btn-outline-success">
-          <clr-icon shape="check"></clr-icon>
-        </button>
-      </div>
-    </form>
-  </div>
-</clr-modal>
+      </td>
+    </ng-container>
 
-<clr-modal [(clrModalOpen)]="openConfirmationModal" [clrModalSize]="'md'">
-  <h3 class="modal-title">Terminar dia</h3>
-  <div class="modal-body">
-    <appointment-end-day [endedAppointments]="endedAppointments">
-    </appointment-end-day>
-    <p>
-      Está seguro que desea finalizar el dia de depilación ?
-    </p>
-    <small>Al terminar el día no se podrá volver a editar ninguno de los turnos correspondientes. Se guardará la recaudación actual y el historial de los pacientes</small>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="(openConfirmationModal = !openConfirmationModal)">No</button>
-    <button type="button" class="btn btn-outline" (click)="this.onEndDay()">Terminar</button>
-  </div>
-</clr-modal>
+    <tr mat-header-row *matHeaderRowDef="displayedMobileColumns"></tr>
+    <tr mat-row *matRowDef="let appointment; columns: displayedMobileColumns;"
+      class="appointment-row"
+      [class.expanded-row]="expandedAppointment === appointment"
+      [ngClass]="getAppointmentRowClass(appointment.status)"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="appointment-detail-row"
+      [ngClass]="getAppointmentRowClass(row.status)"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
+</div>

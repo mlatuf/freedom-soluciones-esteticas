@@ -1,10 +1,9 @@
-.clr-form {
-  .clr-form-control {
-    .clr-input, .select {
-      width: 9rem;
-    }
-  }
-  button {
+.login-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  .mat-form-field, .mat-flat-button {
     width: 100%;
   }
 }

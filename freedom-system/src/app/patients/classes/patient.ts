@@ -6,20 +6,14 @@ export class Patient {
   lastName: string;
   age: number;
   phone: number;
-  hasMedicines: Boolean;
   medicines: string;
-  hasAllergies: Boolean;
   allergies: string;
-  pregnancy: Boolean;
-  hasBodyMetals: Boolean;
-  bodyMetalsPlace: string;
-  hasMoles: Boolean;
-  molesPlace: string;
-  hasTattoos: Boolean;
-  tattoosPlace: string;
-  hasSkinCancer: Boolean;
-  hasEpilepsy: Boolean;
-  hasPreviousTreatment: Boolean;
+  bodyMetals: string;
+  moles: string;
+  tattoos: string;
+  skinCancer: boolean;
+  epilepsy: boolean;
+  pregnant: boolean;
   previousTreatment: string;
   appointments: AppointmentPatient[];
 }

@@ -1,4 +1,45 @@
-.datagrid .datagrid-cell, .datagrid .datagrid-column, .datagrid .datagrid-head .datagrid-row-actions {
-  text-align: left;
-  min-width: 4rem;
+.patient-appointment-history {
+  width: 80%;
+  margin: 0 auto;
+}
+.mat-dialog-title {
+  margin: 0 0 0.5rem;
+  .mat-icon {
+    vertical-align: middle;
+  }
+}
+.mat-dialog-content {
+  margin-top: 0.5rem;
+  .table-container {
+    width: 100%;
+    margin: 0 auto;
+    table {
+      width: 100%;
+      .actions-header {
+        text-align: center;
+      }
+    }
+    &.mobile {
+      .expand-cell-action {
+        cursor: pointer;
+      }
+      .patient-detail {
+        padding-left: 5rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        label {
+          font-weight: bold;
+        }
+      }
+      tr.patient-detail-row {
+        height: 0;
+      }
+    }
+  }
+}
+.mat-dialog-actions {
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-end;
 }

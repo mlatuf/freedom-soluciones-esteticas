@@ -3,6 +3,8 @@ import { Observable, from } from "rxjs";
 import { map, retry } from "rxjs/operators";
 
 import { Appointment } from "src/app/appointments/classes/appointment";
+import { Time } from "src/app/appointments/classes/time";
+import { TimeSlot } from "src/app/appointments/classes/timeSlot";
 
 import {
   AngularFirestore,
@@ -47,7 +49,7 @@ export class AppointmentService {
   }
 
   saveAppointment$(appointment: Appointment, dayId: string): Observable<any> {
-    this.appointmentsCollection = this.afs.collection<Appointment>("appointment", ref =>
+    this.appointmentsCollection = this.afs.collection<Appointment>("appointments", ref =>
       ref.where("day", "==", dayId)
     );
     if (appointment._id) {
@@ -55,6 +57,7 @@ export class AppointmentService {
       delete appointment._id;
       return from(this.appointmentDoc.update(appointment))
     }
+    appointment.status = 1;
     return from(this.appointmentsCollection.add({...appointment}));
   }
 
@@ -63,29 +66,54 @@ export class AppointmentService {
     return from(appointmentDoc.delete());
   }
 
-  getInitialTimes$(busyAppointments: Appointment[]): number[] {
-    let initialTimes = Array.from(Array(52).keys());
+  getInitialTimes$(appointments: Appointment[], currentAppointment: string): Time[] {
+    let initialTimes = [];
+    for(let i=8; i<21; i++) {
+      for(let j=0; j<4; j++) {
+        initialTimes.push(i + ":" + (j===0 ? "00" : 15*j) );
+      }
+    }  
+    initialTimes = initialTimes.map((value, index) => { 
+      return {
+        _id: index,
+        available: true,
+        time: value
+      }
+    });
+    //to not take in consideration the currentAppointment
+    const busyAppointments = currentAppointment ? appointments.filter(obj => obj._id != currentAppointment) : appointments;
     if (busyAppointments) {
       busyAppointments.forEach((appointment) => {
-        const duration = appointment.areas.reduce((acc, area) => area.duration, 0);
-        initialTimes.splice(appointment.time, duration);
+        const duration = appointment.areas.reduce((acc, area) => acc + area.duration, 0);
+        for (let index = 0; index < duration; index ++){
+          initialTimes[appointment.time + index].available = false;
+        }
       });
     }
+
     return initialTimes;
   }
 
-  updateAvailableTimes$(duration: number, availableTimes: number[]): number[] {
-    let availableTimesUpdated = [];
-    for (let index = 0; index < availableTimes.length - duration; index++) {
-      let possibleTime = true;
-      for (let pos = index; possibleTime && pos < index + duration - 1; pos++) {
-        possibleTime =
-          availableTimes[pos + 1] === availableTimes[pos] + 1;
+  updateAvailableSlots$(initialTimes: Time[], duration: number = 1): TimeSlot[] {
+    let availableTimesUpdated: TimeSlot[] = [];
+    let slots = Array.from(Array(initialTimes.length).keys());
+    slots.forEach((slotElm, index) => {
+      // TODO necesito todos los initialtimes para saber cuales estan available
+      if (initialTimes[index].available) {
+        let count = 0;
+        for (let i = index; i < slots.length && count < duration && initialTimes[i].available; i++) {
+          count++;
+          if (count === duration) {
+            const newSlot = {
+              _id: index,
+              startTime: initialTimes[slotElm].time,
+              slot: initialTimes.slice(slotElm, slotElm + duration).map(t => t._id)
+            }
+            availableTimesUpdated.push(newSlot);
+          }
+        }      
       }
-      if (possibleTime) {
-        availableTimesUpdated.push(availableTimes[index]);
-      }
-    }
+    });
     return availableTimesUpdated;
   }
 }

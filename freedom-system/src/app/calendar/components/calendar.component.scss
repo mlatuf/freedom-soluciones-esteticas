@@ -1,34 +1,56 @@
-form {
-  .form-block {
-    margin: 0.5rem;
-    .form-group {
-      margin: 0.5rem 0;
-      padding-left: 6.5rem;
+.newDate-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  @media (max-width: 576px) {
+    .mat-form-field {
+      width: 68%;
     }
   }
-  @media (max-width: 576px) {
-    .form-block {
-      .form-group {
-        padding-left: 0px;
-      }
-    }
+  .mat-flat-button {
+    margin-left: 0.5rem;
   }
 }
-.calendar-grid {
-  .datagrid-cell.action-cell {
-    padding: 0.2rem 0.5rem;
-    .btn-sm {
-      min-width: 2rem;
-      margin-top: 0px;
-      margin-bottom: 0.2px;
-    }
-    @media (max-width: 576px) {
+.table-container {
+  width: 80%;
+  margin: 0 auto;
+  table {
+    width: 100%;
+    .actions-header {
       text-align: center;
-      .btn-sm {
-        &:first-child {
-          margin-top: 0px;
+    }
+    .days-list {
+      .mat-stroked-button {
+        min-width: 50px;
+        margin-right: 0.2rem;
+      }
+    }
+  }
+  &.mobile {
+    width: 100%;
+    .expand-cell-action {
+      cursor: pointer;
+    }
+    .day-detail {
+      padding-left: 5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      label {
+        font-weight: bold;
+      }
+      .days-list {
+        margin: 0.5rem 0rem;
+        .mat-stroked-button {
+          min-width: 30px;
+          margin-right: 0.2rem;
+          padding: 0 5px;
         }
       }
+    }
+    tr.day-detail-row {
+      height: 0;
     }
   }
 }

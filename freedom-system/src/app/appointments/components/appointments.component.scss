@@ -1,45 +1,58 @@
-.appointments-grid {
-  .datagrid-row {
-    &.waiting-confirmation {
-      background-color: #FEF3B5;
-      &:hover {
-        background-color: #FFE860;
-      }
+page-title {
+  .btn-group {
+    margin: 0;
+    button {
+      margin-left: 0.2rem;
+      background-color: whitesmoke;
     }
-    &.confirmed {
-      background-color: #D1D6F3;
-      &:hover {
-        background-color: #B7BDE7;
-      }
+  }
+}
+.table-container {
+  margin: 0 auto;
+  table {
+    width: 100%;
+    .actions-header {
+      text-align: center;
     }
-    &.missing {
-      background-color: #FFCCB5;
-      &:hover {
-        background-color: #FFB38F;
+    tr {
+      &.new {
+        background-color: #ffffff;
       }
-    }
-    &.present {
-      background-color: #D9E4EA;
-      &:hover {
-        background-color: #C1CDD4;
+      &.waiting-confirmation {
+        background-color: #f5f2b8;
       }
-    }
-    &.terminated {
-      background-color: #C7E59C;
-      &:hover {
+      &.confirmed {
+        background-color: #c4c8d4;
+      }
+      &.missing {
+        background-color: #FFCCB5;
+      }
+      &.present {
+        background-color: #ace4ec;
+      }
+      &.terminated {
+        background-color: #ebe7ee;
+      }
+      &.ended {
         background-color: #AADB1E;
       }
     }
-    .datagrid-cell.actions-cell {
-      &.mobile-view {
-        text-align: start;
-        div {
-          margin-bottom: 0.5rem;
-          label {
-            font-weight: bold;
-          }
-        }
+  }
+  &.mobile {
+    .expand-cell-action {
+      cursor: pointer;
+    }
+    .appointment-detail {
+      padding-left: 5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      label {
+        font-weight: bold;
       }
+    }
+    tr.appointment-detail-row {
+      height: 0;
     }
   }
 }

@@ -1,7 +1,8 @@
-.header {
-  .header-nav {
-    .nav-link {
-      width: 100%;
-    }
+.mat-toolbar {
+  .nav-link {
+    width: 100%;
+  }
+  .spacer {
+    flex: 1 1 auto;
   }
 }

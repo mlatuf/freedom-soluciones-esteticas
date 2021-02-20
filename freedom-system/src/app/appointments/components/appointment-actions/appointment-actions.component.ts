@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { getNextStatus } from '../../constants/status.enum';
 
 @Component({
   selector: 'appointment-actions',
@@ -14,7 +15,7 @@ export class AppointmentActionsComponent implements OnChanges {
 
   constructor() { }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.setActionsList();
   }
 
@@ -24,28 +25,6 @@ export class AppointmentActionsComponent implements OnChanges {
   }
 
   setActionsList(): void {
-    switch (this.currentStatus) {
-      case 1:
-        this.actionsList = [2];
-      break;
-      case 2:
-        this.actionsList = [3,7];
-      break;
-      case 3:
-        this.actionsList = [4,5];
-      break;
-      case 4:
-        this.actionsList = [1];
-      break;
-      case 5:
-        this.actionsList = [6];
-      break;
-      case 6:
-        this.actionsList = [1];
-      break;
-      default:
-        this.actionsList = [2];
-      break;
-    }
+    this.actionsList = getNextStatus(this.currentStatus);
   }
 }
