@@ -1,11 +1,4 @@
-<page-title>
-  <mat-slide-toggle
-    color="primary"
-    (change)="toggleEditionMode()"
-    [hidden]="!appointmentId">
-    Editar
-  </mat-slide-toggle>
-</page-title>
+<page-title></page-title>
 <mat-card class="appointment-form-container" [ngClass]="{'mobile' : mobileView}">
   <mat-card-content>
     <form class="appointment-form" [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
@@ -66,7 +59,7 @@
       </div>
       <div class="button-form-group">
         <button mat-flat-button type="submit" color="primary" 
-          [disabled]="(!editionMode || !appointmentForm.dirty || !appointmentForm.valid)">
+          [disabled]="(!appointmentForm.dirty || !appointmentForm.valid)">
           Guardar
         </button>
         <button mat-flat-button type="button" color="warn" 

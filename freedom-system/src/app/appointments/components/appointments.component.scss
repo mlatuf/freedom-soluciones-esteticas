@@ -1,5 +1,13 @@
+page-title {
+  .btn-group {
+    margin: 0;
+    button {
+      margin-left: 0.2rem;
+      background-color: whitesmoke;
+    }
+  }
+}
 .table-container {
-  width: 80%;
   margin: 0 auto;
   table {
     width: 100%;
@@ -7,40 +15,30 @@
       text-align: center;
     }
     tr {
+      &.new {
+        background-color: #ffffff;
+      }
       &.waiting-confirmation {
-        background-color: #FEF3B5;
-        &:hover {
-          background-color: #FFE860;
-        }
+        background-color: #f5f2b8;
       }
       &.confirmed {
-        background-color: #D1D6F3;
-        &:hover {
-          background-color: #B7BDE7;
-        }
+        background-color: #c4c8d4;
       }
       &.missing {
         background-color: #FFCCB5;
-        &:hover {
-          background-color: #FFB38F;
-        }
       }
       &.present {
-        background-color: #D9E4EA;
-        &:hover {
-          background-color: #C1CDD4;
-        }
+        background-color: #ace4ec;
       }
       &.terminated {
-        background-color: #C7E59C;
-        &:hover {
-          background-color: #AADB1E;
-        }
+        background-color: #ebe7ee;
+      }
+      &.ended {
+        background-color: #AADB1E;
       }
     }
   }
   &.mobile {
-    width: 100%;
     .expand-cell-action {
       cursor: pointer;
     }

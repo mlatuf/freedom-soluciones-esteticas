@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>
+  {{ data.title }}
+</h1>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <p>
+    Por favor confirme el importe y seleccione el metodo de pago
+  </p>
+  <form class="payment-form" [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+    <div class="form-content">
+      <section class="form-block">
+        <mat-form-field>
+          <input matInput placeholder="Precio" type="input" formControlName="price" required/>
+          <span matPrefix>$&nbsp;</span>
+          <span matSuffix>.00</span>
+          <mat-error *ngIf="paymentForm.get('price').hasError('required')">Este campo no puede estar vacio</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Metodo de Pago</mat-label>
+          <mat-select formControlName="paymentMethod" 
+            required>
+            <mat-option *ngFor="let method of paymentMethods" [value]="method.key">
+              {{ method.label }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="paymentForm.get('paymentMethod').hasError('required')">Este campo no puede estar vacio</mat-error>
+        </mat-form-field>
+      </section>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="onNoClick()">Cancelar</button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="true" (click)="onSubmit()">Aceptar</button>
+</div>

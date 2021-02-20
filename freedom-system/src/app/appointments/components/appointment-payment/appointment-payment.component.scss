@@ -1,0 +1,50 @@
+.mat-dialog-title {
+  margin: 0 0 0.5rem;
+  .mat-icon {
+    vertical-align: middle;
+  }
+}
+.mat-dialog-content {
+  margin-top: 0.5rem;
+  .payment-form {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 0 auto;
+    .form-content {
+      .form-block {
+        display: flex;
+        flex-direction: row;
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .mat-form-field {
+          margin: 0.4rem 0;
+          width: 100%;
+        }
+      }
+    }
+    .button-form-group {
+      display: flex;
+      justify-content: flex-end;
+      button {
+        margin-left: 0.3rem;
+      }
+    }
+    &.mobile {
+      width: 100%;
+    }
+  }
+  tr.mat-footer-row {
+    font-weight: bold;
+  }
+  p {
+    margin-top: 0px;
+  }
+  
+}
+.mat-dialog-actions {
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: flex-end;
+}

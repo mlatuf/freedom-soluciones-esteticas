@@ -18,16 +18,17 @@ import {
   MatDividerModule, 
   MatCardModule, 
   MatSlideToggleModule, 
-  MatGridListModule } from '@angular/material';
+  MatGridListModule,
+  MatListModule } from '@angular/material';
 
 import { AppointmentsComponent } from './components/appointments.component';
-// import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
 import { StatusDescriptionPipe } from './pipes/status-description.pipe';
 import { TimeMinutesPipe } from './pipes/time-minutes.pipe';
 import { AppointmentDetailsComponent } from './components/appointment-details/appointment-details.component';
 import { AppointmentActionsComponent } from './components/appointment-actions/appointment-actions.component';
 import { AppointmentEndDayComponent } from './components/appointment-end-day/appointment-end-day.component';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { AppointmentPaymentComponent } from './components/appointment-payment/appointment-payment.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatCardModule,
     MatSlideToggleModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   declarations: [ 
     AppointmentsComponent,
@@ -60,8 +62,10 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     AppointmentEndDayComponent,
     // AreasDescriptionPipe,
     StatusDescriptionPipe,
-    TimeMinutesPipe
+    TimeMinutesPipe,
+    AppointmentPaymentComponent
   ],
+  entryComponents: [AppointmentEndDayComponent, AppointmentPaymentComponent],
   providers: [AngularFireAuthGuard]
 })
 export class AppointmentsModule { }
