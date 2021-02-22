@@ -158,10 +158,10 @@ export class AppointmentsComponent implements OnInit {
   }
 
   public endDayDisabled(): Boolean {
-    return this.appointments.filter((appointment) => { 
+    return this.appointments.length === 0 || this.appointments.filter((appointment) => { 
       const statusObj = getStatusByKey(appointment.status);
       return (statusObj != StatusList.Present && statusObj != StatusList.Ended);
-    }).length > 0; 
+    }).length > 0;
   }
 
   public goToAppointmentDetails(appointmentId: number = null): void {
