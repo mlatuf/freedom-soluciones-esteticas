@@ -104,6 +104,10 @@ export class AppointmentDetailsComponent implements OnInit {
       .valueChanges.subscribe(val => {
         this.appointmentDuration = val;
       });
+
+    this.appointmentForm.get("appointmentObservations").valueChanges.subscribe(val => {
+      this.appointment.observations = val;
+    });
   }
 
   private setFormValues(
