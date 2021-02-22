@@ -3,8 +3,9 @@
   border-bottom: 1px solid #CCCCCC;
   display: flex;
   margin-bottom: 10px;
+  justify-content: space-between;
   h2 {
     margin: 0;
-    flex: 0 1 86%;
+    display: flex;
   }
 }

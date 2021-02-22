@@ -120,7 +120,7 @@ export class AreaDetailsComponent implements OnInit{
         }
       });
     } else {
-      this.dialog.closeAll();
+      this.router.navigate(['/areas']);
     }
   }
 }
