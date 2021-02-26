@@ -1,72 +1,87 @@
 <page-title>
   <div class="title-buttons">
-    <button mat-stroked-button 
+    <button
+      mat-stroked-button
       color="primary"
-      (click)="(showNewDateForm = !showNewDateForm)"
-      isRoundButton>
-      <mat-icon [hidden]="showNewDateForm">add</mat-icon>
-      <mat-icon [hidden]="!showNewDateForm">remove</mat-icon>
-      <span [hidden]="mobileView">&nbsp;&nbsp;Nueva Fecha</span>
+      (click)="showNewDateForm = !showNewDateForm"
+      isRoundButton
+    >
+      <mat-icon *ngIf="!showNewDateForm">add</mat-icon>
+      <mat-icon *ngIf="showNewDateForm">remove</mat-icon>
+      <span *ngIf="!mobileView">&nbsp;&nbsp;Nueva Fecha</span>
     </button>
-    <button mat-stroked-button 
+    <button
+      mat-stroked-button
       color="primary"
       (click)="showCalendarHistory()"
-      isRoundButton>
+      isRoundButton
+    >
       <mat-icon>history</mat-icon>
-      <span [hidden]="mobileView">&nbsp;&nbsp;Historial</span>
+      <span *ngIf="!mobileView">&nbsp;&nbsp;Historial</span>
     </button>
   </div>
 </page-title>
-<mat-card [hidden]="!showNewDateForm" class="newDate-container">
+<mat-card *ngIf="showNewDateForm" class="newDate-container">
   <mat-card-content>
     <form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
-        <input matInput 
-          [matDatepicker]="newDatePicker" 
-          placeholder="Seleccionar una fecha" 
+        <input
+          matInput
+          [matDatepicker]="newDatePicker"
+          placeholder="Seleccionar una fecha"
           formControlName="newDate"
-          required/>
-        <mat-datepicker-toggle matSuffix [for]="newDatePicker"></mat-datepicker-toggle>
+          required
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="newDatePicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #newDatePicker></mat-datepicker>
       </mat-form-field>
-      <button mat-flat-button type="submit" color="primary" [disabled]="(!dateForm.dirty || !dateForm.valid)">
-        <span [hidden]="mobileView">Guardar</span>
-        <mat-icon [hidden]="!mobileView">save</mat-icon>
+      <button
+        mat-flat-button
+        type="submit"
+        color="primary"
+        [disabled]="!dateForm.dirty || !dateForm.valid"
+      >
+        <span *ngIf="!mobileView">Guardar</span>
+        <mat-icon *ngIf="mobileView">save</mat-icon>
       </button>
     </form>
   </mat-card-content>
-  <mat-card-actions>
-  </mat-card-actions>
+  <mat-card-actions> </mat-card-actions>
 </mat-card>
 
 <div class="mat-elevation-z1 table-container" *ngIf="!mobileView">
   <table mat-table [dataSource]="dataSource" matSort>
-
     <!-- Year Column -->
     <ng-container matColumnDef="year">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Año</th>
-      <td mat-cell *matCellDef="let day"> {{ day.year }} </td>
+      <td mat-cell *matCellDef="let day">{{ day.year }}</td>
     </ng-container>
 
     <!-- Month Column -->
     <ng-container matColumnDef="month">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Mes</th>
-      <td mat-cell *matCellDef="let day"> {{ day.month + 1 | monthName }} </td>
+      <td mat-cell *matCellDef="let day">{{ day.month + 1 | monthName }}</td>
     </ng-container>
 
     <!-- Days Column -->
     <ng-container matColumnDef="days">
       <th mat-header-cell *matHeaderCellDef>Dias</th>
-      <td mat-cell *matCellDef="let day" class="days-list"> 
-        <button mat-stroked-button color="primary" 
+      <td mat-cell *matCellDef="let day" class="days-list">
+        <button
+          mat-stroked-button
+          color="primary"
           *ngFor="let day of day.days"
-          (click)="goToAppointment(day._id)">
+          (click)="goToAppointment(day._id)"
+        >
           {{ day.date.getDate() }}
-        </button> 
+        </button>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
 </div>
@@ -75,49 +90,67 @@
   <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let day" 
+      <td
+        mat-cell
+        *matCellDef="let day"
         class="expand-cell-action"
-        (click)="expandedDay = (expandedDay === day ? null : day)">
-        <mat-icon *ngIf="(expandedDay != day)">expand_more</mat-icon>
-        <mat-icon *ngIf="(expandedDay === day)">expand_less</mat-icon>
+        (click)="expandedDay = expandedDay === day ? null : day"
+      >
+        <mat-icon *ngIf="expandedDay != day">expand_more</mat-icon>
+        <mat-icon *ngIf="expandedDay === day">expand_less</mat-icon>
       </td>
     </ng-container>
 
-     <!-- Year Column -->
+    <!-- Year Column -->
     <ng-container matColumnDef="year">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Año</th>
-      <td mat-cell *matCellDef="let day"> {{ day.year }} </td>
+      <td mat-cell *matCellDef="let day">{{ day.year }}</td>
     </ng-container>
 
     <!-- Month Column -->
     <ng-container matColumnDef="month">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Mes</th>
-      <td mat-cell *matCellDef="let day"> {{ day.month + 1 | monthName }} </td>
+      <td mat-cell *matCellDef="let day">{{ day.month + 1 | monthName }}</td>
     </ng-container>
 
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let day" [attr.colspan]="displayedMobileColumns.length">
-        <div class="day-detail"
-          [@detailExpand]="(day === expandedDay ? 'expanded' : 'collapsed')">
-          <div class="days-list"> 
-            <button mat-stroked-button color="primary" 
+      <td
+        mat-cell
+        *matCellDef="let day"
+        [attr.colspan]="displayedMobileColumns.length"
+      >
+        <div
+          class="day-detail"
+          [@detailExpand]="day === expandedDay ? 'expanded' : 'collapsed'"
+        >
+          <div class="days-list">
+            <button
+              mat-stroked-button
+              color="primary"
               *ngFor="let day of day.days"
-              (click)="goToAppointment(day._id)">
+              (click)="goToAppointment(day._id)"
+            >
               {{ day.date.getDate() }}
-            </button> 
+            </button>
           </div>
         </div>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedMobileColumns"></tr>
-    <tr mat-row *matRowDef="let day; columns: displayedMobileColumns;"
+    <tr
+      mat-row
+      *matRowDef="let day; columns: displayedMobileColumns"
       class="day-row"
-      [class.expanded-row]="expandedDay === day"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="day-detail-row"></tr>
+      [class.expanded-row]="expandedDay === day"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="day-detail-row"
+    ></tr>
   </table>
 
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
 </div>
-

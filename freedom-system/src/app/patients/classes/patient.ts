@@ -16,4 +16,5 @@ export class Patient {
   pregnant: boolean;
   previousTreatment: string;
   appointments: AppointmentPatient[];
+  nextSession: string;
 }
