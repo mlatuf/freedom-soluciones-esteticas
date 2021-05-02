@@ -44,6 +44,7 @@ export interface ModalData {
 export class AppointmentPaymentComponent implements OnInit {
   paymentMethods: PaymentMethod[];
   months: Month[];
+  years: Number[];
   paymentForm: FormGroup;
 
   constructor(
@@ -57,11 +58,15 @@ export class AppointmentPaymentComponent implements OnInit {
       (paymentMethod) => paymentMethod.key != 1
     );
     this.months = getMonths();
-    const currentMonth = new Date().getMonth();
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    this.years = [currentYear, currentYear + 1];
     this.paymentForm = this.fb.group({
       price: new FormControl(this.data.price, Validators.required),
       paymentMethod: new FormControl(this.data.method, Validators.required),
-      nextSession: new FormControl(currentMonth),
+      nextSessionMonth: new FormControl(currentMonth),
+      nextSessionYear: new FormControl(currentYear),
     });
   }
 

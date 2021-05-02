@@ -1,22 +1,24 @@
 <page-title>
   <div class="title-buttons">
-    <button mat-stroked-button 
+    <button
+      mat-stroked-button
       color="primary"
       (click)="goToAppointmentDetails()"
-      [disabled]="appointmentsDate.isFinished">
+      [disabled]="appointmentsDate.isFinished"
+    >
       <mat-icon>add</mat-icon>
       <span [hidden]="mobileView">&nbsp;&nbsp;Agregar turno</span>
     </button>
-    <button mat-stroked-button 
+    <button
+      mat-stroked-button
       color="primary"
       (click)="showEndDayModal()"
-      [disabled]="(isFinished || endDayDisabled())">
+      [disabled]="isFinished || endDayDisabled()"
+    >
       <mat-icon>assignment_turned_in</mat-icon>
       <span [hidden]="mobileView">&nbsp;Finalizar</span>
     </button>
-    <button mat-stroked-button 
-      color="warn"
-      (click)="deleteDay()">
+    <button mat-stroked-button color="warn" (click)="deleteDay()">
       <mat-icon>delete</mat-icon>
       <span [hidden]="mobileView">&nbsp;Eliminar</span>
     </button>
@@ -25,11 +27,12 @@
 
 <div class="mat-elevation-z1 table-container" *ngIf="!mobileView">
   <table mat-table [dataSource]="dataSource">
-
     <!-- Time Column -->
     <ng-container matColumnDef="time">
       <th mat-header-cell *matHeaderCellDef>Hora</th>
-      <td mat-cell *matCellDef="let appointment">{{ appointment.time | timeMinutes }} </td>
+      <td mat-cell *matCellDef="let appointment">
+        {{ appointment.time | timeMinutes }}
+      </td>
     </ng-container>
 
     <!-- Patient Column -->
@@ -45,19 +48,25 @@
     <!-- Areas Column -->
     <ng-container matColumnDef="areas">
       <th mat-header-cell *matHeaderCellDef>Zonas</th>
-      <td mat-cell *matCellDef="let appointment">{{ appointment.areas | areasDescription }}</td>
+      <td mat-cell *matCellDef="let appointment">
+        {{ appointment.areas | areasDescription }}
+      </td>
     </ng-container>
 
     <!-- Price Column -->
     <ng-container matColumnDef="price">
       <th mat-header-cell *matHeaderCellDef>Precio</th>
-      <td mat-cell *matCellDef="let appointment">{{ appointment.price | currency }}</td>
+      <td mat-cell *matCellDef="let appointment">
+        {{ appointment.price | currency }}
+      </td>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let appointment">{{ appointment.status | statusDescription }}</td>
+      <td mat-cell *matCellDef="let appointment">
+        {{ appointment.status | statusDescription }}
+      </td>
     </ng-container>
 
     <!-- Observations Column -->
@@ -71,26 +80,40 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
       <td mat-cell *matCellDef="let appointment" class="actions-header">
-        <button mat-icon-button aria-label="Editar" title="Editar" color="primary" 
-          (click)="goToAppointmentDetails(appointment._id)">
+        <button
+          mat-icon-button
+          aria-label="Editar"
+          title="Editar"
+          color="primary"
+          (click)="goToAppointmentDetails(appointment._id)"
+          [disabled]="editionDisabled(appointment.status)"
+        >
           <mat-icon>edit</mat-icon>
         </button>
         <appointment-actions
-          [currentStatus]='appointment.status'
-          [selectedAppointment]='appointment._id'
-          (onStatusChange)='onStatusChange($event)'>
+          [currentStatus]="appointment.status"
+          [selectedAppointment]="appointment._id"
+          (onStatusChange)="onStatusChange($event)"
+        >
         </appointment-actions>
-        <button mat-icon-button aria-label="Eliminar" title="Eliminar" color="warn"
-        (click)="deleteAppointment(appointment._id)">
+        <button
+          mat-icon-button
+          aria-label="Eliminar"
+          title="Eliminar"
+          color="warn"
+          (click)="deleteAppointment(appointment._id)"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let appointment; columns: displayedColumns;"
-      [ngClass]="getAppointmentRowClass(appointment.status)">
-    </tr>
+    <tr
+      mat-row
+      *matRowDef="let appointment; columns: displayedColumns"
+      [ngClass]="getAppointmentRowClass(appointment.status)"
+    ></tr>
   </table>
 
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
@@ -100,17 +123,29 @@
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let appointment" 
+      <td
+        mat-cell
+        *matCellDef="let appointment"
         class="expand-cell-action"
-        (click)="expandedAppointment = (expandedAppointment === appointment ? null : appointment)">
-        <mat-icon *ngIf="(expandedAppointment != appointment)">expand_more</mat-icon>
-        <mat-icon *ngIf="(expandedAppointment === appointment)">expand_less</mat-icon>
+        (click)="
+          expandedAppointment =
+            expandedAppointment === appointment ? null : appointment
+        "
+      >
+        <mat-icon *ngIf="expandedAppointment != appointment"
+          >expand_more</mat-icon
+        >
+        <mat-icon *ngIf="expandedAppointment === appointment"
+          >expand_less</mat-icon
+        >
       </td>
     </ng-container>
     <!-- Time Column -->
     <ng-container matColumnDef="time">
       <th mat-header-cell *matHeaderCellDef>Hora</th>
-      <td mat-cell *matCellDef="let appointment">{{ appointment.time | timeMinutes }} </td>
+      <td mat-cell *matCellDef="let appointment">
+        {{ appointment.time | timeMinutes }}
+      </td>
     </ng-container>
 
     <!-- Patient Column -->
@@ -125,27 +160,49 @@
 
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let appointment" [attr.colspan]="displayedMobileColumns.length">
-        <div class="appointment-detail"
-          [@detailExpand]="(appointment === expandedAppointment ? 'expanded' : 'collapsed')">
-          <div><label>Zonas: </label>{{ appointment.areas | areasDescription }}</div>
+      <td
+        mat-cell
+        *matCellDef="let appointment"
+        [attr.colspan]="displayedMobileColumns.length"
+      >
+        <div
+          class="appointment-detail"
+          [@detailExpand]="
+            appointment === expandedAppointment ? 'expanded' : 'collapsed'
+          "
+        >
+          <div>
+            <label>Zonas: </label>{{ appointment.areas | areasDescription }}
+          </div>
           <div><label>Precio: </label>{{ appointment.price | currency }}</div>
-          <div><label>Estado: </label>{{ appointment.status | statusDescription }}</div>
+          <div>
+            <label>Estado: </label>{{ appointment.status | statusDescription }}
+          </div>
           <div>
             <label>Observaciones: </label>
             <small>{{ appointment.observations }}</small>
           </div>
           <div>
-            <button mat-icon-button aria-label="Editar" color="primary" (click)="goToAppointmentDetails(appointment._id)">
+            <button
+              mat-icon-button
+              aria-label="Editar"
+              color="primary"
+              (click)="goToAppointmentDetails(appointment._id)"
+            >
               <mat-icon>edit</mat-icon>
             </button>
             <appointment-actions
-              [currentStatus]='appointment.status'
-              [selectedAppointment]='appointment._id'
-              (onStatusChange)='onStatusChange($event)'>
+              [currentStatus]="appointment.status"
+              [selectedAppointment]="appointment._id"
+              (onStatusChange)="onStatusChange($event)"
+            >
             </appointment-actions>
-            <button mat-icon-button aria-label="Eliminar" color="warn" 
-              (click)="deleteAppointment(appointment._id)">
+            <button
+              mat-icon-button
+              aria-label="Eliminar"
+              color="warn"
+              (click)="deleteAppointment(appointment._id)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -154,12 +211,19 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedMobileColumns"></tr>
-    <tr mat-row *matRowDef="let appointment; columns: displayedMobileColumns;"
+    <tr
+      mat-row
+      *matRowDef="let appointment; columns: displayedMobileColumns"
       class="appointment-row"
       [class.expanded-row]="expandedAppointment === appointment"
-      [ngClass]="getAppointmentRowClass(appointment.status)"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="appointment-detail-row"
-      [ngClass]="getAppointmentRowClass(row.status)"></tr>
+      [ngClass]="getAppointmentRowClass(appointment.status)"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="appointment-detail-row"
+      [ngClass]="getAppointmentRowClass(row.status)"
+    ></tr>
   </table>
 
   <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>

@@ -297,14 +297,18 @@ export class AppointmentsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.selectedAppointment.price =
-          result.paymentMethod === 3 ? result.price * 1.2 : result.price;
+        this.selectedAppointment.price = result.price;
         this.selectedAppointment.paymentMethod = result.paymentMethod;
         this.selectedAppointment.status = StatusList.Ended.key;
-        this.selectedAppointment.patient.nextSession = result.nextSession;
+        this.selectedAppointment.patient.nextSession =
+          result.nextSessionMonth + "/" + result.nextSessionYear;
         this.saveAppointment();
         this.savePatientNextSession();
       }
     });
+  }
+
+  public editionDisabled(status: number): Boolean {
+    return status === StatusList.Ended.key;
   }
 }

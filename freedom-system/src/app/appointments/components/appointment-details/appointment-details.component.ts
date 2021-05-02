@@ -22,7 +22,13 @@ import { Day } from "src/app/calendar/classes/day";
 import { Time } from "src/app/appointments/classes/time";
 import { TimeSlot } from "src/app/appointments/classes/timeSlot";
 import { MatDialog } from "@angular/material";
-import { PaymentList } from "../../constants/payments.enum";
+import { getPayments, PaymentList } from "../../constants/payments.enum";
+import { PaymentMethod, Status } from "../../classes/index";
+import {
+  getStatusByKey,
+  getStatusesForDetails,
+  StatusList,
+} from "../../constants/status.enum";
 
 @Component({
   selector: "appointment-details",
@@ -42,6 +48,8 @@ export class AppointmentDetailsComponent implements OnInit {
   availableSlots: TimeSlot[];
   initialTimes: Time[];
   appointmentForm: FormGroup;
+  paymentMethods: PaymentMethod[];
+  statuses: Status[];
 
   constructor(
     private route: ActivatedRoute,
@@ -59,13 +67,15 @@ export class AppointmentDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.mobileView = this.aplicationState.getIsMobileResolution();
-    this.selectedDay = new Day();
-    this.setSelectedDay(this.route.snapshot.paramMap.get("day"));
-    this.appointmentId = this.route.snapshot.paramMap.get("id");
-    this.setFormValues();
     this.appointment = new Appointment();
+    this.selectedDay = new Day();
     this.busyAppointments = [];
     this.initialTimes = [];
+
+    this.setSelectedDay(this.route.snapshot.paramMap.get("day"));
+    this.appointmentId = this.route.snapshot.paramMap.get("id");
+
+    this.setFormValues();
     this.getSelectorsData();
     if (this.appointmentId) {
       this.presetAppointmentForm();
@@ -102,35 +112,72 @@ export class AppointmentDetailsComponent implements OnInit {
       .valueChanges.subscribe((val) => {
         this.appointmentDuration = val;
       });
-
+    this.appointmentForm
+      .get("appointmentStatus")
+      .valueChanges.subscribe((val) => {
+        this.appointment.status = val;
+      });
     this.appointmentForm
       .get("appointmentObservations")
       .valueChanges.subscribe((val) => {
         this.appointment.observations = val;
       });
+
+    this.appointmentForm
+      .get("appointmentPaymentMethod")
+      .valueChanges.subscribe((val) => {
+        this.appointment.paymentMethod = val;
+      });
+
+    this.appointmentForm
+      .get("appointmentStatus")
+      .valueChanges.subscribe((val) => {
+        this.appointment.status = val;
+      });
   }
 
-  private setFormValues(
-    day = null,
-    patient = null,
-    areas = [],
-    time = null,
-    price = 0,
-    observations = ""
-  ) {
-    const areasToSet = areas.map((area) => area._id);
-    const duration = areas.reduce((acc, area) => acc + area.duration, 0);
-    day = day ? day : this.route.snapshot.paramMap.get("day");
+  private setFormValues() {
+    const areasToSet = this.appointment.areas
+      ? this.appointment.areas.map((area) => area._id)
+      : [];
+    const duration = this.appointment.areas
+      ? this.appointment.areas.reduce((acc, area) => acc + area.duration, 0)
+      : 0;
+    const day = this.appointment.day
+      ? this.appointment.day
+      : this.route.snapshot.paramMap.get("day");
+
+    const appoitmentStatus = this.appointment.status
+      ? getStatusByKey(this.appointment.status).key
+      : 1;
+
+    const patientId = this.appointment.patient
+      ? this.appointment.patient._id
+      : null;
 
     this.appointmentForm = this.fb.group({
       appointmentDay: new FormControl(day, Validators.required),
-      appointmentPatient: new FormControl(patient, Validators.required),
+      appointmentPatient: new FormControl(patientId, Validators.required),
       appointmentAreas: new FormControl(areasToSet, Validators.required),
-      appointmentTime: new FormControl(time, Validators.required),
+      appointmentTime: new FormControl(
+        this.appointment.time || null,
+        Validators.required
+      ),
       appointmentDuration: new FormControl(duration * 15),
-      appointmentPrice: new FormControl(price, Validators.required),
-      appointmentObservations: new FormControl(observations),
+      appointmentPrice: new FormControl(
+        this.appointment.price || 0,
+        Validators.required
+      ),
+      appointmentStatus: new FormControl(appoitmentStatus),
+      appointmentObservations: new FormControl(
+        this.appointment.observations || null
+      ),
+      appointmentPaymentMethod: new FormControl({
+        value: this.appointment.paymentMethod || null,
+        disabled: this.appointment.status != StatusList.Ended.key,
+      }),
     });
+
     this.onChangesForm();
   }
 
@@ -139,9 +186,7 @@ export class AppointmentDetailsComponent implements OnInit {
     this.calendarService.getDayToAppointment$(dayId).subscribe(
       (response) => {
         this.selectedDay = response;
-        this.appointment.day = this.selectedDay._id
-          ? this.selectedDay._id
-          : event;
+        this.appointment.day = this.selectedDay._id;
         this.getBusyAppointments(this.selectedDay._id);
         this.spinner.hide();
       },
@@ -157,14 +202,7 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointmentService.getAppointmentData$(this.appointmentId).subscribe(
       (response) => {
         this.appointment = response;
-        this.setFormValues(
-          this.appointment.day._id,
-          this.appointment.patient._id,
-          this.appointment.areas,
-          this.appointment.time,
-          this.appointment.price,
-          this.appointment.observations
-        );
+        this.setFormValues();
         this.spinner.hide();
       },
       (error) => {
@@ -208,6 +246,9 @@ export class AppointmentDetailsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+
+    this.paymentMethods = getPayments();
+    this.statuses = getStatusesForDetails();
   }
 
   private getBusyAppointments(selectedDay: string): void {

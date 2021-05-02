@@ -5,6 +5,7 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
+import { MatDialog } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { Patient } from "../../../patients/classes/patient";
@@ -12,6 +13,9 @@ import { PatientService } from "../../../patients/services/patient.service";
 import { AlertService } from "../../../core/services/alert/alert.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ApplicationStateService } from "../../../core/services/aplication-state/aplication-state.service";
+import { ModalComponent } from "src/app/core/components/modal/modal.component";
+import { getMonthByKey, getMonths } from "src/app/core/constants/months.enum";
+import { Month } from "src/app/core/classes/month";
 
 @Component({
   selector: "patient-details",
@@ -23,8 +27,9 @@ export class PatientDetailsComponent implements OnInit {
   patient: Patient;
   patientId: string;
   patientForm: FormGroup = null;
+  months: Month[];
+  years: Number[];
   @Input() editionMode: Boolean;
-  openConfirmation: Boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,38 +38,25 @@ export class PatientDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private patientService: PatientService,
     private spinner: NgxSpinnerService,
-    private alertService: AlertService
-  ) {
-    this.openConfirmation = false;
-  }
+    private alertService: AlertService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.mobileView = this.aplicationStateService.getIsMobileResolution();
     this.patientId = this.route.snapshot.paramMap.get("id");
     this.patient = new Patient();
     this.editionMode = !this.patientId;
+    this.months = getMonths();
+    this.years = [new Date().getFullYear(), new Date().getFullYear() + 1];
+
     this.setFormValues();
     if (this.patientId) {
       this.spinner.show();
       this.patientService.getPatientData$(this.patientId).subscribe(
         (response) => {
           this.patient = response;
-          this.setFormValues(
-            this.patient.name,
-            this.patient.lastName,
-            this.patient.age,
-            this.patient.phone,
-            this.patient.medicines,
-            this.patient.allergies,
-            this.patient.moles,
-            this.patient.bodyMetals,
-            this.patient.tattoos,
-            this.patient.skinCancer,
-            this.patient.epilepsy,
-            this.patient.pregnant,
-            this.patient.previousTreatment,
-            this.patient.nextSession
-          );
+          this.setFormValues();
           this.spinner.hide();
         },
         (error) => {
@@ -84,77 +76,73 @@ export class PatientDetailsComponent implements OnInit {
     }
   }
 
-  private setFormValues(
-    name = null,
-    lastName = null,
-    age = null,
-    phone = null,
-    medicines = null,
-    allergies = null,
-    moles = null,
-    bodyMetals = null,
-    tattoos = null,
-    skinCancer = false,
-    epilepsy = false,
-    pregnant = false,
-    previousTreatment = null,
-    nextAppointment = null
-  ): void {
+  private setFormValues(): void {
+    const nextSessionDate = this.patient.nextSession
+      ? new Date(this.patient.nextSession)
+      : new Date();
+    const nextSessionMonth = getMonthByKey(nextSessionDate.getMonth() + 1)
+      .label;
+    const nextSessionYear = nextSessionDate.getFullYear();
+
     this.patientForm = this.fb.group({
       patientName: new FormControl(
-        { value: name, disabled: !this.editionMode },
+        { value: this.patient.name || null, disabled: !this.editionMode },
         Validators.required
       ),
       patientLastName: new FormControl(
-        { value: lastName, disabled: !this.editionMode },
+        { value: this.patient.lastName || null, disabled: !this.editionMode },
         Validators.required
       ),
       patientAge: new FormControl(
-        { value: age, disabled: !this.editionMode },
+        { value: this.patient.age || null, disabled: !this.editionMode },
         Validators.required
       ),
       patientPhone: new FormControl(
-        { value: phone, disabled: !this.editionMode },
+        { value: this.patient.phone || null, disabled: !this.editionMode },
         Validators.required
       ),
       patientMedicines: new FormControl({
-        value: medicines,
+        value: this.patient.medicines || null,
         disabled: !this.editionMode,
       }),
       patientAllergies: new FormControl({
-        value: allergies,
+        value: this.patient.allergies || null,
         disabled: !this.editionMode,
       }),
       patientMoles: new FormControl({
-        value: moles,
+        value: this.patient.moles || null,
         disabled: !this.editionMode,
       }),
       patientBodyMetals: new FormControl({
-        value: bodyMetals,
+        value: this.patient.bodyMetals || null,
         disabled: !this.editionMode,
       }),
       patientTattoos: new FormControl({
-        value: tattoos,
+        value: this.patient.tattoos || null,
         disabled: !this.editionMode,
       }),
       patientSkinCancer: new FormControl({
-        value: skinCancer,
+        value: this.patient.skinCancer || null,
         disabled: !this.editionMode,
       }),
       patientEpilepsy: new FormControl({
-        value: epilepsy,
+        value: this.patient.epilepsy || null,
         disabled: !this.editionMode,
       }),
       patientPregnant: new FormControl({
-        value: pregnant,
+        value: this.patient.pregnant || null,
         disabled: !this.editionMode,
       }),
       patientPreviousTreatment: new FormControl({
-        value: previousTreatment,
+        value: this.patient.previousTreatment || null,
         disabled: !this.editionMode,
       }),
-      patientNextAppointment: new FormControl({
-        value: nextAppointment,
+      patientNextSessionYear: new FormControl({
+        value: nextSessionYear,
+        disabled: !this.editionMode,
+      }),
+      patientNextSessionMonth: new FormControl({
+        value: nextSessionMonth,
         disabled: !this.editionMode,
       }),
     });
@@ -204,11 +192,20 @@ export class PatientDetailsComponent implements OnInit {
       .valueChanges.subscribe((val) => {
         this.patient.previousTreatment = val;
       });
-    this.patientForm
-      .get("patientNextAppointment")
-      .valueChanges.subscribe((val) => {
-        this.patient.nextSession = val;
-      });
+    if (this.patient.nextSession) {
+      this.patientForm
+        .get("patientNextSessionYear")
+        .valueChanges.subscribe((val) => {
+          const month = this.patient.nextSession.split("/")[0];
+          this.patient.nextSession = month + "/" + val;
+        });
+      this.patientForm
+        .get("patientNextSessionMonth")
+        .valueChanges.subscribe((val) => {
+          const year = this.patient.nextSession.split("/")[1];
+          this.patient.nextSession = val + "/" + year;
+        });
+    }
   }
 
   onSubmit() {
@@ -227,14 +224,24 @@ export class PatientDetailsComponent implements OnInit {
     );
   }
 
-  cancelEdition(formDirty) {
-    this.openConfirmation = formDirty;
-    if (!formDirty) {
+  public cancelEdition(formDirty): void {
+    if (formDirty) {
+      const dialogRef = this.dialog.open(ModalComponent, {
+        data: {
+          title: "Cancelar edicion",
+          text:
+            "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
+          isConfirmationModal: true,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.router.navigate(["/patients"]);
+        }
+      });
+    } else {
       this.router.navigate(["/patients"]);
     }
-  }
-
-  confirmCancelation() {
-    this.router.navigate(["/patients"]);
   }
 }

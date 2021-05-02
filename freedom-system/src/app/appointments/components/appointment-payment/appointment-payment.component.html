@@ -36,11 +36,19 @@
             >Este campo no puede estar vacio</mat-error
           >
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Siguiente Sesion</mat-label>
-          <mat-select formControlName="nextSession">
+        <mat-form-field class="mid-field">
+          <mat-label>Mes</mat-label>
+          <mat-select formControlName="nextSessionMonth">
             <mat-option *ngFor="let month of months" [value]="month.label">
               {{ month.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="mid-field">
+          <mat-label>Ano</mat-label>
+          <mat-select formControlName="nextSessionYear">
+            <mat-option *ngFor="let year of years" [value]="year">
+              {{ year }}
             </mat-option>
           </mat-select>
         </mat-form-field>
