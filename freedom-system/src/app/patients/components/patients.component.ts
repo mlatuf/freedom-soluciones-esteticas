@@ -95,7 +95,7 @@ export class PatientsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  deletePatient(patientName: string) {
+  deletePatient(patientId: string, patientName: string) {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar paciente " + patientName,
@@ -107,14 +107,14 @@ export class PatientsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.confirmDeletePatient();
+        this.confirmDeletePatient(patientId);
       }
     });
   }
 
-  confirmDeletePatient() {
+  confirmDeletePatient(patientId: string) {
     this.spinner.show();
-    this.patientService.deletePatient$(this.patientSelected).subscribe(
+    this.patientService.deletePatient$(patientId).subscribe(
       (response) => {
         this.spinner.hide();
         this.alertService.success("Paciente eliminado con exito");

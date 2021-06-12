@@ -2,7 +2,8 @@
   <mat-slide-toggle
     color="primary"
     (change)="toggleEditionMode()"
-    [hidden]="(!areaId)">
+    [hidden]="!areaId"
+  >
     Editar
   </mat-slide-toggle>
 </page-title>
@@ -10,30 +11,51 @@
   <mat-card-content>
     <form [formGroup]="areaForm" class="area-form" (ngSubmit)="onSubmit()">
       <mat-form-field>
-        <input matInput placeholder="Descripcion" type="text" formControlName="areaDescription" required/>
+        <input
+          matInput
+          placeholder="Descripcion"
+          type="text"
+          formControlName="areaDescription"
+          required
+        />
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Precio" type="input" formControlName="areaPrice" required/>
+        <input
+          matInput
+          placeholder="Precio"
+          type="input"
+          formControlName="areaPrice"
+          required
+        />
         <span matPrefix>$&nbsp;</span>
         <span matSuffix>.00</span>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Duracion</mat-label>
         <mat-select formControlName="areaDuration" required>
-          <mat-option *ngFor="let time of durationsArray" [value]="time.id">{{ time.description }}</mat-option>
+          <mat-option *ngFor="let time of durationsArray" [value]="time.id">{{
+            time.description
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <div class="button-form-group">
-        <button mat-flat-button type="submit" color="primary" 
-          [disabled]="(!editionMode || !areaForm.dirty || !areaForm.valid)">
+        <button
+          mat-stroked-button
+          type="submit"
+          color="primary"
+          [disabled]="!editionMode || !areaForm.dirty || !areaForm.valid"
+        >
           Guardar
         </button>
-        <button mat-flat-button type="button" color="warn" 
-          (click)="cancelEditionModal(areaForm.dirty)">
+        <button
+          mat-stroked-button
+          type="button"
+          color="warn"
+          (click)="cancelEditionModal(areaForm.dirty)"
+        >
           Cancelar
         </button>
       </div>
     </form>
   </mat-card-content>
 </mat-card>
-  

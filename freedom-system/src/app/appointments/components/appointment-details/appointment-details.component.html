@@ -118,7 +118,7 @@
       </div>
       <div class="button-form-group">
         <button
-          mat-flat-button
+          mat-stroked-button
           type="submit"
           color="primary"
           [disabled]="!appointmentForm.dirty || !appointmentForm.valid"
@@ -126,7 +126,7 @@
           Guardar
         </button>
         <button
-          mat-flat-button
+          mat-stroked-button
           type="button"
           color="warn"
           (click)="cancelEdition(appointmentForm.dirty)"

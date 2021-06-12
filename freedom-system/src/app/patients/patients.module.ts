@@ -31,7 +31,6 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    ClarityModule,
     RouterModule,
     MatTableModule,
     MatFormFieldModule,

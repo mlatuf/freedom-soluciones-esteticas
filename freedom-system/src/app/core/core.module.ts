@@ -1,22 +1,31 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClarityModule } from '@clr/angular';
-import { RoutingModule } from '../routing.module';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ClarityModule } from "@clr/angular";
+import { RoutingModule } from "../routing.module";
 
 import {
-  MatButtonModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatIconModule, MatSelectModule, MatDividerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatDialogModule
-} from '@angular/material';
+  MatButtonModule,
+  MatCardModule,
+  MatInputModule,
+  MatToolbarModule,
+  MatMenuModule,
+  MatIconModule,
+  MatSelectModule,
+  MatDividerModule,
+  MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatDialogModule,
+} from "@angular/material";
 
-import { ApplicationStateService } from './services/aplication-state/aplication-state.service';
-import { PageTitleComponent } from './components/page-title/page-title.component';
-import { AlertsComponent } from './components/alerts/alerts.component';
-import { MenuComponent } from './components/menu/menu.component';
-import { LoginComponent } from './components/login/login/login.component';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
-import { ModalComponent } from './components/modal/modal.component';
-import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
-
+import { ApplicationStateService } from "./services/aplication-state/aplication-state.service";
+import { PageTitleComponent } from "./components/page-title/page-title.component";
+import { AlertsComponent } from "./components/alerts/alerts.component";
+import { MenuComponent } from "./components/menu/menu.component";
+import { LoginComponent } from "./components/login/login/login.component";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
+import { ModalComponent } from "./components/modal/modal.component";
+import { AreasDescriptionPipe } from "./pipes/areas-description.pipe";
 
 @NgModule({
   declarations: [
@@ -25,22 +34,21 @@ import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
     MenuComponent,
     LoginComponent,
     ModalComponent,
-    AreasDescriptionPipe
+    AreasDescriptionPipe,
   ],
   exports: [
     PageTitleComponent,
     AlertsComponent,
     MenuComponent,
-    AreasDescriptionPipe
+    AreasDescriptionPipe,
   ],
   imports: [
     CommonModule,
-    ClarityModule,
     RoutingModule,
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatCardModule,
     MatInputModule,
     MatMenuModule,
@@ -48,8 +56,12 @@ import { AreasDescriptionPipe } from './pipes/areas-description.pipe';
     MatSnackBarModule,
     MatSelectModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
   ],
-  providers: [ApplicationStateService, AngularFireAuthGuard,{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}]
+  providers: [
+    ApplicationStateService,
+    AngularFireAuthGuard,
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}

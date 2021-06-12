@@ -70,7 +70,7 @@ export class PatientService {
     return from(this.patientsCollection.add({ ...patient }));
   }
 
-  deletePatient$(patientId: number): Observable<any> {
+  deletePatient$(patientId: string): Observable<any> {
     this.patientDoc = this.afs.doc<Patient>("patients/" + patientId);
     return from(this.patientDoc.delete());
   }
