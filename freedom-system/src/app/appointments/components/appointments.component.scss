@@ -1,5 +1,5 @@
 page-title {
-  .btn-group {
+  .title-buttons {
     margin: 0;
     button {
       margin-left: 0.2rem;
@@ -57,17 +57,5 @@ page-title {
     tr.appointment-detail-row {
       height: 0;
     }
-  }
-}
-.payment-modal {
-  .clr-form-control {
-    margin-top: 0px;
-    .clr-control-label {
-      flex: 0 0 33.333333%;
-      max-width: 33.333333%;
-    }
-  }
-  small {
-    padding-top: 0.6rem;
   }
 }

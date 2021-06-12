@@ -1,64 +1,78 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatDialog,
+} from "@angular/material";
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
 
-import { Patient } from '../classes/patient';
-import { PatientService } from '../services/patient.service';
-import { AlertService } from 'src/app/core/services/alert/alert.service'
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ApplicationStateService } from 'src/app/core/services/aplication-state/aplication-state.service';
-import { ModalComponent } from 'src/app/core/components/modal/modal.component';
-import { PatientAppointmentHistoryComponent } from '../components/patient-appointment-history/patient-appointment-history.component';
-
+import { Patient } from "../classes/patient";
+import { PatientService } from "../services/patient.service";
+import { AlertService } from "src/app/core/services/alert/alert.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
+import { ModalComponent } from "src/app/core/components/modal/modal.component";
+import { PatientAppointmentHistoryComponent } from "../components/patient-appointment-history/patient-appointment-history.component";
 
 @Component({
-  selector: 'patients',
-  templateUrl: './patients.component.html',
-  styleUrls: ['./patients.component.scss'],
+  selector: "patients",
+  templateUrl: "./patients.component.html",
+  styleUrls: ["./patients.component.scss"],
   animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    trigger("detailExpand", [
+      state("collapsed", style({ height: "0px", minHeight: "0" })),
+      state("expanded", style({ height: "*" })),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      ),
     ]),
-  ]
+  ],
 })
 export class PatientsComponent implements OnInit {
-
   mobileView: Boolean;
   patients: Patient[];
   patientSelected: number;
   patientNameSelected: string;
 
-  displayedColumns: string[] = ['fullName', 'phone', 'actions'];
-  displayedMobileColumns: string[] = ['expand', 'fullName'];
+  displayedColumns: string[] = ["fullName", "phone", "nextSession", "actions"];
+  displayedMobileColumns: string[] = ["expand", "fullName"];
   dataSource: MatTableDataSource<Patient>;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private aplicationStateService: ApplicationStateService, 
-    private patientService: PatientService, 
-    private spinner:   NgxSpinnerService, 
+  constructor(
+    private aplicationStateService: ApplicationStateService,
+    private patientService: PatientService,
+    private spinner: NgxSpinnerService,
     private alertService: AlertService,
-    public dialog: MatDialog) {}
-  
+    public dialog: MatDialog
+  ) {}
+
   ngOnInit() {
     this.mobileView = this.aplicationStateService.getIsMobileResolution();
     this.patients = [];
     this.getPatientList();
   }
-  
-  private getPatientList() {    
+
+  private getPatientList() {
     this.spinner.show();
     this.patientService.getPatients$().subscribe(
-      response => {
+      (response) => {
         this.patients = response;
         this.dataSource = new MatTableDataSource(this.patients);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.spinner.hide();
       },
-      error => {
+      (error) => {
         this.spinner.hide();
         this.alertService.error(error);
       }
@@ -72,43 +86,44 @@ export class PatientsComponent implements OnInit {
 
   showHistoryModal(patientId: string) {
     const dialogRef = this.dialog.open(PatientAppointmentHistoryComponent, {
-      width: '80%',
+      width: "80%",
       data: {
-        title: 'Historial de sesiones',
-        patientId: patientId
-      }
+        title: "Historial de sesiones",
+        patientId: patientId,
+      },
     });
-    dialogRef.afterClosed().subscribe(result => {});
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  deletePatient(patientId: number, patientName: string) {
+  deletePatient(patientId: string, patientName: string) {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
-        title: 'Eliminar paciente ' + patientName, 
-        text: "Esta seguro que desea eliminar el paciente? Se perderan todos los datos del mismo y su historial de sesiones",
-        isConfirmationModal: true
-      }
+        title: "Eliminar paciente " + patientName,
+        text:
+          "Esta seguro que desea eliminar el paciente? Se perderan todos los datos del mismo y su historial de sesiones",
+        isConfirmationModal: true,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        this.confirmDeletePatient();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.confirmDeletePatient(patientId);
       }
     });
   }
 
-  confirmDeletePatient() {
-    this.spinner.show();    
-    this.patientService.deletePatient$(this.patientSelected).subscribe(
-      response => {
+  confirmDeletePatient(patientId: string) {
+    this.spinner.show();
+    this.patientService.deletePatient$(patientId).subscribe(
+      (response) => {
         this.spinner.hide();
         this.alertService.success("Paciente eliminado con exito");
         this.getPatientList();
       },
-      error => {
+      (error) => {
         this.spinner.hide();
         this.alertService.error(error);
       }
     );
   }
-} 
+}

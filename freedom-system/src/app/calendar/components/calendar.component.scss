@@ -1,14 +1,24 @@
+page-title {
+  .title-buttons {
+    margin: 0;
+    button {
+      margin-left: 0.2rem;
+      background-color: whitesmoke;
+    }
+  }
+}
 .newDate-container {
   display: flex;
   flex-direction: column;
   max-width: 400px;
   margin: 0 auto;
+  margin-bottom: 1rem;
   @media (max-width: 576px) {
     .mat-form-field {
       width: 68%;
     }
   }
-  .mat-flat-button {
+  .mat-stroked-button {
     margin-left: 0.5rem;
   }
 }

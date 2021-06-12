@@ -1,69 +1,136 @@
 <page-title></page-title>
-<mat-card class="appointment-form-container" [ngClass]="{'mobile' : mobileView}">
+<mat-card class="appointment-form-container" [ngClass]="{ mobile: mobileView }">
   <mat-card-content>
-    <form class="appointment-form" [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+    <form
+      class="appointment-form"
+      [formGroup]="appointmentForm"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="form-content">
         <section class="form-block">
           <mat-form-field>
             <mat-label>Paciente</mat-label>
-            <mat-select formControlName="appointmentPatient"
-              required>
-              <mat-option *ngFor="let patient of patients" [value]="patient._id">{{ patient.fullName }}</mat-option>
+            <mat-select formControlName="appointmentPatient" required>
+              <mat-option
+                *ngFor="let patient of patients"
+                [value]="patient._id"
+                >{{ patient.fullName }}</mat-option
+              >
             </mat-select>
-            <mat-error *ngIf="appointmentForm.get('appointmentPatient').hasError('required')">Este campo no puede estar vacio</mat-error>
+            <mat-error
+              *ngIf="
+                appointmentForm.get('appointmentPatient').hasError('required')
+              "
+              >Este campo no puede estar vacio</mat-error
+            >
           </mat-form-field>
           <mat-form-field>
             <mat-label>Zonas</mat-label>
-            <mat-select multiple
-              formControlName="appointmentAreas"
-              required>
+            <mat-select multiple formControlName="appointmentAreas" required>
               <mat-option *ngFor="let area of areas" [value]="area._id">
                 {{ area.description }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="appointmentForm.get('appointmentAreas').hasError('required')">Este campo no puede estar vacio</mat-error>
+            <mat-error
+              *ngIf="
+                appointmentForm.get('appointmentAreas').hasError('required')
+              "
+              >Este campo no puede estar vacio</mat-error
+            >
           </mat-form-field>
           <mat-form-field class="mid-field">
             <mat-label>Fecha</mat-label>
-            <mat-select formControlName="appointmentDay" 
-              required>
+            <mat-select formControlName="appointmentDay" required>
               <mat-option *ngFor="let day of availableDays" [value]="day._id">
-                {{ day.date.toDate() | date:'mediumDate' }}
+                {{ day.date.toDate() | date: "mediumDate" }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="appointmentForm.get('appointmentDay').hasError('required')">Este campo no puede estar vacio</mat-error>
+            <mat-error
+              *ngIf="appointmentForm.get('appointmentDay').hasError('required')"
+              >Este campo no puede estar vacio</mat-error
+            >
           </mat-form-field>
           <mat-form-field class="mid-field">
             <mat-label>Hora</mat-label>
-            <mat-select formControlName="appointmentTime"
-              required>
-              <mat-option *ngFor="let time of availableSlots" [value]="time._id">
+            <mat-select formControlName="appointmentTime" required>
+              <mat-option
+                *ngFor="let time of availableSlots"
+                [value]="time._id"
+              >
                 {{ time.startTime }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="appointmentForm.get('appointmentTime').hasError('required')">Este campo no puede estar vacio</mat-error>
+            <mat-error
+              *ngIf="
+                appointmentForm.get('appointmentTime').hasError('required')
+              "
+              >Este campo no puede estar vacio</mat-error
+            >
           </mat-form-field>
           <mat-form-field class="mid-field">
-            <input matInput placeholder="duracion" type="input" formControlName="appointmentDuration"/>
+            <input
+              matInput
+              placeholder="duracion"
+              type="input"
+              formControlName="appointmentDuration"
+            />
             <span matSuffix>min.</span>
           </mat-form-field>
           <mat-form-field class="mid-field">
-            <input matInput placeholder="Precio" type="input" formControlName="appointmentPrice"/>
+            <input
+              matInput
+              placeholder="Precio"
+              type="input"
+              formControlName="appointmentPrice"
+            />
             <span matPrefix>$&nbsp;</span>
             <span matSuffix>.00</span>
           </mat-form-field>
-          <mat-form-field>
-            <textarea matInput placeholder="Observaciones" formControlName="appointmentObservations"></textarea>
+          <mat-form-field *ngIf="appointment.status" class="mid-field">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="appointmentStatus">
+              <mat-option
+                *ngFor="let status of statuses"
+                [value]="status.key"
+                >{{ status.label }}</mat-option
+              >
+            </mat-select>
           </mat-form-field>
-        </section>        
+          <mat-form-field *ngIf="appointment.paymentMethod" class="mid-field">
+            <mat-label>Metodo de Pago</mat-label>
+            <mat-select formControlName="appointmentPaymentMethod">
+              <mat-option
+                *ngFor="let method of paymentMethods"
+                [value]="method.key"
+              >
+                {{ method.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea
+              matInput
+              placeholder="Observaciones"
+              formControlName="appointmentObservations"
+            ></textarea>
+          </mat-form-field>
+        </section>
       </div>
       <div class="button-form-group">
-        <button mat-flat-button type="submit" color="primary" 
-          [disabled]="(!appointmentForm.dirty || !appointmentForm.valid)">
+        <button
+          mat-stroked-button
+          type="submit"
+          color="primary"
+          [disabled]="!appointmentForm.dirty || !appointmentForm.valid"
+        >
           Guardar
         </button>
-        <button mat-flat-button type="button" color="warn" 
-          (click)="cancelEdition(appointmentForm.dirty)">
+        <button
+          mat-stroked-button
+          type="button"
+          color="warn"
+          (click)="cancelEdition(appointmentForm.dirty)"
+        >
           Cancelar
         </button>
       </div>

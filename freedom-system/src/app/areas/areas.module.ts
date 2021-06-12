@@ -1,20 +1,32 @@
-import { NgModule } from '@angular/core';
-import { ClarityModule } from '@clr/angular';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { MatTableModule, MatFormFieldModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatDialogModule, MatDividerModule, MatCardModule, MatSlideToggleModule } from '@angular/material';
-import { CoreModule } from '../core/core.module';
+import { NgModule } from "@angular/core";
+import { ClarityModule } from "@clr/angular";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  MatTableModule,
+  MatFormFieldModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatIconModule,
+  MatButtonModule,
+  MatSelectModule,
+  MatInputModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatCardModule,
+  MatSlideToggleModule,
+} from "@angular/material";
+import { CoreModule } from "../core/core.module";
 
-import { AreasComponent } from './components/areas.component';
-import { AreaDetailsComponent } from './components/area-details/area-details.component';
-import { AreaService } from './services/area.service';
-import { DurationMinutesPipe } from './pipes/duration-minutes.pipe';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { AreasComponent } from "./components/areas.component";
+import { AreaDetailsComponent } from "./components/area-details/area-details.component";
+import { AreaService } from "./services/area.service";
+import { DurationMinutesPipe } from "./pipes/duration-minutes.pipe";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 
 @NgModule({
   imports: [
     CommonModule,
-    ClarityModule,
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
@@ -29,13 +41,9 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
     MatDialogModule,
     MatDividerModule,
     MatCardModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
-  declarations: [
-    AreasComponent,
-    AreaDetailsComponent,
-    DurationMinutesPipe
-  ],
-  providers: [AreaService, AngularFireAuthGuard]
+  declarations: [AreasComponent, AreaDetailsComponent, DurationMinutesPipe],
+  providers: [AreaService, AngularFireAuthGuard],
 })
-export class AreasModule { }
+export class AreasModule {}

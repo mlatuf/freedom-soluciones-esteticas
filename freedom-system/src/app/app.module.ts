@@ -1,53 +1,56 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFireStorageModule } from "@angular/fire/storage";
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatInputModule, MatTableModule,
-  MatToolbarModule, MatMenuModule,MatIconModule, MatProgressSpinnerModule
-} from '@angular/material';
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatInputModule,
+  MatTableModule,
+  MatToolbarModule,
+  MatMenuModule,
+  MatIconModule,
+  MatProgressSpinnerModule,
+} from "@angular/material";
 
-import { environment } from '../environments/environment';
+import { environment } from "../environments/environment";
 
-import { ClarityModule } from '@clr/angular';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { ClarityModule } from "@clr/angular";
+import { NgxSpinnerModule } from "ngx-spinner";
 
-import { CoreModule } from './core/core.module';
-import { AreasModule } from './areas/areas.module';
-import { CalendarModule } from './calendar/calendar.module';
-import { PatientsModule } from './patients/patients.module';
-import { AppointmentsModule } from './appointments/appointments.module';
+import { CoreModule } from "./core/core.module";
+import { AreasModule } from "./areas/areas.module";
+import { CalendarModule } from "./calendar/calendar.module";
+import { PatientsModule } from "./patients/patients.module";
+import { AppointmentsModule } from "./appointments/appointments.module";
 
-import { RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
-import { ModalComponent } from './core/components/modal/modal.component';
-
+import { RouterModule } from "@angular/router";
+import { AppComponent } from "./app.component";
+import { ModalComponent } from "./core/components/modal/modal.component";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     RouterModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    ClarityModule,
     NgxSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
     MatToolbarModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatCardModule,
     MatInputModule,
     MatDialogModule,
@@ -59,10 +62,10 @@ import { ModalComponent } from './core/components/modal/modal.component';
     AreasModule,
     CalendarModule,
     PatientsModule,
-    AppointmentsModule
+    AppointmentsModule,
   ],
   bootstrap: [AppComponent],
   providers: [AngularFireAuthGuard],
-  entryComponents: [ModalComponent]
+  entryComponents: [ModalComponent],
 })
-export class AppModule { }
+export class AppModule {}

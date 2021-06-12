@@ -5,11 +5,34 @@
 <mat-divider></mat-divider>
 <div mat-dialog-content>
   <p>{{ data.text }}</p>
-  <p *ngIf="data.hasError">Intentelo mas tarde. Si el problema persiste consulte con el administrador del sistema</p>
+  <p *ngIf="data.hasError">
+    Intentelo mas tarde. Si el problema persiste consulte con el administrador
+    del sistema
+  </p>
 </div>
 <div mat-dialog-actions>
-  <button *ngIf="(data.isConfirmationModal)" mat-stroked-button (click)="onNoClick()">No</button>
-  <button *ngIf="(data.isConfirmationModal)" mat-stroked-button color="primary" [mat-dialog-close]="true">Si</button>
-  <button *ngIf="(!data.isConfirmationModal)"mat-stroked-button color="primary" [mat-dialog-close]="true">Aceptar</button>
+  <button
+    *ngIf="data.isConfirmationModal"
+    mat-stroked-button
+    color="primary"
+    [mat-dialog-close]="true"
+  >
+    Si
+  </button>
+  <button
+    *ngIf="data.isConfirmationModal"
+    mat-stroked-button
+    color="warn"
+    (click)="onNoClick()"
+  >
+    No
+  </button>
+  <button
+    *ngIf="!data.isConfirmationModal"
+    mat-stroked-button
+    color="primary"
+    [mat-dialog-close]="true"
+  >
+    Aceptar
+  </button>
 </div>
-

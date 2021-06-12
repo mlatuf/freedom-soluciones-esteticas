@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Observable, from } from "rxjs";
-import { map, retry} from "rxjs/operators";
+import { map, retry } from "rxjs/operators";
 import { Day } from "../classes/day";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-  AngularFirestore
+  AngularFirestore,
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
 
 let currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1);
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class CalendarService {
   private daysCollection: AngularFirestoreCollection<Day>;
@@ -26,13 +26,16 @@ export class CalendarService {
     this.reloadCalendarCollection();
     let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
-      map(actions =>
-        actions.filter(a => { return a.payload.doc.data().date.toDate() >= currentDate })
-        .map(a => {
-          const _id = a.payload.doc.id;
-          const data = a.payload.doc.data() as Day;
-          return { _id, ...data };
-        })
+      map((actions) =>
+        actions
+          .filter((a) => {
+            return a.payload.doc.data().date.toDate() >= currentDate;
+          })
+          .map((a) => {
+            const _id = a.payload.doc.id;
+            const data = a.payload.doc.data() as Day;
+            return { _id, ...data };
+          })
       ),
       map(this.extractData)
     );
@@ -43,7 +46,7 @@ export class CalendarService {
     this.reloadCalendarCollection();
     this.dayDoc = this.afs.doc<Day>("days/" + dayId);
     return this.dayDoc.snapshotChanges().pipe(
-      map(a => {
+      map((a) => {
         const data = a.payload.data() as Day;
         const _id = a.payload.id;
         return { _id, ...data };
@@ -55,12 +58,16 @@ export class CalendarService {
     this.reloadCalendarCollection();
     let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
-      map(actions =>
-        actions.map(a => {
-          const _id = a.payload.doc.id;
-          const data = a.payload.doc.data() as Day;
-          return { _id, ...data };
-        })
+      map((actions) =>
+        actions
+          .filter((a) => {
+            return a.payload.doc.data().date.toDate() > currentDate;
+          })
+          .map((a) => {
+            const _id = a.payload.doc.id;
+            const data = a.payload.doc.data() as Day;
+            return { _id, ...data };
+          })
       )
     );
     return calendar;
@@ -70,13 +77,16 @@ export class CalendarService {
     this.reloadCalendarCollection();
     let calendar = this.daysCollection.snapshotChanges().pipe(
       retry(3),
-      map(actions =>
-        actions.filter(a => {return a.payload.doc.data().date.toDate() < currentDate})
-        .map(a => {
-          const _id = a.payload.doc.id;
-          const data = a.payload.doc.data() as Day;
-          return { _id, ...data };
-        })
+      map((actions) =>
+        actions
+          .filter((a) => {
+            return a.payload.doc.data().date.toDate() < currentDate;
+          })
+          .map((a) => {
+            const _id = a.payload.doc.id;
+            const data = a.payload.doc.data() as Day;
+            return { _id, ...data };
+          })
       ),
       map(this.extractData)
     );
@@ -92,8 +102,8 @@ export class CalendarService {
 
   private extractData(data: any) {
     let newDaysArray = [];
-    data.forEach(day => {
-      let addedMonth = newDaysArray.filter(obj => {
+    data.forEach((day) => {
+      let addedMonth = newDaysArray.filter((obj) => {
         let selected = day.date.toDate();
         return (
           obj.year === selected.getFullYear() &&
@@ -101,15 +111,15 @@ export class CalendarService {
         );
       });
       if (addedMonth.length > 0) {
-        addedMonth[0].days.push({_id: day._id, date:day.date.toDate()});
-        addedMonth[0].days.sort(function(a, b) {
+        addedMonth[0].days.push({ _id: day._id, date: day.date.toDate() });
+        addedMonth[0].days.sort(function (a, b) {
           return +new Date(a.date) - +new Date(b.date);
         });
       } else {
         let newDay = {
           year: day.date.toDate().getFullYear(),
           month: day.date.toDate().getMonth(),
-          days: [{ _id: day._id, date: day.date.toDate() }]
+          days: [{ _id: day._id, date: day.date.toDate() }],
         };
         newDaysArray.push(newDay);
       }
@@ -117,15 +127,14 @@ export class CalendarService {
     return newDaysArray;
   }
 
-
   private reloadCalendarCollection(): void {
-    this.daysCollection = this.afs.collection<Day>("days", ref =>
-      ref.where("uid", "==", this.afAuth.auth.currentUser.uid).orderBy('date')
+    this.daysCollection = this.afs.collection<Day>("days", (ref) =>
+      ref.where("uid", "==", this.afAuth.auth.currentUser.uid).orderBy("date")
     );
   }
 
   deleteCalendarDay$(dayId: string): Observable<any> {
-    this.dayDoc = this.afs.doc<Day>('days/' + dayId);
+    this.dayDoc = this.afs.doc<Day>("days/" + dayId);
     return from(this.dayDoc.delete());
   }
 }

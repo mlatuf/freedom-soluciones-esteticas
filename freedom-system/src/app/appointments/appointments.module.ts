@@ -1,40 +1,39 @@
-import { NgModule } from '@angular/core';
-import { ClarityModule } from '@clr/angular';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { CoreModule } from '../core/core.module';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { ClarityModule } from "@clr/angular";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { CoreModule } from "../core/core.module";
+import { RouterModule } from "@angular/router";
 
-import { 
-  MatButtonModule, 
-  MatIconModule, 
-  MatTableModule, 
-  MatPaginatorModule, 
-  MatSortModule, 
-  MatSelectModule, 
-  MatInputModule, 
-  MatDialogModule, 
-  MatDividerModule, 
-  MatCardModule, 
-  MatSlideToggleModule, 
+import {
+  MatButtonModule,
+  MatIconModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatSelectModule,
+  MatInputModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatCardModule,
+  MatSlideToggleModule,
   MatGridListModule,
-  MatListModule } from '@angular/material';
+  MatListModule,
+} from "@angular/material";
 
-import { AppointmentsComponent } from './components/appointments.component';
-import { StatusDescriptionPipe } from './pipes/status-description.pipe';
-import { TimeMinutesPipe } from './pipes/time-minutes.pipe';
-import { AppointmentDetailsComponent } from './components/appointment-details/appointment-details.component';
-import { AppointmentActionsComponent } from './components/appointment-actions/appointment-actions.component';
-import { AppointmentEndDayComponent } from './components/appointment-end-day/appointment-end-day.component';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
-import { AppointmentPaymentComponent } from './components/appointment-payment/appointment-payment.component';
-
+import { AppointmentsComponent } from "./components/appointments.component";
+import { StatusDescriptionPipe } from "./pipes/status-description.pipe";
+import { TimeMinutesPipe } from "./pipes/time-minutes.pipe";
+import { AppointmentDetailsComponent } from "./components/appointment-details/appointment-details.component";
+import { AppointmentActionsComponent } from "./components/appointment-actions/appointment-actions.component";
+import { AppointmentEndDayComponent } from "./components/appointment-end-day/appointment-end-day.component";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
+import { AppointmentPaymentComponent } from "./components/appointment-payment/appointment-payment.component";
 
 @NgModule({
   imports: [
     CommonModule,
-    ClarityModule,
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
@@ -53,9 +52,9 @@ import { AppointmentPaymentComponent } from './components/appointment-payment/ap
     MatSlideToggleModule,
     MatGridListModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
   ],
-  declarations: [ 
+  declarations: [
     AppointmentsComponent,
     AppointmentDetailsComponent,
     AppointmentActionsComponent,
@@ -63,9 +62,9 @@ import { AppointmentPaymentComponent } from './components/appointment-payment/ap
     // AreasDescriptionPipe,
     StatusDescriptionPipe,
     TimeMinutesPipe,
-    AppointmentPaymentComponent
+    AppointmentPaymentComponent,
   ],
   entryComponents: [AppointmentEndDayComponent, AppointmentPaymentComponent],
-  providers: [AngularFireAuthGuard]
+  providers: [AngularFireAuthGuard],
 })
-export class AppointmentsModule { }
+export class AppointmentsModule {}
