@@ -12,6 +12,7 @@ import { PatientDetailsComponent } from './patients/components/patient-details/p
 import { AreasComponent } from './areas/components/areas.component';
 import { AreaDetailsComponent } from './areas/components/area-details/area-details.component';
 import { RouterModule, Routes } from '@angular/router';
+import { CashRegisterComponent } from './cash-register/components/cash-register/cash-register.component';
 
 // const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 // const redirectLoggedInToCalendar = () => redirectLoggedInTo(['calendar']);
@@ -34,6 +35,8 @@ const routes: Routes = [
   { path: 'areas', component: AreasComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Zonas' }},
   { path: 'area/details', component: AreaDetailsComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Nueva Zona' }},
   { path: 'area/details/:id', component: AreaDetailsComponent, canActivate: [AngularFireAuthGuard],data: { title: 'Detalles de la zona' }},
+
+  { path: 'cash-register', component: CashRegisterComponent, canActivate: [AngularFireAuthGuard], data: { title: 'Cajas' }},
 ];
 
 @NgModule({
