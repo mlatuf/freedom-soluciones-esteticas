@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { ClarityModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -23,13 +22,13 @@ import {
 } from "@angular/material";
 
 import { AppointmentsComponent } from "./components/appointments.component";
-import { StatusDescriptionPipe } from "./pipes/status-description.pipe";
-import { TimeMinutesPipe } from "./pipes/time-minutes.pipe";
 import { AppointmentDetailsComponent } from "./components/appointment-details/appointment-details.component";
 import { AppointmentActionsComponent } from "./components/appointment-actions/appointment-actions.component";
 import { AppointmentEndDayComponent } from "./components/appointment-end-day/appointment-end-day.component";
-import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { AppointmentPaymentComponent } from "./components/appointment-payment/appointment-payment.component";
+import { StatusDescriptionPipe } from "./pipes/status-description.pipe";
+import { TimeMinutesPipe } from "./pipes/time-minutes.pipe";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 
 @NgModule({
   imports: [
@@ -59,7 +58,6 @@ import { AppointmentPaymentComponent } from "./components/appointment-payment/ap
     AppointmentDetailsComponent,
     AppointmentActionsComponent,
     AppointmentEndDayComponent,
-    // AreasDescriptionPipe,
     StatusDescriptionPipe,
     TimeMinutesPipe,
     AppointmentPaymentComponent,
