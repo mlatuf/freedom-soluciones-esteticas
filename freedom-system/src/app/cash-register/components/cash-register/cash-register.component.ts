@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
+import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
@@ -22,6 +23,7 @@ export class CashRegisterComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
+    private router: Router,
     private aplicationState: ApplicationStateService,
     private cashRegisterService: CashRegisterService,
     private spinner: NgxSpinnerService,
@@ -49,5 +51,9 @@ export class CashRegisterComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+  }
+
+  goToDayMovements(day: string): void {
+    this.router.navigate(["/day-movements", day]);
   }
 }

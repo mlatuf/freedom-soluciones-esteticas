@@ -18,9 +18,11 @@ import {
 import { CashRegisterComponent } from "./components/cash-register/cash-register.component";
 import { CoreModule } from "../core/core.module";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
+import { DayMovementsComponent } from './components/day-movements/day-movements/day-movements.component';
+import { MovementDetailsComponent } from './components/movement-details/movement-details/movement-details.component';
 
 @NgModule({
-  declarations: [CashRegisterComponent],
+  declarations: [CashRegisterComponent, DayMovementsComponent, MovementDetailsComponent],
   imports: [
     CommonModule,
     CoreModule,

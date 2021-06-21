@@ -21,8 +21,9 @@
           mat-stroked-button
           color="primary"
           *ngFor="let day of day.days"
+          (click)="goToDayMovements(day._id)"
         >
-          {{ day.date.getDate() }}
+          {{ day.date }}
         </button>
       </td>
     </ng-container>
@@ -75,8 +76,9 @@
               mat-stroked-button
               color="primary"
               *ngFor="let day of day.days"
+              (click)="goToDayMovements(day._id)"
             >
-              {{ day.date.getDate() }}
+              {{ day.date }}
             </button>
           </div>
         </div>
