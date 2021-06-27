@@ -13,8 +13,7 @@ import { AreasComponent } from "./areas/components/areas.component";
 import { AreaDetailsComponent } from "./areas/components/area-details/area-details.component";
 import { RouterModule, Routes } from "@angular/router";
 import { CashRegisterComponent } from "./cash-register/components/cash-register/cash-register.component";
-import { DayMovementsComponent } from "./cash-register/components/day-movements/day-movements/day-movements.component";
-import { MovementDetailsComponent } from "./cash-register/components/day-movements/movement-details/movement-details/movement-details.component";
+import { DayMovementsComponent } from "./cash-register/components/day-movements/day-movements.component";
 
 // const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 // const redirectLoggedInToCalendar = () => redirectLoggedInTo(['calendar']);
@@ -103,18 +102,6 @@ const routes: Routes = [
     component: DayMovementsComponent,
     canActivate: [AngularFireAuthGuard],
     data: { title: "Movimientos del dia" },
-  },
-  {
-    path: "day-movements/details",
-    component: MovementDetailsComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { title: "Nuevo movimient" },
-  },
-  {
-    path: "day-movements/details/:id",
-    component: MovementDetailsComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { title: "Editar movimient" },
   },
 ];
 

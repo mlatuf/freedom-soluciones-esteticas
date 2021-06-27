@@ -5,6 +5,7 @@ import {
   AngularFirestoreCollection,
   AngularFirestore,
   AngularFirestoreDocument,
+  DocumentReference,
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Day, Movement } from "../classes";
@@ -67,7 +68,7 @@ export class CashRegisterService {
     );
   }
 
-  saveMovement$(movement: Movement) {
+  saveMovement$(movement: Movement): Observable<DocumentReference | void> {
     if (movement._id) {
       this.movementDoc = this.afs.doc<Movement>(
         "cash-movements/" + movement._id
@@ -76,6 +77,11 @@ export class CashRegisterService {
       return from(this.movementDoc.update(movement));
     }
     return from(this.movementsCollection.add({ ...movement }));
+  }
+
+  deleteMovement$(movementId: string): Observable<void> {
+    const movementDoc = this.afs.doc<Movement>("cash-movements/" + movementId);
+    return from(movementDoc.delete());
   }
 
   private extractData(data: any): Day[] {

@@ -17,6 +17,8 @@ import { Movement } from "src/app/cash-register/classes/movement";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
+import { MovementDetailsComponent } from "./movement-details/movement-details.component";
+import { ModalComponent } from "src/app/core/components/modal/modal.component";
 
 @Component({
   selector: "app-day-movements",
@@ -26,6 +28,7 @@ import { ApplicationStateService } from "src/app/core/services/aplication-state/
 export class DayMovementsComponent implements OnInit {
   pageTitle: string;
   movements: Movement[];
+  movement: Movement;
   selectedDay: string;
   mobileView: boolean;
 
@@ -47,6 +50,7 @@ export class DayMovementsComponent implements OnInit {
     this.mobileView = this.aplicationStateService.getIsMobileResolution();
     this.selectedDay = this.route.snapshot.paramMap.get("day");
     this.movements = [];
+    this.movement = new Movement();
 
     this.getMovementsList();
   }
@@ -66,6 +70,81 @@ export class DayMovementsComponent implements OnInit {
         this.alertService.error(error);
       }
     );
+  }
+
+  private saveMovement(): void {
+    this.spinner.show();
+    this.cashRegisterService.saveMovement$(this.movement).subscribe({
+      next(response) {
+        this.movement = response;
+        this.spinner.hide();
+      },
+      error(error) {
+        this.spinner.hide();
+        this.alertService.error(error);
+      },
+    });
+  }
+
+  public editMovement(movementId: string = null): void {
+    const selectedMovement = this.movements.find(
+      (movement) => movement._id === movementId
+    );
+
+    const selectedType = selectedMovement
+      ? this.isIncome(selectedMovement)
+        ? 1
+        : 2
+      : 1;
+    const selectedDetails = selectedMovement ? selectedMovement.details : "";
+    const selectedAmount = selectedMovement
+      ? Math.abs(selectedMovement.amount)
+      : 0;
+    const dialogRef = this.dialog.open(MovementDetailsComponent, {
+      data: {
+        title: "Editar movimiento",
+        details: selectedDetails,
+        amount: selectedAmount,
+        type: selectedType,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.movement.amount =
+          result.type === 2
+            ? -Math.abs(result.amount)
+            : Math.abs(result.amount);
+        this.movement.details = result.details;
+        this.movement.day = this.selectedDay;
+        this.saveMovement();
+      }
+    });
+  }
+
+  public deleteMovement(movementId: string): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: "Eliminar movimiento",
+        text: "Está seguro que desea eliminar el movimiento? Esta accion es irreversible",
+        isConfirmationModal: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.spinner.show();
+        this.cashRegisterService.deleteMovement$(movementId).subscribe({
+          next(response) {
+            this.spinner.hide();
+          },
+          error(error) {
+            this.spinner.hide();
+            this.alertService.error(error);
+          },
+        });
+      }
+    });
   }
 
   public isIncome(movement: Movement): boolean {

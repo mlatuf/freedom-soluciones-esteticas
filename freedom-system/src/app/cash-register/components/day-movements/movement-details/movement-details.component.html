@@ -1,1 +1,61 @@
-<p>movement-details works!</p>
+<h1 mat-dialog-title>
+  {{ data.title }}
+</h1>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <form
+    class="movement-form"
+    [formGroup]="movementForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="form-content">
+      <section class="form-block">
+        <mat-form-field>
+          <input
+            matInput
+            type="input"
+            placeholder="Detalles"
+            formControlName="details"
+          />
+          <mat-error *ngIf="movementForm.get('details').hasError('required')"
+            >Este campo no puede estar vacio</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Importe"
+            type="input"
+            formControlName="amount"
+            required
+          />
+          <span matPrefix>$&nbsp;</span>
+          <span matSuffix>.00</span>
+          <mat-error *ngIf="movementForm.get('amount').hasError('required')"
+            >Este campo no puede estar vacio</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Tipo de movimiento</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of types" [value]="type.key">
+              {{ type.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="onNoClick()">Cancelar</button>
+  <button
+    mat-stroked-button
+    color="primary"
+    [mat-dialog-close]="true"
+    (click)="onSubmit()"
+    [disabled]="!movementForm.dirty || !movementForm.valid"
+  >
+    Aceptar
+  </button>
+</div>

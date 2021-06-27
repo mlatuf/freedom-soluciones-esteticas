@@ -1,6 +1,6 @@
 <page-title>
   <div class="title-buttons">
-    <button mat-stroked-button color="primary" (click)="goToMovementDetails()">
+    <button mat-stroked-button color="primary" (click)="editMovement()">
       <mat-icon>add</mat-icon>
       <span [hidden]="mobileView">&nbsp;&nbsp;Nuevo Movimiento</span>
     </button>
@@ -60,11 +60,16 @@
           mat-icon-button
           aria-label="Editar"
           color="primary"
-          (click)="goToMovementDetails(movement._id)"
+          (click)="editMovement(movement._id)"
         >
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button aria-label="Eliminar" color="warn">
+        <button
+          mat-icon-button
+          aria-label="Eliminar"
+          color="warn"
+          (click)="deleteMovement(movement._id)"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </td>

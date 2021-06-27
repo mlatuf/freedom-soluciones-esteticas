@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatButtonModule,
   MatIconModule,
@@ -13,19 +14,26 @@ import {
   MatSortModule,
   MatDividerModule,
   MatDialogModule,
+  MatSelectModule,
 } from "@angular/material";
 
-import { CashRegisterComponent } from "./components/cash-register/cash-register.component";
 import { CoreModule } from "../core/core.module";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
-import { DayMovementsComponent } from './components/day-movements/day-movements/day-movements.component';
-import { MovementDetailsComponent } from './components/movement-details/movement-details/movement-details.component';
+import { CashRegisterComponent } from "./components/cash-register/cash-register.component";
+import { DayMovementsComponent } from "./components/day-movements/day-movements.component";
+import { MovementDetailsComponent } from "./components/day-movements/movement-details/movement-details.component";
 
 @NgModule({
-  declarations: [CashRegisterComponent, DayMovementsComponent, MovementDetailsComponent],
+  declarations: [
+    CashRegisterComponent,
+    DayMovementsComponent,
+    MovementDetailsComponent,
+  ],
   imports: [
     CommonModule,
     CoreModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
@@ -38,7 +46,9 @@ import { MovementDetailsComponent } from './components/movement-details/movement
     MatSortModule,
     MatDividerModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   providers: [AngularFireAuthGuard],
+  entryComponents: [MovementDetailsComponent],
 })
 export class CashRegisterModule {}
