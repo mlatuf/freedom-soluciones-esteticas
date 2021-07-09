@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ClarityModule } from "@clr/angular";
 import { RoutingModule } from "../routing.module";
 
 import {
@@ -26,6 +25,7 @@ import { LoginComponent } from "./components/login/login/login.component";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AreasDescriptionPipe } from "./pipes/areas-description.pipe";
+import { MonthNamePipe } from "./pipes/month-name.pipe";
 
 @NgModule({
   declarations: [
@@ -35,12 +35,14 @@ import { AreasDescriptionPipe } from "./pipes/areas-description.pipe";
     LoginComponent,
     ModalComponent,
     AreasDescriptionPipe,
+    MonthNamePipe,
   ],
   exports: [
     PageTitleComponent,
     AlertsComponent,
     MenuComponent,
     AreasDescriptionPipe,
+    MonthNamePipe,
   ],
   imports: [
     CommonModule,

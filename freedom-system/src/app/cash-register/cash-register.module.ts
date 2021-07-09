@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-
 import {
   MatButtonModule,
   MatIconModule,
@@ -15,21 +14,26 @@ import {
   MatSortModule,
   MatDividerModule,
   MatDialogModule,
+  MatSelectModule,
 } from "@angular/material";
 
 import { CoreModule } from "../core/core.module";
-
-import { CalendarComponent } from "./components/calendar.component";
-import { CalendarHistoryComponent } from "./components/calendar-history/calendar-history.component";
-
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
+import { CashRegisterComponent } from "./components/cash-register/cash-register.component";
+import { DayMovementsComponent } from "./components/day-movements/day-movements.component";
+import { MovementDetailsComponent } from "./components/day-movements/movement-details/movement-details.component";
 
 @NgModule({
+  declarations: [
+    CashRegisterComponent,
+    DayMovementsComponent,
+    MovementDetailsComponent,
+  ],
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
@@ -42,9 +46,9 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
     MatSortModule,
     MatDividerModule,
     MatDialogModule,
+    MatSelectModule,
   ],
-  declarations: [CalendarComponent, CalendarHistoryComponent],
-  entryComponents: [CalendarHistoryComponent],
   providers: [AngularFireAuthGuard],
+  entryComponents: [MovementDetailsComponent],
 })
-export class CalendarModule {}
+export class CashRegisterModule {}

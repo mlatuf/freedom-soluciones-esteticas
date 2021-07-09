@@ -23,7 +23,6 @@ import {
 
 import { environment } from "../environments/environment";
 
-import { ClarityModule } from "@clr/angular";
 import { NgxSpinnerModule } from "ngx-spinner";
 
 import { CoreModule } from "./core/core.module";
@@ -35,6 +34,7 @@ import { AppointmentsModule } from "./appointments/appointments.module";
 import { RouterModule } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { ModalComponent } from "./core/components/modal/modal.component";
+import { CashRegisterModule } from "./cash-register/cash-register.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -63,6 +63,7 @@ import { ModalComponent } from "./core/components/modal/modal.component";
     CalendarModule,
     PatientsModule,
     AppointmentsModule,
+    CashRegisterModule,
   ],
   bootstrap: [AppComponent],
   providers: [AngularFireAuthGuard],

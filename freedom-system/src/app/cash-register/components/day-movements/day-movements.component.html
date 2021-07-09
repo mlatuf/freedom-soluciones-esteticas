@@ -1,0 +1,85 @@
+<page-title>
+  <div class="title-buttons">
+    <button mat-stroked-button color="primary" (click)="editMovement()">
+      <mat-icon>add</mat-icon>
+      <span [hidden]="mobileView">&nbsp;&nbsp;Nuevo Movimiento</span>
+    </button>
+  </div>
+</page-title>
+
+<div class="mat-elevation-z1 table-container">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let movement">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="movement type outcome"
+          *ngIf="!isIncome(movement)"
+          color="warn"
+          >arrow_back</mat-icon
+        >
+        <mat-icon
+          aria-hidden="false"
+          aria-label="movement type income"
+          *ngIf="isIncome(movement)"
+          color="primary"
+          >arrow_forward</mat-icon
+        >
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Details Column -->
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef>Descripción</th>
+      <td mat-cell *matCellDef="let movement">{{ movement.details }}</td>
+      <td mat-footer-cell *matFooterCellDef>Total</td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Monto</th>
+      <td mat-cell *matCellDef="let movement">
+        {{ movement.amount | currency }}
+      </td>
+      <td
+        mat-footer-cell
+        *matFooterCellDef
+        [ngClass]="{ warn: getTotalAmount() < 0 }"
+      >
+        {{ getTotalAmount() | currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let movement">
+        <button
+          mat-icon-button
+          aria-label="Editar"
+          color="primary"
+          (click)="editMovement(movement._id)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          aria-label="Eliminar"
+          color="warn"
+          (click)="deleteMovement(movement._id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let movement; columns: displayedColumns"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true"></mat-paginator>
+</div>

@@ -102,21 +102,23 @@ export class CalendarService {
 
   private extractData(data: any) {
     let newDaysArray = [];
+
+    const isPresent = (day, selectedDay) =>
+      day.year === selectedDay.getFullYear() &&
+      day.month === selectedDay.getMonth();
+
     data.forEach((day) => {
-      let addedMonth = newDaysArray.filter((obj) => {
-        let selected = day.date.toDate();
-        return (
-          obj.year === selected.getFullYear() &&
-          obj.month === selected.getMonth()
-        );
-      });
-      if (addedMonth.length > 0) {
-        addedMonth[0].days.push({ _id: day._id, date: day.date.toDate() });
-        addedMonth[0].days.sort(function (a, b) {
+      const selected = day.date.toDate();
+      const addedMonth = newDaysArray.find((newDay) =>
+        isPresent(newDay, selected)
+      );
+      if (addedMonth) {
+        addedMonth.days.push({ _id: day._id, date: day.date.toDate() });
+        addedMonth.days.sort(function (a, b) {
           return +new Date(a.date) - +new Date(b.date);
         });
       } else {
-        let newDay = {
+        const newDay = {
           year: day.date.toDate().getFullYear(),
           month: day.date.toDate().getMonth(),
           days: [{ _id: day._id, date: day.date.toDate() }],

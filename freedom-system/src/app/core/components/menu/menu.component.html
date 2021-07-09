@@ -2,10 +2,18 @@
   <mat-toolbar-row *ngIf="!mobileView">
     <span>Freedom System</span>
     <span class="spacer"></span>
-    <button mat-button routerLink="/calendar" routerLinkActive="active">Calendario</button>
-    <button mat-button routerLink="/patients" routerLinkActive="active">Pacientes</button>
-    <button mat-button routerLink="/areas" routerLinkActive="active">Zonas</button>
-    <button mat-button routerLinkActive="active" disabled>Caja</button>
+    <button mat-button routerLink="/calendar" routerLinkActive="active">
+      Calendario
+    </button>
+    <button mat-button routerLink="/patients" routerLinkActive="active">
+      Pacientes
+    </button>
+    <button mat-button routerLink="/areas" routerLinkActive="active">
+      Zonas
+    </button>
+    <button mat-button routerLink="/cash-register" routerLinkActive="active">
+      Cajas
+    </button>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -22,13 +30,21 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu" class="mobile-menu">
-      <button mat-button routerLink="/calendar" routerLinkActive="active">Calendario</button>
+      <button mat-button routerLink="/calendar" routerLinkActive="active">
+        Calendario
+      </button>
       <mat-divider></mat-divider>
-      <button mat-button routerLink="/patients" routerLinkActive="active">Pacientes</button>
+      <button mat-button routerLink="/patients" routerLinkActive="active">
+        Pacientes
+      </button>
       <mat-divider></mat-divider>
-      <button mat-button routerLink="/areas" routerLinkActive="active">Zonas</button>
+      <button mat-button routerLink="/areas" routerLinkActive="active">
+        Zonas
+      </button>
       <mat-divider></mat-divider>
-      <button mat-button routerLinkActive="active" disabled>Caja</button>
+      <button mat-button routerLink="/cash-register" routerLinkActive="active">
+        Cajas
+      </button>
       <mat-divider></mat-divider>
       <button mat-button (click)="openModal()">Salir</button>
     </mat-menu>
