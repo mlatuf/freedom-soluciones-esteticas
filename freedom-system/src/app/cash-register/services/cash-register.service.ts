@@ -8,7 +8,7 @@ import {
   DocumentReference,
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { Day, Movement } from "../classes";
+import { Day, Movement } from "../models";
 
 interface IDay {
   _id: string;

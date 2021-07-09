@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, from } from "rxjs";
 import { map, retry } from "rxjs/operators";
-import { Day } from "../classes/day";
+import { Day } from "../models/day";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,

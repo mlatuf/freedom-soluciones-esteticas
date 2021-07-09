@@ -11,19 +11,19 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { AppointmentService } from "src/app/appointments/services/appointment.service";
 import { AreaService } from "src/app/areas/services/area.service";
-import { Area } from "src/app/areas/classes/area";
-import { Patient } from "src/app/patients/classes/patient";
+import { Area } from "src/app/areas/models/area";
+import { Patient } from "src/app/patients/models/patient";
 import { PatientService } from "src/app/patients/services/patient.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Appointment } from "src/app/appointments/classes/appointment";
+import { Appointment } from "src/app/appointments/models/appointment";
 import { ModalComponent } from "src/app/core/components/modal/modal.component";
 import { CalendarService } from "src/app/calendar/services/calendar.service";
-import { Day } from "src/app/calendar/classes/day";
-import { Time } from "src/app/appointments/classes/time";
-import { TimeSlot } from "src/app/appointments/classes/timeSlot";
+import { Day } from "src/app/calendar/models/day";
+import { Time } from "src/app/appointments/models/time";
+import { TimeSlot } from "src/app/appointments/models/timeSlot";
 import { MatDialog } from "@angular/material";
 import { getPayments, PaymentList } from "../../constants/payments.enum";
-import { PaymentMethod, Status } from "../../classes/index";
+import { PaymentMethod, Status } from "../../models/index";
 import {
   getStatusByKey,
   getStatusesForDetails,
@@ -323,8 +323,7 @@ export class AppointmentDetailsComponent implements OnInit {
       const dialogRef = this.dialog.open(ModalComponent, {
         data: {
           title: "Cancelar edicion",
-          text:
-            "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
+          text: "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
           isConfirmationModal: true,
         },
       });

@@ -15,9 +15,9 @@ import {
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-import { PaymentMethod } from "../../classes/paymentMethod";
+import { PaymentMethod } from "../../models/paymentMethod";
 import { getPayments } from "../../constants/payments.enum";
-import { Month } from "src/app/core/classes/month";
+import { Month } from "src/app/core/models/month";
 import { getMonths } from "src/app/core/constants/months.enum";
 
 export interface ModalData {

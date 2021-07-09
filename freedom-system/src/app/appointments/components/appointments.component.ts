@@ -9,9 +9,9 @@ import {
   trigger,
 } from "@angular/animations";
 
-import { Appointment } from "src/app/appointments/classes/appointment";
-import { Area } from "src/app/areas/classes/area";
-import { Day } from "src/app/calendar/classes/day";
+import { Appointment } from "src/app/appointments/models/appointment";
+import { Area } from "src/app/areas/models/area";
+import { Day } from "src/app/calendar/models/day";
 
 import { AppointmentService } from "src/app/appointments/services/appointment.service";
 import { CalendarService } from "src/app/calendar/services/calendar.service";
@@ -27,9 +27,9 @@ import {
 import { PaymentList, Payments } from "../constants/payments.enum";
 import { AppointmentPaymentComponent } from "./appointment-payment/appointment-payment.component";
 import { PatientService } from "src/app/patients/services/patient.service";
-import { Movement } from "src/app/cash-register/classes";
+import { Movement } from "src/app/cash-register/models";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
-import { Taking } from "../classes";
+import { Taking } from "../models";
 
 @Component({
   selector: "appointments",

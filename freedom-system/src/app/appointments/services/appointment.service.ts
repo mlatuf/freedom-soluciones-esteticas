@@ -2,16 +2,16 @@ import { Injectable } from "@angular/core";
 import { Observable, from } from "rxjs";
 import { map, retry } from "rxjs/operators";
 
-import { Appointment } from "src/app/appointments/classes/appointment";
-import { Time } from "src/app/appointments/classes/time";
-import { TimeSlot } from "src/app/appointments/classes/timeSlot";
+import { Appointment } from "src/app/appointments/models/appointment";
+import { Time } from "src/app/appointments/models/time";
+import { TimeSlot } from "src/app/appointments/models/timeSlot";
 
 import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-import { Patient } from "src/app/patients/classes/patient";
+import { Patient } from "src/app/patients/models/patient";
 
 @Injectable({
   providedIn: "root",

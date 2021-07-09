@@ -8,9 +8,9 @@ import {
 } from "@angular/animations";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-import { Appointment } from "../../classes/appointment";
+import { Appointment } from "../../models/appointment";
 import { getPayments } from "../../constants/payments.enum";
-import { Taking } from "../../classes/taking";
+import { Taking } from "../../models/taking";
 
 export interface ModalData {
   title: string;

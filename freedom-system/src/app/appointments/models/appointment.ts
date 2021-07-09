@@ -1,5 +1,5 @@
-import { Area } from "src/app/areas/classes/area";
-import { Patient } from "src/app/patients/classes/patient";
+import { Area } from "src/app/areas/models/area";
+import { Patient } from "src/app/patients/models/patient";
 
 export class Appointment {
   _id: string;

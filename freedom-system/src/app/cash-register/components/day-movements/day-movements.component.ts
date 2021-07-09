@@ -13,7 +13,7 @@ import {
 } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
-import { Movement } from "src/app/cash-register/classes/movement";
+import { Movement } from "src/app/cash-register/models/movement";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";

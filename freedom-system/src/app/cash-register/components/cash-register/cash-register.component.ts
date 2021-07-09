@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
-import { Day } from "../../classes/day";
+import { Day } from "../../models/day";
 import { CashRegisterService } from "../../services/cash-register.service";
 
 @Component({

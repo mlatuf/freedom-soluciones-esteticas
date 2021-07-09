@@ -8,14 +8,14 @@ import {
 import { MatDialog } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { Patient } from "../../../patients/classes/patient";
+import { Patient } from "../../models/patient";
 import { PatientService } from "../../../patients/services/patient.service";
 import { AlertService } from "../../../core/services/alert/alert.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ApplicationStateService } from "../../../core/services/aplication-state/aplication-state.service";
 import { ModalComponent } from "src/app/core/components/modal/modal.component";
 import { getMonthByKey, getMonths } from "src/app/core/constants/months.enum";
-import { Month } from "src/app/core/classes/month";
+import { Month } from "src/app/core/models/month";
 
 @Component({
   selector: "patient-details",
@@ -80,8 +80,9 @@ export class PatientDetailsComponent implements OnInit {
     const nextSessionDate = this.patient.nextSession
       ? new Date(this.patient.nextSession)
       : new Date();
-    const nextSessionMonth = getMonthByKey(nextSessionDate.getMonth() + 1)
-      .label;
+    const nextSessionMonth = getMonthByKey(
+      nextSessionDate.getMonth() + 1
+    ).label;
     const nextSessionYear = nextSessionDate.getFullYear();
 
     this.patientForm = this.fb.group({
@@ -229,8 +230,7 @@ export class PatientDetailsComponent implements OnInit {
       const dialogRef = this.dialog.open(ModalComponent, {
         data: {
           title: "Cancelar edicion",
-          text:
-            "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
+          text: "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
           isConfirmationModal: true,
         },
       });

@@ -13,7 +13,7 @@ import {
   trigger,
 } from "@angular/animations";
 
-import { Patient } from "../classes/patient";
+import { Patient } from "../models/patient";
 import { PatientService } from "../services/patient.service";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -99,8 +99,7 @@ export class PatientsComponent implements OnInit {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar paciente " + patientName,
-        text:
-          "Esta seguro que desea eliminar el paciente? Se perderan todos los datos del mismo y su historial de sesiones",
+        text: "Esta seguro que desea eliminar el paciente? Se perderan todos los datos del mismo y su historial de sesiones",
         isConfirmationModal: true,
       },
     });
