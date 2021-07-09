@@ -100,6 +100,10 @@ export class DayMovementsComponent implements OnInit {
     const selectedAmount = selectedMovement
       ? Math.abs(selectedMovement.amount)
       : 0;
+
+    const createdAt = selectedMovement
+      ? selectedMovement.createdAt
+      : new Date();
     const dialogRef = this.dialog.open(MovementDetailsComponent, {
       data: {
         title: "Editar movimiento",
@@ -117,6 +121,7 @@ export class DayMovementsComponent implements OnInit {
             : Math.abs(result.amount);
         this.movement.details = result.details;
         this.movement.day = this.selectedDay;
+        this.movement.createdAt = createdAt;
         this.saveMovement();
       }
     });

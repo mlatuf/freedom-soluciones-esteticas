@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { from, Observable } from "rxjs";
-import { map, retry } from "rxjs/operators";
+import { map, retry, tap } from "rxjs/operators";
 import {
   AngularFirestoreCollection,
   AngularFirestore,
@@ -39,7 +39,7 @@ export class CashRegisterService {
         map((actions) =>
           actions
             .filter((a) => {
-              return a.payload.doc.data().date.toDate() <= currentDate;
+              return a.payload.doc.data().date.toDate() >= currentDate;
             })
             .map((a) => {
               const _id = a.payload.doc.id;
@@ -64,7 +64,13 @@ export class CashRegisterService {
           const _id = a.payload.doc.id;
           return { _id, ...data };
         })
-      )
+      ),
+      tap((results) => {
+        results.sort(
+          (movementA, movementB) =>
+            movementB.createdAt.toDate() - movementA.createdAt.toDate()
+        );
+      })
     );
   }
 
@@ -75,6 +81,13 @@ export class CashRegisterService {
       );
       delete movement._id;
       return from(this.movementDoc.update(movement));
+    }
+    delete movement._id;
+    if (!this.movementsCollection) {
+      this.movementsCollection = this.afs.collection<Movement>(
+        "cash-movements",
+        (ref) => ref.where("day", "==", movement.day)
+      );
     }
     return from(this.movementsCollection.add({ ...movement }));
   }

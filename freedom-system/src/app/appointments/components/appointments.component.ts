@@ -24,9 +24,12 @@ import {
   getStatusByKey,
   StatusList,
 } from "src/app/appointments/constants/status.enum";
-import { PaymentList } from "../constants/payments.enum";
+import { PaymentList, Payments } from "../constants/payments.enum";
 import { AppointmentPaymentComponent } from "./appointment-payment/appointment-payment.component";
 import { PatientService } from "src/app/patients/services/patient.service";
+import { Movement } from "src/app/cash-register/classes";
+import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
+import { Taking } from "../classes";
 
 @Component({
   selector: "appointments",
@@ -76,6 +79,7 @@ export class AppointmentsComponent implements OnInit {
     private appointmentService: AppointmentService,
     private patientService: PatientService,
     private calendarService: CalendarService,
+    private cashRegisterService: CashRegisterService,
     public dialog: MatDialog
   ) {
     this.openPaymentModal = this.openConfirmationModal = false;
@@ -141,16 +145,16 @@ export class AppointmentsComponent implements OnInit {
     this.spinner.show();
     this.patientService
       .savePatient$(this.selectedAppointment.patient)
-      .subscribe(
-        (response) => {
+      .subscribe({
+        next(response) {
           this.selectedAppointment.patient = response;
           this.spinner.hide();
         },
-        (error) => {
+        error(error) {
           this.spinner.hide();
           this.alertService.error(error);
-        }
-      );
+        },
+      });
   }
 
   public getAppointmentRowClass(status: number) {
@@ -168,15 +172,15 @@ export class AppointmentsComponent implements OnInit {
       case StatusList.Terminated.key:
         this.appointmentService
           .deleteAppointment$(this.selectedAppointment._id)
-          .subscribe(
-            (response) => {
+          .subscribe({
+            next() {
               this.spinner.hide();
             },
-            (error) => {
+            error(error) {
               this.spinner.hide();
               this.alertService.error(error);
-            }
-          );
+            },
+          });
         break;
       default:
         this.selectedAppointment.status = appointmentChanged.newStatus;
@@ -199,7 +203,8 @@ export class AppointmentsComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      this.appointmentsDate.isFinished = result;
+      this.appointmentsDate.isFinished = result.finished;
+      this.createEndDayMovement(result.takings);
     });
   }
 
@@ -224,8 +229,7 @@ export class AppointmentsComponent implements OnInit {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar dia completo",
-        text:
-          "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        text: "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
         isConfirmationModal: true,
       },
     });
@@ -234,29 +238,31 @@ export class AppointmentsComponent implements OnInit {
       if (result) {
         this.appointments.forEach((appointment) => {
           this.spinner.show();
-          this.appointmentService.deleteAppointment$(appointment._id).subscribe(
-            (response) => {
-              this.spinner.hide();
-            },
-            (error) => {
-              this.spinner.hide();
-              this.alertService.error(error);
-            }
-          );
+          this.appointmentService
+            .deleteAppointment$(appointment._id)
+            .subscribe({
+              next() {
+                this.spinner.hide();
+              },
+              error(error) {
+                this.spinner.hide();
+                this.alertService.error(error);
+              },
+            });
         });
         this.spinner.show();
         this.calendarService
           .deleteCalendarDay$(this.appointmentsDate._id)
-          .subscribe(
-            (response) => {
+          .subscribe({
+            next() {
               this.spinner.hide();
               this.router.navigate(["/calendar"]);
             },
-            (error) => {
+            error(error) {
               this.spinner.hide();
               this.alertService.error(error);
-            }
-          );
+            },
+          });
       }
     });
   }
@@ -265,8 +271,7 @@ export class AppointmentsComponent implements OnInit {
     const dialogRef = this.dialog.open(ModalComponent, {
       data: {
         title: "Eliminar turno",
-        text:
-          "Está seguro que desea eliminar el turno? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        text: "Está seguro que desea eliminar el turno? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
         isConfirmationModal: true,
       },
     });
@@ -274,15 +279,15 @@ export class AppointmentsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.spinner.show();
-        this.appointmentService.deleteAppointment$(appointmentId).subscribe(
-          (response) => {
+        this.appointmentService.deleteAppointment$(appointmentId).subscribe({
+          next() {
             this.spinner.hide();
           },
-          (error) => {
+          error(error) {
             this.spinner.hide();
             this.alertService.error(error);
-          }
-        );
+          },
+        });
       }
     });
   }
@@ -310,5 +315,34 @@ export class AppointmentsComponent implements OnInit {
 
   public editionDisabled(status: number): Boolean {
     return status === StatusList.Ended.key;
+  }
+
+  private createEndDayMovement(takings: Taking[]): void {
+    const endDayMovements = takings
+      .filter((taking) => taking.value != 0)
+      .map((taking) => ({
+        _id: null,
+        day: this.appointmentsDate._id,
+        amount:
+          taking.label != Payments.nonPayment
+            ? Math.abs(taking.value)
+            : -Math.abs(taking.value),
+        details: `Total ${taking.label} del dia`,
+        createdAt: new Date(),
+      }));
+
+    endDayMovements.forEach((movement) => {
+      this.spinner.show();
+      this.cashRegisterService.saveMovement$(movement).subscribe(
+        (response) => {
+          this.spinner.hide();
+          this.router.navigate(["/day-movements", this.appointmentsDate._id]);
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        }
+      );
+    });
   }
 }

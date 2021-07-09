@@ -1,5 +1,5 @@
 export class Area {
-  _id: number;
+  _id: string;
   description: string;
   duration: number;
   price: number;

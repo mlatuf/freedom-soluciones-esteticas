@@ -3,4 +3,5 @@ export class Movement {
   day: string;
   amount: number;
   details: string;
+  createdAt: any;
 }
