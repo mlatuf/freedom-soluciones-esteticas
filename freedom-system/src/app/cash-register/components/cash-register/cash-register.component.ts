@@ -39,7 +39,7 @@ export class CashRegisterComponent implements OnInit {
   private getCashRegisters() {
     this.spinner.show();
     this.cashRegisterService.getCashRegisterDays$().subscribe(
-      (response) => {
+      (response: Day[]) => {
         this.cashRegisters = response;
         this.dataSource = new MatTableDataSource(this.cashRegisters);
         this.dataSource.paginator = this.paginator;

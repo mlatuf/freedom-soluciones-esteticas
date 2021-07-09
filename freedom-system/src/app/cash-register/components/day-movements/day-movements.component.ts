@@ -58,7 +58,7 @@ export class DayMovementsComponent implements OnInit {
   private getMovementsList() {
     this.spinner.show();
     this.cashRegisterService.getMovements$(this.selectedDay).subscribe(
-      (response) => {
+      (response: Movement[]) => {
         this.movements = response;
         this.dataSource = new MatTableDataSource(this.movements);
         this.dataSource.paginator = this.paginator;
@@ -74,16 +74,15 @@ export class DayMovementsComponent implements OnInit {
 
   private saveMovement(): void {
     this.spinner.show();
-    this.cashRegisterService.saveMovement$(this.movement).subscribe({
-      next(response) {
-        this.movement = response;
+    this.cashRegisterService.saveMovement$(this.movement).subscribe(
+      () => {
         this.spinner.hide();
       },
-      error(error) {
+      (error) => {
         this.spinner.hide();
         this.alertService.error(error);
-      },
-    });
+      }
+    );
   }
 
   public editMovement(movementId: string = null): void {
@@ -139,15 +138,15 @@ export class DayMovementsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.spinner.show();
-        this.cashRegisterService.deleteMovement$(movementId).subscribe({
-          next(response) {
+        this.cashRegisterService.deleteMovement$(movementId).subscribe(
+          () => {
             this.spinner.hide();
           },
-          error(error) {
+          (error) => {
             this.spinner.hide();
             this.alertService.error(error);
-          },
-        });
+          }
+        );
       }
     });
   }

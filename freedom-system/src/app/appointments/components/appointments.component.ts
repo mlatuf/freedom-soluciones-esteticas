@@ -30,6 +30,7 @@ import { PatientService } from "src/app/patients/services/patient.service";
 import { Movement } from "src/app/cash-register/models";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
 import { Taking } from "../models";
+import { Patient } from "src/app/patients/models/patient";
 
 @Component({
   selector: "appointments",
@@ -109,11 +110,11 @@ export class AppointmentsComponent implements OnInit {
     );
   }
 
-  private getAppointmentsList(selectedDay): void {
+  private getAppointmentsList(selectedDay: string): void {
     this.spinner.show();
     this.appointmentService.getAppointments$(selectedDay).subscribe(
-      (response) => {
-        this.appointments = response.sort((a, b) => a.time - b.time);
+      (response: Appointment[]) => {
+        this.appointments = response;
         this.dataSource = new MatTableDataSource(this.appointments);
         this.dataSource.paginator = this.paginator;
         this.spinner.hide();
@@ -130,7 +131,7 @@ export class AppointmentsComponent implements OnInit {
     this.appointmentService
       .saveAppointment$(this.selectedAppointment, this.day)
       .subscribe(
-        (response) => {
+        (response: Appointment) => {
           this.selectedAppointment = response;
           this.spinner.hide();
         },
@@ -145,16 +146,16 @@ export class AppointmentsComponent implements OnInit {
     this.spinner.show();
     this.patientService
       .savePatient$(this.selectedAppointment.patient)
-      .subscribe({
-        next(response) {
+      .subscribe(
+        (response: Patient) => {
           this.selectedAppointment.patient = response;
           this.spinner.hide();
         },
-        error(error) {
+        (error) => {
           this.spinner.hide();
           this.alertService.error(error);
-        },
-      });
+        }
+      );
   }
 
   public getAppointmentRowClass(status: number) {
@@ -172,15 +173,16 @@ export class AppointmentsComponent implements OnInit {
       case StatusList.Terminated.key:
         this.appointmentService
           .deleteAppointment$(this.selectedAppointment._id)
-          .subscribe({
-            next() {
+          .subscribe(
+            () => {
               this.spinner.hide();
             },
-            error(error) {
+            (error) => {
               this.spinner.hide();
               this.alertService.error(error);
             },
-          });
+            () => {}
+          );
         break;
       default:
         this.selectedAppointment.status = appointmentChanged.newStatus;
@@ -210,6 +212,7 @@ export class AppointmentsComponent implements OnInit {
 
   public endDayDisabled(): Boolean {
     return (
+      this.appointmentsDate.isFinished ||
       this.appointments.length === 0 ||
       this.appointments.filter((appointment) => {
         const statusObj = getStatusByKey(appointment.status);
@@ -238,31 +241,29 @@ export class AppointmentsComponent implements OnInit {
       if (result) {
         this.appointments.forEach((appointment) => {
           this.spinner.show();
-          this.appointmentService
-            .deleteAppointment$(appointment._id)
-            .subscribe({
-              next() {
-                this.spinner.hide();
-              },
-              error(error) {
-                this.spinner.hide();
-                this.alertService.error(error);
-              },
-            });
+          this.appointmentService.deleteAppointment$(appointment._id).subscribe(
+            () => {
+              this.spinner.hide();
+            },
+            (error) => {
+              this.spinner.hide();
+              this.alertService.error(error);
+            }
+          );
         });
         this.spinner.show();
         this.calendarService
           .deleteCalendarDay$(this.appointmentsDate._id)
-          .subscribe({
-            next() {
+          .subscribe(
+            () => {
               this.spinner.hide();
               this.router.navigate(["/calendar"]);
             },
-            error(error) {
+            (error) => {
               this.spinner.hide();
               this.alertService.error(error);
-            },
-          });
+            }
+          );
       }
     });
   }
@@ -279,15 +280,15 @@ export class AppointmentsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.spinner.show();
-        this.appointmentService.deleteAppointment$(appointmentId).subscribe({
-          next() {
+        this.appointmentService.deleteAppointment$(appointmentId).subscribe(
+          () => {
             this.spinner.hide();
           },
-          error(error) {
+          (error) => {
             this.spinner.hide();
             this.alertService.error(error);
-          },
-        });
+          }
+        );
       }
     });
   }
@@ -334,7 +335,7 @@ export class AppointmentsComponent implements OnInit {
     endDayMovements.forEach((movement) => {
       this.spinner.show();
       this.cashRegisterService.saveMovement$(movement).subscribe(
-        (response) => {
+        () => {
           this.spinner.hide();
           this.router.navigate(["/day-movements", this.appointmentsDate._id]);
         },

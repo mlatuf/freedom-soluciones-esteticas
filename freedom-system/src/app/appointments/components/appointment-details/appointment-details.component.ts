@@ -306,7 +306,7 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointmentService
       .saveAppointment$(this.appointment, this.selectedDay._id)
       .subscribe(
-        (response) => {
+        () => {
           this.spinner.hide();
           this.router.navigate(["/appointments", this.selectedDay._id]);
           this.alertService.success("Turno guardado con éxito");

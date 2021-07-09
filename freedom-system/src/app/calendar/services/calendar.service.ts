@@ -60,9 +60,11 @@ export class CalendarService {
       retry(3),
       map((actions) =>
         actions
-          .filter((a) => {
-            return a.payload.doc.data().date.toDate() > currentDate;
-          })
+          .filter(
+            (a) =>
+              a.payload.doc.data().date.toDate() > currentDate &&
+              !a.payload.doc.data().isFinished
+          )
           .map((a) => {
             const _id = a.payload.doc.id;
             const data = a.payload.doc.data() as Day;
