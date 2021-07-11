@@ -31,6 +31,7 @@ import { Movement } from "src/app/cash-register/models";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
 import { Taking } from "../models";
 import { Patient } from "src/app/patients/models/patient";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "appointments",
@@ -78,6 +79,7 @@ export class AppointmentsComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private alertService: AlertService,
     private appointmentService: AppointmentService,
+    private helperService: HelperService,
     private patientService: PatientService,
     private calendarService: CalendarService,
     private cashRegisterService: CashRegisterService,
@@ -126,63 +128,30 @@ export class AppointmentsComponent implements OnInit {
     );
   }
 
-  private saveAppointment(): void {
-    this.spinner.show();
-    this.appointmentService
-      .saveAppointment$(this.selectedAppointment, this.day)
-      .subscribe(
-        (response: Appointment) => {
-          this.selectedAppointment = response;
-          this.spinner.hide();
-        },
-        (error) => {
-          this.spinner.hide();
-          this.alertService.error(error);
-        }
-      );
-  }
+  public endDayDisabled = (): Boolean =>
+    this.helperService.isEndDayDisabled(
+      this.appointments,
+      this.appointmentsDate.isFinished
+    );
 
-  private savePatientNextSession(): void {
-    this.spinner.show();
-    this.patientService
-      .savePatient$(this.selectedAppointment.patient)
-      .subscribe(
-        (response: Patient) => {
-          this.selectedAppointment.patient = response;
-          this.spinner.hide();
-        },
-        (error) => {
-          this.spinner.hide();
-          this.alertService.error(error);
-        }
-      );
-  }
+  public getAppointmentRowClass = (status: number): string =>
+    getStatusByKey(status).classRow;
 
-  public getAppointmentRowClass(status: number) {
-    return getStatusByKey(status).classRow;
-  }
+  public editionDisabled = (status: number): Boolean =>
+    status === StatusList.Ended.key;
 
   public onStatusChange(appointmentChanged: any): void {
-    this.selectedAppointment = this.appointments.find(
-      (obj) => obj._id === appointmentChanged.selectedAppointment
+    this.selectedAppointment = this.helperService.getSelectedAppointment(
+      this.appointments,
+      appointmentChanged
     );
+
     switch (appointmentChanged.newStatus) {
       case StatusList.Ended.key:
         this.endAppointment(this.selectedAppointment);
         break;
       case StatusList.Terminated.key:
-        this.appointmentService
-          .deleteAppointment$(this.selectedAppointment._id)
-          .subscribe(
-            () => {
-              this.spinner.hide();
-            },
-            (error) => {
-              this.spinner.hide();
-              this.alertService.error(error);
-            },
-            () => {}
-          );
+        this.cancelAppointment(this.selectedAppointment);
         break;
       default:
         this.selectedAppointment.status = appointmentChanged.newStatus;
@@ -191,81 +160,11 @@ export class AppointmentsComponent implements OnInit {
     }
   }
 
-  public showEndDayModal(): void {
-    const billableAppointments = this.appointments.filter(
-      (appointment) =>
-        appointment.status === StatusList.Ended.key ||
-        appointment.status === StatusList.Present.key
-    );
-    const dialogRef = this.dialog.open(AppointmentEndDayComponent, {
-      width: "80%",
-      data: {
-        title: "Terminar dia",
-        appointments: billableAppointments,
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.appointmentsDate.isFinished = result.finished;
-      this.createEndDayMovement(result.takings);
-    });
-  }
-
-  public endDayDisabled(): Boolean {
-    return (
-      this.appointmentsDate.isFinished ||
-      this.appointments.length === 0 ||
-      this.appointments.filter((appointment) => {
-        const statusObj = getStatusByKey(appointment.status);
-        return statusObj != StatusList.Present && statusObj != StatusList.Ended;
-      }).length > 0
-    );
-  }
-
   public goToAppointmentDetails(appointmentId: number = null): void {
-    let detailsUrl = appointmentId
+    const detailsUrl = appointmentId
       ? ["/appointment/details/", this.appointmentsDate._id, appointmentId]
       : ["/appointment/details/", this.appointmentsDate._id];
     this.router.navigate(detailsUrl);
-  }
-
-  public deleteDay(): void {
-    const dialogRef = this.dialog.open(ModalComponent, {
-      data: {
-        title: "Eliminar dia completo",
-        text: "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
-        isConfirmationModal: true,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.appointments.forEach((appointment) => {
-          this.spinner.show();
-          this.appointmentService.deleteAppointment$(appointment._id).subscribe(
-            () => {
-              this.spinner.hide();
-            },
-            (error) => {
-              this.spinner.hide();
-              this.alertService.error(error);
-            }
-          );
-        });
-        this.spinner.show();
-        this.calendarService
-          .deleteCalendarDay$(this.appointmentsDate._id)
-          .subscribe(
-            () => {
-              this.spinner.hide();
-              this.router.navigate(["/calendar"]);
-            },
-            (error) => {
-              this.spinner.hide();
-              this.alertService.error(error);
-            }
-          );
-      }
-    });
   }
 
   public deleteAppointment(appointmentId: string): void {
@@ -314,8 +213,51 @@ export class AppointmentsComponent implements OnInit {
     });
   }
 
-  public editionDisabled(status: number): Boolean {
-    return status === StatusList.Ended.key;
+  private cancelAppointment(selectedAppointment: Appointment): void {
+    this.appointmentService
+      .deleteAppointment$(selectedAppointment._id)
+      .subscribe(
+        () => {
+          this.spinner.hide();
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        },
+        () => {}
+      );
+  }
+
+  private saveAppointment(): void {
+    this.spinner.show();
+    this.appointmentService
+      .saveAppointment$(this.selectedAppointment, this.day)
+      .subscribe(
+        (response: Appointment) => {
+          this.selectedAppointment = response;
+          this.spinner.hide();
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        }
+      );
+  }
+
+  private savePatientNextSession(): void {
+    this.spinner.show();
+    this.patientService
+      .savePatient$(this.selectedAppointment.patient)
+      .subscribe(
+        (response: Patient) => {
+          this.selectedAppointment.patient = response;
+          this.spinner.hide();
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        }
+      );
   }
 
   private createEndDayMovement(takings: Taking[]): void {
@@ -344,6 +286,71 @@ export class AppointmentsComponent implements OnInit {
           this.alertService.error(error);
         }
       );
+    });
+  }
+
+  private deleteAllAppointments(): void {
+    this.appointments.forEach((appointment) => {
+      this.spinner.show();
+      this.appointmentService.deleteAppointment$(appointment._id).subscribe(
+        () => {
+          this.spinner.hide();
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        }
+      );
+    });
+  }
+
+  private deleteCalendarDay(): void {
+    this.spinner.show();
+    this.calendarService
+      .deleteCalendarDay$(this.appointmentsDate._id)
+      .subscribe(
+        () => {
+          this.spinner.hide();
+          this.router.navigate(["/calendar"]);
+        },
+        (error) => {
+          this.spinner.hide();
+          this.alertService.error(error);
+        }
+      );
+  }
+
+  public deleteDay(): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: {
+        title: "Eliminar dia completo",
+        text: "Está seguro que desea eliminar el dia? Se perderán todos los datos de los turnos agendando para el dia. Esta accion es irreversible",
+        isConfirmationModal: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteAllAppointments();
+        this.deleteCalendarDay();
+      }
+    });
+  }
+
+  public showEndDayModal(): void {
+    const billableAppointments = this.helperService.getBillableAppointments(
+      this.appointments
+    );
+    const dialogRef = this.dialog.open(AppointmentEndDayComponent, {
+      width: "80%",
+      data: {
+        title: "Terminar dia",
+        appointments: billableAppointments,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.appointmentsDate.isFinished = result.finished;
+      this.createEndDayMovement(result.takings);
     });
   }
 }
