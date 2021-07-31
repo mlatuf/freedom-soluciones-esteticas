@@ -29,6 +29,7 @@ import {
   getStatusesForDetails,
   StatusList,
 } from "../../constants/status.enum";
+import { HelperService } from "../../services/helper.service";
 
 @Component({
   selector: "appointment-details",
@@ -60,6 +61,7 @@ export class AppointmentDetailsComponent implements OnInit {
     private alertService: AlertService,
     private calendarService: CalendarService,
     private appointmentService: AppointmentService,
+    private helperService: HelperService,
     private areaService: AreaService,
     private patientService: PatientService,
     public dialog: MatDialog
@@ -256,11 +258,11 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       (response) => {
         this.busyAppointments = response;
-        this.initialTimes = this.appointmentService.getInitialTimes$(
+        this.initialTimes = this.helperService.getInitialTimes(
           this.busyAppointments,
           this.appointmentId
         );
-        this.availableSlots = this.appointmentService.updateAvailableSlots$(
+        this.availableSlots = this.helperService.updateAvailableSlots(
           this.initialTimes
         );
         this.spinner.hide();
@@ -288,7 +290,7 @@ export class AppointmentDetailsComponent implements OnInit {
       this.appointmentForm
         .get("appointmentPrice")
         .patchValue(this.appointment.price);
-      this.availableSlots = this.appointmentService.updateAvailableSlots$(
+      this.availableSlots = this.helperService.updateAvailableSlots(
         this.initialTimes,
         this.appointmentDuration
       );

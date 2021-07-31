@@ -53,7 +53,9 @@ export class AppointmentEndDayComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.appointments.forEach((appointment) => {
-      this.takings[appointment.paymentMethod - 1].value += appointment.price;
+      this.takings[appointment.paymentMethod - 1].value += Math.abs(
+        appointment.price
+      );
     });
   }
 

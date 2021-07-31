@@ -49,7 +49,6 @@ export class PatientDetailsComponent implements OnInit {
     this.editionMode = !this.patientId;
     this.months = getMonths();
     this.years = [new Date().getFullYear(), new Date().getFullYear() + 1];
-
     this.setFormValues();
     if (this.patientId) {
       this.spinner.show();
@@ -78,7 +77,7 @@ export class PatientDetailsComponent implements OnInit {
 
   private setFormValues(): void {
     const nextSessionDate = this.patient.nextSession
-      ? new Date(this.patient.nextSession)
+      ? new Date(`1/${this.patient.nextSession}`)
       : new Date();
     const nextSessionMonth = getMonthByKey(
       nextSessionDate.getMonth() + 1

@@ -350,7 +350,21 @@ export class AppointmentsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.appointmentsDate.isFinished = result.finished;
-      this.createEndDayMovement(result.takings);
+      this.endDay(result.takings);
     });
+  }
+
+  public endDay(takings: Taking[]): void {
+    this.spinner.show();
+    this.calendarService.saveDate$(this.appointmentsDate).subscribe(
+      () => {
+        this.spinner.hide();
+        this.createEndDayMovement(takings);
+      },
+      (error) => {
+        this.spinner.hide();
+        this.alertService.error(error);
+      }
+    );
   }
 }

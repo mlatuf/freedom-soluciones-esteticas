@@ -96,6 +96,7 @@ export class CalendarService {
   }
 
   saveDate$(newDate: Day): Observable<any> {
+    //TODO  fix save date finished
     let toDate = new Date(newDate.date);
     newDate.date = toDate;
     newDate.uid = this.afAuth.auth.currentUser.uid;

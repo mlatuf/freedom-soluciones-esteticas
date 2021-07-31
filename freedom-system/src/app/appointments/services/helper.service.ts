@@ -34,13 +34,15 @@ export class HelperService {
   public isEndDayDisabled = (
     appointments: Appointment[],
     isFinished: Boolean
-  ): Boolean =>
-    isFinished ||
-    appointments.length === 0 ||
-    appointments.filter((appointment) => {
+  ): Boolean => {
+    const pendingAppointments = appointments.filter((appointment) => {
       const statusObj = getStatusByKey(appointment.status);
-      return statusObj != StatusList.Present && statusObj != StatusList.Ended;
-    }).length > 0;
+      return statusObj === StatusList.Confirmed;
+    });
+    return (
+      isFinished || appointments.length === 0 || pendingAppointments.length > 0
+    );
+  };
 
   public getInitialTimes = (
     appointments: Appointment[],
