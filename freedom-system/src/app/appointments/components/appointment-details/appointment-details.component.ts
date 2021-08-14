@@ -161,6 +161,9 @@ export class AppointmentDetailsComponent implements OnInit {
       appointmentDay: new FormControl(day, Validators.required),
       appointmentPatient: new FormControl(patientId, Validators.required),
       appointmentAreas: new FormControl(areasToSet, Validators.required),
+      isOverAppointment: new FormControl(
+        this.appointment.isOverAppointment || null
+      ),
       appointmentTime: new FormControl(
         this.appointment.time || null,
         Validators.required

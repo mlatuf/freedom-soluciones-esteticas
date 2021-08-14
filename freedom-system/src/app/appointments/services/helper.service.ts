@@ -44,23 +44,26 @@ export class HelperService {
     );
   };
 
-  public getInitialTimes = (
-    appointments: Appointment[],
-    currentAppointment: string
-  ): Time[] => {
+  public getInitialSlots = () => {
     let initialTimes = [];
     for (let i = START_DAY_TIME; i < END_DAY_TIME; i++) {
       for (let j = 0; j < MAX_APPOINTMENTS_IN_HOUR; j++) {
         initialTimes.push(i + ":" + (j === 0 ? "00" : APPOINTMENT_PERIOD * j));
       }
     }
-    initialTimes = initialTimes.map((value, index) => {
-      return {
-        _id: index,
-        available: true,
-        time: value,
-      };
-    });
+
+    return initialTimes.map((value, index) => ({
+      _id: index,
+      available: true,
+      time: value,
+    }));
+  };
+
+  public getInitialTimes = (
+    appointments: Appointment[],
+    currentAppointment: string
+  ): Time[] => {
+    const initialSlotTimes = this.getInitialSlots();
     //to not take in consideration the currentAppointment
     const busyAppointments = currentAppointment
       ? appointments.filter(
@@ -74,35 +77,35 @@ export class HelperService {
           0
         );
         for (let index = 0; index < duration; index++) {
-          initialTimes[appointment.time + index].available = false;
+          initialSlotTimes[appointment.time + index].available = false;
         }
       });
     }
 
-    return initialTimes;
+    return initialSlotTimes;
   };
 
   public updateAvailableSlots = (
-    initialTimes: Time[],
+    initialSlotTimes: Time[],
     duration: number = 1
   ): TimeSlot[] => {
     let availableTimesUpdated: TimeSlot[] = [];
-    let slots = Array.from(Array(initialTimes.length).keys());
+    const slots = Array.from(Array(initialSlotTimes.length).keys());
     slots.forEach((slotElm, index) => {
       // TODO necesito todos los initialtimes para saber cuales estan available
-      if (initialTimes[index].available) {
+      if (initialSlotTimes[index].available) {
         let count = 0;
         for (
           let i = index;
-          i < slots.length && count < duration && initialTimes[i].available;
+          i < slots.length && count < duration && initialSlotTimes[i].available;
           i++
         ) {
           count++;
           if (count === duration) {
             const newSlot = {
               _id: index,
-              startTime: initialTimes[slotElm].time,
-              slot: initialTimes
+              startTime: initialSlotTimes[slotElm].time,
+              slot: initialSlotTimes
                 .slice(slotElm, slotElm + duration)
                 .map((t) => t._id),
             };

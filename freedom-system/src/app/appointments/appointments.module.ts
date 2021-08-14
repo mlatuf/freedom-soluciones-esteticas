@@ -19,6 +19,7 @@ import {
   MatSlideToggleModule,
   MatGridListModule,
   MatListModule,
+  MatCheckboxModule,
 } from "@angular/material";
 
 import { AppointmentsComponent } from "./components/appointments.component";
@@ -52,6 +53,7 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
     MatGridListModule,
     MatDialogModule,
     MatListModule,
+    MatCheckboxModule,
   ],
   declarations: [
     AppointmentsComponent,

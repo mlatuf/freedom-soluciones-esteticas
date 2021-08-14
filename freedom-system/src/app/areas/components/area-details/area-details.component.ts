@@ -44,6 +44,7 @@ export class AreaDetailsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.durationsArray = [
+      { id: 0, description: "0 minutos" },
       { id: 1, description: "15 minutos" },
       { id: 2, description: "30 minutos" },
       { id: 3, description: "45 minutos" },
