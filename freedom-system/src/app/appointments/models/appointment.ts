@@ -7,7 +7,6 @@ export class Appointment {
   patient: Patient;
   time: number;
   areas: Area[];
-  isOverAppointment: boolean = false;
   price: number;
   paymentMethod: number;
   status: number;

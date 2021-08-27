@@ -44,7 +44,7 @@ export class HelperService {
     );
   };
 
-  public getInitialSlots = () => {
+  public getInitialTimes = () => {
     let initialTimes = [];
     for (let i = START_DAY_TIME; i < END_DAY_TIME; i++) {
       for (let j = 0; j < MAX_APPOINTMENTS_IN_HOUR; j++) {
@@ -59,11 +59,11 @@ export class HelperService {
     }));
   };
 
-  public getInitialTimes = (
+  public getInitialSlots = (
     appointments: Appointment[],
     currentAppointment: string
   ): Time[] => {
-    const initialSlotTimes = this.getInitialSlots();
+    const initialSlotTimes = this.getInitialTimes();
     //to not take in consideration the currentAppointment
     const busyAppointments = currentAppointment
       ? appointments.filter(
