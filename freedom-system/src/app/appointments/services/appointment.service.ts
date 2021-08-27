@@ -1,17 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Observable, from } from "rxjs";
-import { map, retry } from "rxjs/operators";
+import { map, retry, tap } from "rxjs/operators";
 
-import { Appointment } from "src/app/appointments/classes/appointment";
-import { Time } from "src/app/appointments/classes/time";
-import { TimeSlot } from "src/app/appointments/classes/timeSlot";
+import { Appointment } from "src/app/appointments/models/appointment";
+import { Time } from "src/app/appointments/models/time";
+import { TimeSlot } from "src/app/appointments/models/timeSlot";
 
 import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-import { Patient } from "src/app/patients/classes/patient";
 
 @Injectable({
   providedIn: "root",
@@ -35,7 +34,12 @@ export class AppointmentService {
           const _id = a.payload.doc.id;
           return { _id, ...data };
         })
-      )
+      ),
+      tap((results) => {
+        results.sort(
+          (appointmentA, appointmentB) => appointmentA.time - appointmentB.time
+        );
+      })
     );
   }
 
@@ -74,73 +78,5 @@ export class AppointmentService {
       "appointments/" + appointmentId
     );
     return from(appointmentDoc.delete());
-  }
-
-  getInitialTimes$(
-    appointments: Appointment[],
-    currentAppointment: string
-  ): Time[] {
-    let initialTimes = [];
-    for (let i = 8; i < 21; i++) {
-      for (let j = 0; j < 4; j++) {
-        initialTimes.push(i + ":" + (j === 0 ? "00" : 15 * j));
-      }
-    }
-    initialTimes = initialTimes.map((value, index) => {
-      return {
-        _id: index,
-        available: true,
-        time: value,
-      };
-    });
-    //to not take in consideration the currentAppointment
-    const busyAppointments = currentAppointment
-      ? appointments.filter((obj) => obj._id != currentAppointment)
-      : appointments;
-    if (busyAppointments) {
-      busyAppointments.forEach((appointment) => {
-        const duration = appointment.areas.reduce(
-          (acc, area) => acc + area.duration,
-          0
-        );
-        for (let index = 0; index < duration; index++) {
-          initialTimes[appointment.time + index].available = false;
-        }
-      });
-    }
-
-    return initialTimes;
-  }
-
-  updateAvailableSlots$(
-    initialTimes: Time[],
-    duration: number = 1
-  ): TimeSlot[] {
-    let availableTimesUpdated: TimeSlot[] = [];
-    let slots = Array.from(Array(initialTimes.length).keys());
-    slots.forEach((slotElm, index) => {
-      // TODO necesito todos los initialtimes para saber cuales estan available
-      if (initialTimes[index].available) {
-        let count = 0;
-        for (
-          let i = index;
-          i < slots.length && count < duration && initialTimes[i].available;
-          i++
-        ) {
-          count++;
-          if (count === duration) {
-            const newSlot = {
-              _id: index,
-              startTime: initialTimes[slotElm].time,
-              slot: initialTimes
-                .slice(slotElm, slotElm + duration)
-                .map((t) => t._id),
-            };
-            availableTimesUpdated.push(newSlot);
-          }
-        }
-      }
-    });
-    return availableTimesUpdated;
   }
 }

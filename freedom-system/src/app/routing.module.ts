@@ -24,7 +24,7 @@ const routes: Routes = [
   {
     path: "login",
     component: LoginComponent,
-    data: { title: "Ingresar a Freedom System" },
+    data: { title: "Ingresar" },
   },
 
   {

@@ -5,30 +5,39 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialog } from "@angular/material";
+
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
 import { NgxSpinnerService } from "ngx-spinner";
 
 import { AlertService } from "src/app/core/services/alert/alert.service";
-import { AppointmentService } from "src/app/appointments/services/appointment.service";
-import { AreaService } from "src/app/areas/services/area.service";
-import { Area } from "src/app/areas/classes/area";
-import { Patient } from "src/app/patients/classes/patient";
 import { PatientService } from "src/app/patients/services/patient.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Appointment } from "src/app/appointments/classes/appointment";
-import { ModalComponent } from "src/app/core/components/modal/modal.component";
 import { CalendarService } from "src/app/calendar/services/calendar.service";
-import { Day } from "src/app/calendar/classes/day";
-import { Time } from "src/app/appointments/classes/time";
-import { TimeSlot } from "src/app/appointments/classes/timeSlot";
-import { MatDialog } from "@angular/material";
-import { getPayments, PaymentList } from "../../constants/payments.enum";
-import { PaymentMethod, Status } from "../../classes/index";
+import { AreaService } from "src/app/areas/services/area.service";
 import {
+  AppointmentService,
+  HelperService,
+} from "src/app/appointments/services";
+
+import { Area } from "src/app/areas/models/area";
+import { Patient } from "src/app/patients/models/patient";
+import { ModalComponent } from "src/app/core/components/modal/modal.component";
+import { Day } from "src/app/calendar/models/day";
+import {
+  Time,
+  TimeSlot,
+  Appointment,
+  PaymentMethod,
+  Status,
+} from "src/app/appointments/models";
+import {
+  getPayments,
+  PaymentList,
   getStatusByKey,
   getStatusesForDetails,
   StatusList,
-} from "../../constants/status.enum";
+} from "src/app/appointments/constants";
 
 @Component({
   selector: "appointment-details",
@@ -60,6 +69,7 @@ export class AppointmentDetailsComponent implements OnInit {
     private alertService: AlertService,
     private calendarService: CalendarService,
     private appointmentService: AppointmentService,
+    private helperService: HelperService,
     private areaService: AreaService,
     private patientService: PatientService,
     public dialog: MatDialog
@@ -187,7 +197,11 @@ export class AppointmentDetailsComponent implements OnInit {
       (response) => {
         this.selectedDay = response;
         this.appointment.day = this.selectedDay._id;
-        this.getBusyAppointments(this.selectedDay._id);
+        // this.getBusyAppointments(this.selectedDay._id);
+        this.initialTimes = this.helperService.getInitialTimes();
+        this.availableSlots = this.helperService.updateAvailableSlots(
+          this.initialTimes
+        );
         this.spinner.hide();
       },
       (error) => {
@@ -251,18 +265,29 @@ export class AppointmentDetailsComponent implements OnInit {
     this.statuses = getStatusesForDetails();
   }
 
+  private setAvailableTimeSlots(busyAppointments: Appointment[]): void {
+    this.initialTimes = this.helperService.getInitialSlots(
+      busyAppointments,
+      this.appointmentId
+    );
+    this.availableSlots = this.helperService.updateAvailableSlots(
+      this.initialTimes
+    );
+  }
+
   private getBusyAppointments(selectedDay: string): void {
     this.spinner.show();
     this.appointmentService.getAppointments$(selectedDay).subscribe(
       (response) => {
         this.busyAppointments = response;
-        this.initialTimes = this.appointmentService.getInitialTimes$(
-          this.busyAppointments,
-          this.appointmentId
-        );
-        this.availableSlots = this.appointmentService.updateAvailableSlots$(
-          this.initialTimes
-        );
+        this.setAvailableTimeSlots(this.busyAppointments);
+        // this.initialTimes = this.helperService.getInitialTimes(
+        //   this.busyAppointments,
+        //   this.appointmentId
+        // );
+        // this.availableSlots = this.helperService.updateAvailableSlots(
+        //   this.initialTimes
+        // );
         this.spinner.hide();
       },
       (error) => {
@@ -288,10 +313,10 @@ export class AppointmentDetailsComponent implements OnInit {
       this.appointmentForm
         .get("appointmentPrice")
         .patchValue(this.appointment.price);
-      this.availableSlots = this.appointmentService.updateAvailableSlots$(
-        this.initialTimes,
-        this.appointmentDuration
-      );
+      // this.availableSlots = this.helperService.updateAvailableSlots(
+      //   this.initialTimes,
+      //   this.appointmentDuration
+      // );
       this.appointmentDuration = this.appointmentDuration * 15;
     }
     this.appointment.areas = selectedAreasObject;
@@ -306,7 +331,7 @@ export class AppointmentDetailsComponent implements OnInit {
     this.appointmentService
       .saveAppointment$(this.appointment, this.selectedDay._id)
       .subscribe(
-        (response) => {
+        () => {
           this.spinner.hide();
           this.router.navigate(["/appointments", this.selectedDay._id]);
           this.alertService.success("Turno guardado con éxito");
@@ -323,8 +348,7 @@ export class AppointmentDetailsComponent implements OnInit {
       const dialogRef = this.dialog.open(ModalComponent, {
         data: {
           title: "Cancelar edicion",
-          text:
-            "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
+          text: "Está seguro que desea cancelar la edicion? Se perderán todos los datos no guardados.",
           isConfirmationModal: true,
         },
       });

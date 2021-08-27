@@ -5,9 +5,9 @@ import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-import { Patient } from "../classes/patient";
+import { Patient } from "../models/patient";
 import { map } from "rxjs/operators";
-import { AppointmentPatient } from "../classes/appointment-patient";
+import { AppointmentPatient } from "../models/appointment-patient";
 
 @Injectable({
   providedIn: "root",

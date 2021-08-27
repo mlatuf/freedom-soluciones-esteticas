@@ -8,9 +8,9 @@ import {
 } from "@angular/animations";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-import { Appointment } from "../../classes/appointment";
+import { Appointment } from "../../models/appointment";
 import { getPayments } from "../../constants/payments.enum";
-import { Taking } from "../../classes/taking";
+import { Taking } from "../../models/taking";
 
 export interface ModalData {
   title: string;
@@ -53,7 +53,9 @@ export class AppointmentEndDayComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.appointments.forEach((appointment) => {
-      this.takings[appointment.paymentMethod - 1].value += appointment.price;
+      this.takings[appointment.paymentMethod - 1].value += Math.abs(
+        appointment.price
+      );
     });
   }
 

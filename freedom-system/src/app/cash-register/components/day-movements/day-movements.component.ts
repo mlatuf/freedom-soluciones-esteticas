@@ -13,7 +13,7 @@ import {
 } from "@angular/material";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
-import { Movement } from "src/app/cash-register/classes/movement";
+import { Movement } from "src/app/cash-register/models/movement";
 import { CashRegisterService } from "src/app/cash-register/services/cash-register.service";
 import { AlertService } from "src/app/core/services/alert/alert.service";
 import { ApplicationStateService } from "src/app/core/services/aplication-state/aplication-state.service";
@@ -58,7 +58,7 @@ export class DayMovementsComponent implements OnInit {
   private getMovementsList() {
     this.spinner.show();
     this.cashRegisterService.getMovements$(this.selectedDay).subscribe(
-      (response) => {
+      (response: Movement[]) => {
         this.movements = response;
         this.dataSource = new MatTableDataSource(this.movements);
         this.dataSource.paginator = this.paginator;
@@ -74,16 +74,15 @@ export class DayMovementsComponent implements OnInit {
 
   private saveMovement(): void {
     this.spinner.show();
-    this.cashRegisterService.saveMovement$(this.movement).subscribe({
-      next(response) {
-        this.movement = response;
+    this.cashRegisterService.saveMovement$(this.movement).subscribe(
+      () => {
         this.spinner.hide();
       },
-      error(error) {
+      (error) => {
         this.spinner.hide();
         this.alertService.error(error);
-      },
-    });
+      }
+    );
   }
 
   public editMovement(movementId: string = null): void {
@@ -139,15 +138,15 @@ export class DayMovementsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.spinner.show();
-        this.cashRegisterService.deleteMovement$(movementId).subscribe({
-          next(response) {
+        this.cashRegisterService.deleteMovement$(movementId).subscribe(
+          () => {
             this.spinner.hide();
           },
-          error(error) {
+          (error) => {
             this.spinner.hide();
             this.alertService.error(error);
-          },
-        });
+          }
+        );
       }
     });
   }

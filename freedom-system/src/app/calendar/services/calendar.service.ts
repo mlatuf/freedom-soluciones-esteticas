@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, from } from "rxjs";
 import { map, retry } from "rxjs/operators";
-import { Day } from "../classes/day";
+import { Day } from "../models/day";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
@@ -60,9 +60,11 @@ export class CalendarService {
       retry(3),
       map((actions) =>
         actions
-          .filter((a) => {
-            return a.payload.doc.data().date.toDate() > currentDate;
-          })
+          .filter(
+            (a) =>
+              a.payload.doc.data().date.toDate() > currentDate &&
+              !a.payload.doc.data().isFinished
+          )
           .map((a) => {
             const _id = a.payload.doc.id;
             const data = a.payload.doc.data() as Day;
@@ -94,6 +96,7 @@ export class CalendarService {
   }
 
   saveDate$(newDate: Day): Observable<any> {
+    //TODO  fix save date finished
     let toDate = new Date(newDate.date);
     newDate.date = toDate;
     newDate.uid = this.afAuth.auth.currentUser.uid;
